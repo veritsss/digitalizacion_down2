@@ -1,0 +1,97 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\ProfessorController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Manual4Controller;
+use App\Http\Controllers\Manual3Controller;
+use App\Http\Controllers\Manual2Controller;
+use App\Http\Controllers\Manual1Controller;
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+
+// Rutas accesibles solo para profesores
+Route::middleware(['auth', 'role:Profesor'])->group(function () {
+    
+});
+
+// Rutas accesibles solo para estudiantes
+Route::middleware(['auth', 'role:Estudiante'])->group(function () {
+
+   });
+
+   // Rutas accesibles para todos los usuarios autenticados
+Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
+    
+    Route::get('/inicio', function () {
+        return view('inicio'); 
+    })->name('inicio');
+
+    
+    Route::get('/pareo-seleccion-dibujo/select-question-images', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
+    Route::post('/pareo-seleccion-dibujo/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
+    Route::get('/pareo-seleccion-dibujo/select-correct-images', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
+    Route::post('/pareo-seleccion-dibujo/save-correct-images', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
+    
+    
+    //ETAPA 1
+        Route::get('/manual1', [Manual1Controller::class, 'index'])->name('manual1');
+        Route::get('/pareo-seleccion-dibujo', [Manual1Controller::class, 'pareoSeleccionDibujo'])->name('pareo-seleccion-dibujo');
+        Route::get('/asociacion', [Manual1Controller::class, 'asociacion'])->name('asociacion');
+        Route::get('/clasificacion', [Manual1Controller::class, 'clasificacion'])->name('clasificacion');
+        Route::get('/pareo-igualdad', [Manual1Controller::class, 'pareoIgualdad'])->name('pareo-igualdad');
+        Route::get('/series', [Manual1Controller::class, 'series'])->name('series');
+    //ETAPA 2
+
+        Route::get('/manual2', [Manual2Controller::class, 'index'])->name('manual2');
+        Route::get('/abecedario', [Manual2Controller::class, 'abecedario'])->name('abecedario');
+        Route::get('/asociar', [Manual2Controller::class, 'asociar'])->name('asociar');
+        Route::get('/carteles', [Manual2Controller::class, 'carteles'])->name('carteles');
+        Route::get('/componer', [Manual2Controller::class, 'componer'])->name('componer');
+        Route::get('/libros-personales', [Manual2Controller::class, 'librosPersonales'])->name('libros-personales');
+        Route::get('/seleccion-asociacion', [Manual2Controller::class, 'seleccionAsociacion'])->name('seleccion-asociacion');
+        Route::get('/tarjetas-fotos', [Manual2Controller::class, 'tarjetasFotos'])->name('tarjetas-fotos');
+        Route::get('/unir', [Manual2Controller::class, 'unir'])->name('unir');
+
+
+    //ETAPA 3   
+        Route::get('/manual3', [Manual3Controller::class, 'index'])->name('manual3');
+        Route::get('/composicion-modelo', [Manual3Controller::class, 'composicionModelo'])->name('composicion-modelo');
+        Route::get('/reconocimiento-silabas', [Manual3Controller::class, 'reconocimientoSilabas'])->name('reconocimiento-silabas');
+    
+
+    //ETAPA 4
+        Route::get('/manual4', [Manual4Controller::class, 'index'])->name('manual4');
+        Route::get('/completar', [Manual4Controller::class, 'completar'])->name('completar');
+        Route::get('/componer-oraciones', [Manual4Controller::class, 'componerOraciones'])->name('componer-oraciones');
+        Route::get('/secuenciar-textos', [Manual4Controller::class, 'secuenciarTextos'])->name('secuenciar-textos');
+        Route::get('/seleccionar', [Manual4Controller::class, 'seleccionar'])->name('seleccionar');
+    
+        
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+        Route::get('/pareo-seleccion-dibujo/student-select-images', [StudentController::class, 'showSelectionPage'])->name('student.showSelectionPage');
+    Route::post('/pareo-seleccion-dibujo/check-answer', [StudentController::class, 'checkAnswer'])->name('student.checkAnswer');
+    });
+
+require __DIR__.'/auth.php';
+
+    
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+
