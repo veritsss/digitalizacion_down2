@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 // Rutas accesibles solo para profesores
 Route::middleware(['auth', 'role:Profesor'])->group(function () {
-    
+
 });
 
 // Rutas accesibles solo para estudiantes
@@ -34,18 +34,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
-    
+
     Route::get('/inicio', function () {
-        return view('inicio'); 
+        return view('inicio');
     })->name('inicio');
 
-    
-    Route::get('/pareo-seleccion-dibujo/select-question-images', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
-    Route::post('/pareo-seleccion-dibujo/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
-    Route::get('/pareo-seleccion-dibujo/select-correct-images', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
-    Route::post('/pareo-seleccion-dibujo/save-correct-images', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
-    
-    
+
+    Route::get('/professor/select-question-images-page/{folder?}', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
+    Route::post('/professor/select-question-images/{folder?}', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
+    Route::get('/professor/select-correct-images/{folder?}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
+    Route::post('/professor/save-correct-images/{folder?}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
+
+
     //ETAPA 1
         Route::get('/manual1', [Manual1Controller::class, 'index'])->name('manual1');
         Route::get('/pareo-seleccion-dibujo', [Manual1Controller::class, 'pareoSeleccionDibujo'])->name('pareo-seleccion-dibujo');
@@ -66,11 +66,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/unir', [Manual2Controller::class, 'unir'])->name('unir');
 
 
-    //ETAPA 3   
+    //ETAPA 3
         Route::get('/manual3', [Manual3Controller::class, 'index'])->name('manual3');
         Route::get('/composicion-modelo', [Manual3Controller::class, 'composicionModelo'])->name('composicion-modelo');
         Route::get('/reconocimiento-silabas', [Manual3Controller::class, 'reconocimientoSilabas'])->name('reconocimiento-silabas');
-    
+
 
     //ETAPA 4
         Route::get('/manual4', [Manual4Controller::class, 'index'])->name('manual4');
@@ -78,19 +78,29 @@ Route::middleware('auth')->group(function () {
         Route::get('/componer-oraciones', [Manual4Controller::class, 'componerOraciones'])->name('componer-oraciones');
         Route::get('/secuenciar-textos', [Manual4Controller::class, 'secuenciarTextos'])->name('secuenciar-textos');
         Route::get('/seleccionar', [Manual4Controller::class, 'seleccionar'])->name('seleccionar');
-    
-        
+
+
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
         Route::get('/pareo-seleccion-dibujo/student-select-images', [StudentController::class, 'showSelectionPage'])->name('student.showSelectionPage');
     Route::post('/pareo-seleccion-dibujo/check-answer', [StudentController::class, 'checkAnswer'])->name('student.checkAnswer');
+
+    // Mostrar la pregunta al estudiante
+    Route::get('/student/question/{question}', [StudentController::class, 'showQuestion'])->name('student.showQuestion');
+
+    // Mostrar la primera pregunta no respondida
+    Route::get('/student/answer/{type}', [StudentController::class, 'getFirstUnansweredQuestion'])->name('student.answer');
+
+// Guardar la respuesta del estudiante
+Route::post('/student/question/{question}/save', [StudentController::class, 'saveAnswer'])->name('student.saveAnswer');
     });
+
 
 require __DIR__.'/auth.php';
 
-    
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 

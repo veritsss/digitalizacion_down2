@@ -8,7 +8,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['title','type',];
 
     public function images()
     {

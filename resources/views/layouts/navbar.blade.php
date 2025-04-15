@@ -82,7 +82,7 @@
         color: #ecf0f1; /* Texto claro para enlaces */
     }
 
-    .navbar-nav .nav-link:hover, 
+    .navbar-nav .nav-link:hover,
     .navbar-nav .nav-link:focus {
         color: #3498db; /* Enlaces de color azul suave al pasar el mouse */
         text-decoration: underline; /* Subrayado al pasar el mouse para mejorar la visibilidad */
@@ -93,4 +93,4 @@
     }
 </style>
 
-      
+

@@ -9,13 +9,13 @@
 </head>
 <body>
 
-    @include('layouts.navbar') 
+    @include('layouts.navbar')
 
-    <main class="container mt-4">
-        @yield('contenido') 
+    <main class="container-fluid mt-4 mb-5">
+        @yield('contenido')
     </main>
+        @include('layouts.footer')
 
-    @include('layouts.footer')
 
 </body>
 </html>
