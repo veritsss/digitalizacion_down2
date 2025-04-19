@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Image;
+use App\Models\Question;
+use App\Models\QuestionImage;
 
 class ProfessorController extends Controller
 {
@@ -73,13 +75,12 @@ class ProfessorController extends Controller
 
         return view('manual1.select-correct-images', compact('images', 'folder'));
     }
-
     // Guardar las imágenes correctas
     public function saveCorrectImages(Request $request)
     {
         $request->validate([
-            'selected_images' => 'required|array',
-            'selected_images.*' => 'exists:question_images,image_id',
+            'selected_images' => 'required|array', // Validar que se seleccionen imágenes
+            'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan
         ]);
 
         $questionId = session('question_id');
@@ -88,13 +89,61 @@ class ProfessorController extends Controller
             return response()->json(['success' => false, 'message' => 'No se encontró la pregunta asociada.']);
         }
 
-        \App\Models\QuestionImage::where('question_id', $questionId)
-            ->update(['is_correct' => false]);
+        // Obtener el tipo de actividad de la pregunta
+        $question = Question::find($questionId);
+        if (!$question) {
+            return response()->json(['success' => false, 'message' => 'La pregunta no existe.']);
+        }
 
-        \App\Models\QuestionImage::where('question_id', $questionId)
-            ->whereIn('image_id', $request->selected_images)
-            ->update(['is_correct' => true]);
+        // PAREO
+        if ($question->type === 'pareoyseleccion') {
+            // Lógica para guardar imágenes correctas en pareo
+            QuestionImage::where('question_id', $questionId)
+                ->update(['is_correct' => false]);
 
-        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
+            QuestionImage::where('question_id', $questionId)
+                ->whereIn('image_id', $request->selected_images)
+                ->update(['is_correct' => true]);
+
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo.']);
+        }
+
+        // ASOCIACIÓN
+        elseif ($question->type === 'asociacion') {
+            $request->validate([
+                'pairs' => 'required|array', // Validar que se seleccionen pares
+                'pairs.*' => 'integer|min:1', // Validar que los pares sean enteros
+            ]);
+
+            // Marcar todas las imágenes como incorrectas por defecto
+            QuestionImage::where('question_id', $questionId)
+                ->update(['is_correct' => false]);
+
+            // Marcar los pares seleccionados como correctos
+            foreach ($request->pairs as $imageId => $pairId) {
+                QuestionImage::where('question_id', $questionId)
+                    ->where('image_id', $imageId)
+                    ->update([
+                        'pair_id' => $pairId, // Asignar el pair_id
+                        'is_correct' => true, // Marcar como correcta
+                    ]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociación.']);
+        }
+
+        // CLASIFICACIÓN
+        elseif ($question->type === 'clasificacion') {
+             // Lógica para guardar imágenes correctas en pareo
+             QuestionImage::where('question_id', $questionId)
+             ->update(['is_correct' => false]);
+
+         QuestionImage::where('question_id', $questionId)
+             ->whereIn('image_id', $request->selected_images)
+             ->update(['is_correct' => true]);
+
+         return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificacion.']);
     }
+    return response()->json(['success' => false, 'message' => 'Tipo de actividad no reconocido.']);
+}
 }

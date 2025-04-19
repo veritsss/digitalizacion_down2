@@ -60,7 +60,6 @@ class Manual1Controller extends Controller
 
     public function clasificacion()
     {
-        // Filtrar imágenes cuyo path contenga 'images/pareoyseleccion/'
         $images = \App\Models\Image::where('path', 'like', 'images/clasificacion/%')->get();
 
         if (Auth::user()->role === 'Profesor') {
