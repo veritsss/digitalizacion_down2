@@ -1,4 +1,4 @@
-*/@extends('layouts.app')
+@extends('layouts.app')
 @section('title', 'Responder Pregunta')
 
 @section('contenido')
@@ -83,4 +83,3 @@
     </div>
 </div>
 @endsection
-/*
