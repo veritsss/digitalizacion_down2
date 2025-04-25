@@ -29,14 +29,8 @@ class StudentController extends Controller
             return redirect()->back()->with('message', 'No hay preguntas disponibles para esta actividad.');
         }
 
-        // Cargar la vista correspondiente según el tipo de pregunta
-        if ($question->type === 'pareoyseleccion') {
-            return view('manual1.student-answer-pareo', compact('question'));
-        } elseif ($question->type === 'asociacion') {
-            return view('manual1.student-answer-asociacion', compact('question'));
-        }
-
-        return back()->with('message', 'Tipo de actividad no reconocida.');
+        // Cargar la vista correspondiente
+        return view('manual1.student-answer-pareo', compact('question'));
     }
 
     // Mostrar la pregunta al estudiante
@@ -47,7 +41,10 @@ class StudentController extends Controller
         if ($question->type === 'pareoyseleccion') {
             return view('manual1.student-answer-pareo', compact('question'));
         } elseif ($question->type === 'asociacion') {
-            return view('manual1.student-answer-asociacion', compact('question'));
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'clasificacion') {
+            return view('manual1.student-answer-pareo', compact('question'));
         }
 
         return back()->with('message', 'Tipo de actividad no reconocido.');
@@ -57,102 +54,17 @@ class StudentController extends Controller
     public function saveAnswer(Request $request, $questionId)
     {
         $studentId = auth()->id(); // Obtener el ID del estudiante autenticado
-
-        // Obtener la pregunta y su tipo
         $question = Question::with('images')->findOrFail($questionId);
+        $mode = $request->input('mode'); // Obtener el modo desde el formulario
 
-        if ($question->type === 'asociacion') {
-            // Lógica para asociación (sin cambios)
+        if ($mode === 'images') {
+            // Validar las imágenes seleccionadas
             $request->validate([
-                'selected_images' => 'required|array|size:2', // Validar que se seleccionen exactamente 2 imágenes
-                'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan
+                'selected_images' => 'required|array',
+                'selected_images.*' => 'exists:question_images,image_id',
             ]);
 
-            $selectedImages = $request->selected_images;
-            $key = $selectedImages[0];
-            $value = $selectedImages[1];
-
-            // Verificar si el par es correcto (basado en el pair_id)
-            $keyPairId = QuestionImage::where('question_id', $questionId)
-                ->where('image_id', $key)
-                ->value('pair_id');
-
-            $valuePairId = QuestionImage::where('question_id', $questionId)
-                ->where('image_id', $value)
-                ->value('pair_id');
-
-            $pairIsCorrect = ($keyPairId !== null && $keyPairId === $valuePairId);
-
-            // Guardar cada imagen como respuesta del estudiante
-            StudentAnswer::create([
-                'student_id' => $studentId,
-                'question_id' => $questionId,
-                'image_id' => $key,
-                'is_correct' => $pairIsCorrect,
-            ]);
-
-            StudentAnswer::create([
-                'student_id' => $studentId,
-                'question_id' => $questionId,
-                'image_id' => $value,
-                'is_correct' => $pairIsCorrect,
-            ]);
-
-            // Marcar las imágenes como respondidas (sin eliminarlas)
-            QuestionImage::where('question_id', $questionId)
-                ->whereIn('image_id', [$key, $value])
-                ->update(['is_answered' => true]);
-
-            // Verificar si quedan imágenes sin responder en la pregunta
-            $remainingImages = QuestionImage::where('question_id', $questionId)
-                ->where('is_answered', false)
-                ->count();
-
-            if ($remainingImages === 0) {
-                // Obtener el tipo de la pregunta para redirigir al mismo tipo
-                $type = $question->type;
-
-                // Verificar si hay más preguntas sin responder
-                $nextQuestion = Question::where('type', $type)
-                    ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
-                    ->first();
-
-                if ($pairIsCorrect) {
-                    if ($nextQuestion) {
-                        // Redirigir a la siguiente pregunta no respondida
-                        return redirect()->route('student.showQuestion', $nextQuestion->id)
-                            ->with('message', '¡Respuesta correcta!');
-                    } else {
-                        // No hay más preguntas, redirigir a una página final
-                        return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas!');
-                    }
-                } else {
-                    if ($nextQuestion) {
-                        return redirect()->route('student.showQuestion', $nextQuestion->id)
-                            ->with('message', 'Respuesta incorrecta :( ');
-                    } else {
-                        // No hay más preguntas, redirigir a una página final
-                        return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas, pero tu última respuesta fue incorrecta!');
-                    }
-                }
-            }
-
-            // Si quedan imágenes, recargar la misma pregunta
-            return redirect()->route('student.showQuestion', $questionId)
-                ->with('message', $pairIsCorrect ? '¡Par correcto!' : 'Par incorrecto. Intenta nuevamente.');
-        }
-
-        // Lógica para pareo
-        if ($question->type === 'pareoyseleccion') {
-            // Validar que se seleccionen imágenes
-            $request->validate([
-                'selected_images' => 'required|array', // Validar que se seleccionen imágenes
-                'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan en la tabla question_images
-            ]);
-
-            $selectedImages = $request->selected_images;
-
-            // Obtener las imágenes correctas
+            $selectedImages = $request->input('selected_images');
             $correctImages = QuestionImage::where('question_id', $questionId)
                 ->where('is_correct', true)
                 ->pluck('image_id')
@@ -170,35 +82,95 @@ class StudentController extends Controller
                 ]);
             }
 
-            // Marcar las imágenes como respondidas (sin eliminarlas)
+            // Marcar las imágenes como respondidas
             QuestionImage::where('question_id', $questionId)
                 ->whereIn('image_id', $selectedImages)
                 ->update(['is_answered' => true]);
 
             // Verificar si hay más preguntas sin responder
-            $type = $question->type;
-            $nextQuestion = Question::where('type', $type)
+            $nextQuestion = Question::where('type', $question->type)
                 ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
                 ->first();
 
-            if ($isCorrect) {
+            if ($nextQuestion) {
+                return redirect()->route('student.showQuestion', $nextQuestion->id)
+                    ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+            } else {
+                return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas!');
+            }
+        } elseif ($mode === 'pairs') {
+            // Validar las imágenes seleccionadas
+            $request->validate([
+                'selected_images' => 'required|array', // Validar que se seleccionen imágenes
+                'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan
+            ]);
+
+            $selectedImages = $request->input('selected_images');
+            $pairs = []; // Almacenar los pares seleccionados
+
+            // Agrupar las imágenes seleccionadas en pares
+            foreach ($selectedImages as $imageId) {
+                $pairId = QuestionImage::where('question_id', $questionId)
+                    ->where('image_id', $imageId)
+                    ->value('pair_id');
+
+                if ($pairId !== null) {
+                    $pairs[$pairId][] = $imageId;
+                }
+            }
+
+            $isCorrect = true; // Asumimos que todos los pares son correctos inicialmente
+
+            // Verificar cada par
+            foreach ($pairs as $pairId => $images) {
+                if (count($images) < 2) {
+                    $isCorrect = false; // Si un par no tiene exactamente 2 imágenes, es incorrecto
+                }
+
+                // Guardar cada imagen como respuesta del estudiante
+                foreach ($images as $imageId) {
+                    StudentAnswer::create([
+                        'student_id' => $studentId,
+                        'question_id' => $questionId,
+                        'image_id' => $imageId,
+                        'pair_id' => $pairId,
+                        'is_correct' => $isCorrect,
+                    ]);
+
+                    // Marcar la imagen como respondida
+                    QuestionImage::where('question_id', $questionId)
+                        ->where('image_id', $imageId)
+                        ->update(['is_answered' => true]);
+                }
+            }
+
+            // Verificar si quedan imágenes sin responder en la pregunta
+            $remainingImages = QuestionImage::where('question_id', $questionId)
+                ->where('is_answered', false)
+                ->count();
+
+            if ($remainingImages === 0) {
+                // Obtener el tipo de la pregunta para redirigir al mismo tipo
+                $type = $question->type;
+
+                // Verificar si hay más preguntas sin responder
+                $nextQuestion = Question::where('type', $type)
+                    ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+                    ->first();
+
                 if ($nextQuestion) {
                     // Redirigir a la siguiente pregunta no respondida
                     return redirect()->route('student.showQuestion', $nextQuestion->id)
-                        ->with('message', '¡Respuesta correcta!');
+                        ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
                 } else {
                     // No hay más preguntas, redirigir a una página final
                     return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas!');
                 }
-            } else {
-                if ($nextQuestion) {
-                    return redirect()->route('student.showQuestion', $nextQuestion->id)
-                    ->with('message', 'Respuesta incorrecta :( ');
-                } else {
-                    // No hay más preguntas, redirigir a una página final
-                    return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas, pero tu última respuesta fue incorrecta!');
-                }
             }
+
+            // Si quedan imágenes, recargar la misma pregunta
+            return redirect()->route('student.showQuestion', $questionId)
+                ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
         }
     }
 }

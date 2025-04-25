@@ -60,7 +60,10 @@
 
     <form action="{{ route('student.saveAnswer', $question->id) }}" method="POST">
         @csrf
+        <input type="hidden" name="mode" value="{{ $question->mode }}">
         <div class="row">
+            @if($question->mode === 'images')
+            <!-- Modo: Imágenes -->
             @foreach($question->images as $image)
                 <div class="col-6 col-md-3 text-center mb-4">
                     <input type="checkbox" name="selected_images[]" value="{{ $image->image_id }}" id="image_{{ $image->image_id }}" class="btn-check">
@@ -69,7 +72,19 @@
                     </label>
                 </div>
             @endforeach
-        </div>
+        @elseif($question->mode === 'pairs')
+            <!-- Modo: Pares -->
+            @foreach($question->images->where('is_answered', false) as $image)
+            <div class="col-6 col-md-3 text-center mb-4">
+                <!-- Checkbox para seleccionar la imagen -->
+                <input type="checkbox" name="selected_images[]" value="{{ $image->image_id }}" id="image_{{ $image->image_id }}" class="btn-check">
+                <label for="image_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                    <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
+                </label>
+            </div>
+        @endforeach
+        @endif
+    </div>
 
         <!-- Botón de Enviar Respuesta -->
         <button type="submit" class="btn btn-success btn-lg btn-submit">Enviar Respuesta</button>

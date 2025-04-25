@@ -33,7 +33,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('professor.selectQuestionImagesPage','series') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+    <a href="{{ route('professor.selectConfigurationMode','series') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
         Comenzar con las Series
     </a>
 

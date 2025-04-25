@@ -41,7 +41,8 @@
 
 <form action="{{ route('professor.selectQuestionImages') }}" method="POST">
     @csrf
-    <input type="hidden" name="folder" value="{{ $folder }}"> <!-- Agregar el valor de la carpeta -->
+    <input type="hidden" name="folder" value="{{ $folder }}">
+    <input type="hidden" name="mode" value="{{ $mode }}">
 
     <div class="mb-3">
         <label for="title" class="form-label">Título de la Pregunta</label>

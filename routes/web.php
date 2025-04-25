@@ -40,10 +40,13 @@ Route::middleware('auth')->group(function () {
     })->name('inicio');
 
 
-    Route::get('/professor/select-question-images-page/{folder?}', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
-    Route::post('/professor/select-question-images/{folder?}', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
-    Route::get('/professor/select-correct-images/{folder?}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
-    Route::post('/professor/save-correct-images/{folder?}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
+
+
+    Route::get('/professor/select-configuration-mode/{folder}', [ProfessorController::class, 'selectConfigurationMode'])->name('professor.selectConfigurationMode');
+    Route::get('/professor/select-question-images/{folder}/{mode}', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
+    Route::post('/professor/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
+    Route::get('/professor/select-correct-images/{folder}/{mode}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
+    Route::post('/professor/save-correct-images/{folder}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
 
 
     //ETAPA 1
