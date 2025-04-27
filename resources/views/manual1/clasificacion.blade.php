@@ -25,28 +25,98 @@
         <li>Ampliar el vocabulario y comprensión semántica.</li>
         <li>Trabajar la categorización como base del lenguaje.</li>
     </ul>
+    <style>
+        /* Botón para Clasificación por Color */
+        .btn-color {
+            background-color: #007bff; /* Azul */
+            color: white;
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-color:hover {
+            background-color: #0056b3; /* Azul oscuro */
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Botón para Clasificación por Categoría */
+        .btn-categoria {
+            background-color: #28a745; /* Verde */
+            color: white;
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-categoria:hover {
+            background-color: #1e7e34; /* Verde oscuro */
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Botón para Clasificación por Hábitat */
+        .btn-habitat {
+            background-color: #ffc107; /* Amarillo */
+            color: black;
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-habitat:hover {
+            background-color: #e0a800; /* Amarillo oscuro */
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Botones Responsivos */
+        .btn-block {
+            width: 100%;
+            padding: 20px; /* Aumentar el padding para hacerlos más largos */
+            font-size: 1.4rem; /* Aumentar el tamaño de la fuente */
+            border-radius: 8px;
+            max-width: 800px; /* Aumentar el ancho máximo */
+        }
+    </style>
 
     @if($isProfessor)
-
     @if(session('message'))
         <div class="alert alert-success">
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('professor.selectConfigurationMode','clasificacion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-        Comenzar con la Clasificación
-    </a>
-
-    @else
+    <div class="d-flex flex-column align-items-center gap-3">
+        <a href="{{ route('professor.selectConfigurationMode','clasificacionColor') }}"
+           class="btn btn-lg btn-color shadow-sm btn-block">
+            Clasificación por Color
+        </a>
+        <a href="{{ route('professor.selectConfigurationMode','clasificacionCategoria') }}"
+           class="btn btn-lg btn-categoria shadow-sm btn-block">
+            Clasificación por Categoría
+        </a>
+        <a href="{{ route('professor.selectConfigurationMode','clasificacionHabitat') }}"
+           class="btn btn-lg btn-habitat shadow-sm btn-block">
+            Clasificación por Hábitat
+        </a>
+    </div>
+@else
     <!-- Contenido para Estudiantes -->
-    <div class="mt-4">
+    <div class="d-flex flex-column align-items-center gap-3">
         @if(isset($message))
             <div class="alert alert-info">
                 {{ $message }}
             </div>
         @else
-        <a href="{{ route('student.answer', ['type' => 'clasificacion']) }}" class="btn btn-primary btn-lg">
-            Responder Preguntas de Clasificación
+        <a href="{{ route('student.answer', ['type' => 'clasificacionColor']) }}"
+            class="btn btn-lg btn-color shadow-sm btn-block">
+            Responder Preguntas de Clasificación por Color
+        </a>
+        <a href="{{ route('student.answer', ['type' => 'clasificacionCategoria']) }}"
+            class="btn btn-lg btn-categoria shadow-sm btn-block">
+            Responder Preguntas de Clasificación por Categoría
+        </a>
+        <a href="{{ route('student.answer', ['type' => 'clasificacionHabitat']) }}"
+            class="btn btn-lg btn-habitat shadow-sm btn-block">
+            Responder Preguntas de Clasificación por Hábitat
         </a>
         @endif
     </div>

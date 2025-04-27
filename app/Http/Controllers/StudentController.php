@@ -43,7 +43,10 @@ class StudentController extends Controller
         } elseif ($question->type === 'asociacion') {
             return view('manual1.student-answer-pareo', compact('question'));
         }
-        elseif ($question->type === 'clasificacion') {
+        elseif ($question->type === 'clasificacionColor') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'clasificacionCategoria') {
             return view('manual1.student-answer-pareo', compact('question'));
         }
 

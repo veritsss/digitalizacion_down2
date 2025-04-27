@@ -94,7 +94,7 @@
                         </div>
                     @endforeach
                 @endif
-            @elseif($folder === 'clasificacion')
+            @elseif($folder === 'clasificacionColor')
                 @if($mode === 'images')
                     @foreach($images as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
@@ -119,6 +119,59 @@
                         </div>
                     @endforeach
                 @endif
+
+                @elseif($folder === 'clasificacionHabitat')
+                @if($mode === 'images')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                @elseif($mode === 'pairs')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
+                                <option value="">Seleccionar Par</option>
+                                @for($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">Par {{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    @endforeach
+                @endif
+
+                @elseif($folder === 'clasificacionCategoria')
+                @if($mode === 'images')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                @elseif($mode === 'pairs')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
+                                <option value="">Seleccionar Par</option>
+                                @for($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">Par {{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    @endforeach
+                @endif
+
             @elseif($folder === 'pareoporigualdad')
                 @if($mode === 'images')
                     @foreach($images as $image)
@@ -144,7 +197,32 @@
                         </div>
                     @endforeach
                 @endif
-            @elseif($folder === 'series')
+            @elseif($folder === 'seriesTamaño')
+                @if($mode === 'images')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                @elseif($mode === 'pairs')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
+                                <option value="">Seleccionar Par</option>
+                                @for($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">Par {{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    @endforeach
+                @endif
+                @elseif($folder === 'seriesTemporales')
                 @if($mode === 'images')
                     @foreach($images as $image)
                         <div class="col-6 col-md-3 text-center mb-4">

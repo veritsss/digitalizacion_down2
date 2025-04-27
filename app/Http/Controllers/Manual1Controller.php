@@ -58,9 +58,9 @@ class Manual1Controller extends Controller
             abort(403, 'No tienes permisos para acceder a esta página.');
            }
 
-    public function clasificacion()
+    public function clasificacionColor()
     {
-        $images = \App\Models\Image::where('path', 'like', 'images/clasificacion/%')->get();
+        $images = \App\Models\Image::where('path', 'like', 'images/clasificacionColor/%')->get();
 
         if (Auth::user()->role === 'Profesor') {
             return view('manual1.clasificacion', [
@@ -76,6 +76,57 @@ class Manual1Controller extends Controller
 
         abort(403, 'No tienes permisos para acceder a esta página.');
        }
+
+       public function clasificacionCategoria()
+    {
+        $images = \App\Models\Image::where('path', 'like', 'images/clasificacionCategoria/%')->get();
+
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual1.clasificacion', [
+                'images' => $images,
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual1.clasificacion', [
+                'images' => $images,
+                'isProfessor' => false,
+            ]);
+        }
+
+        abort(403, 'No tienes permisos para acceder a esta página.');
+       }
+       public function clasificacionHabitat()
+    {
+        $images = \App\Models\Image::where('path', 'like', 'images/clasificacionHabitat/%')->get();
+
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual1.clasificacion', [
+                'images' => $images,
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual1.clasificacion', [
+                'images' => $images,
+                'isProfessor' => false,
+            ]);
+        }
+
+        abort(403, 'No tienes permisos para acceder a esta página.');
+       }
+
+       public function clasificacion()
+       {
+
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual1.clasificacion', [
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual1.clasificacion', [
+                'isProfessor' => false,
+            ]);
+        }
+        }
 
     public function pareoIgualdad()
     {
@@ -98,20 +149,55 @@ class Manual1Controller extends Controller
 
     public function series()
     {
-        $images = \App\Models\Image::where('path', 'like', 'images/series/%')->get();
 
         if (Auth::user()->role === 'Profesor') {
             return view('manual1.series', [
-                'images' => $images,
+
                 'isProfessor' => true,
             ]);
         } elseif (Auth::user()->role === 'Estudiante') {
             return view('manual1.series', [
-                'images' => $images,
+
                 'isProfessor' => false,
             ]);
         }
 
         abort(403, 'No tienes permisos para acceder a esta página.');
        }
+       public function seriesTemporales()
+       {
+           $images = \App\Models\Image::where('path', 'like', 'images/seriesTemporales/%')->get();
+
+           if (Auth::user()->role === 'Profesor') {
+               return view('manual1.series', [
+                   'images' => $images,
+                   'isProfessor' => true,
+               ]);
+           } elseif (Auth::user()->role === 'Estudiante') {
+               return view('manual1.series', [
+                   'images' => $images,
+                   'isProfessor' => false,
+               ]);
+           }
+
+           abort(403, 'No tienes permisos para acceder a esta página.');
+          }
+          public function seriesTamaño()
+          {
+              $images = \App\Models\Image::where('path', 'like', 'images/seriesTamaño/%')->get();
+
+              if (Auth::user()->role === 'Profesor') {
+                  return view('manual1.series', [
+                      'images' => $images,
+                      'isProfessor' => true,
+                  ]);
+              } elseif (Auth::user()->role === 'Estudiante') {
+                  return view('manual1.series', [
+                      'images' => $images,
+                      'isProfessor' => false,
+                  ]);
+              }
+
+              abort(403, 'No tienes permisos para acceder a esta página.');
+             }
 }

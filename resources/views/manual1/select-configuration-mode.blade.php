@@ -21,28 +21,39 @@
 
 <!-- Opciones de configuración -->
 <div class="row justify-content-center">
-    <div class="col-md-5 mb-4">
-        <div class="card shadow-sm border-primary">
-            <div class="card-body text-center">
+    <div class="col-md-5 mb-4 d-flex">
+        <div class="card shadow-sm border-primary equal-height-card w-100">
+            <div class="card-body text-center d-flex flex-column">
                 <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
-                <p class="card-text text-muted">Selecciona las imágenes correctas para configurar las respuestas.</p>
-                <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100">
-                    Seleccionar Imágenes
-                </a>
+                <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
+                <div class="mt-auto">
+                    <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                        Seleccionar Imágenes
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-5 mb-4">
-        <div class="card shadow-sm border-success">
-            <div class="card-body text-center">
+    <div class="col-md-5 mb-4 d-flex">
+        <div class="card shadow-sm border-success equal-height-card w-100">
+            <div class="card-body text-center d-flex flex-column">
                 <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
-                <p class="card-text text-muted">Asigna pares para configurar las respuestas correctas.</p>
-                <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100">
-                    Seleccionar Pares
-                </a>
+                <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                <div class="mt-auto">
+                    <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                        Seleccionar Pares
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </div>
+<style>
+    .equal-height-card {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 @endsection

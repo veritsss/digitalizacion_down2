@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    
-    use HasFactory, Notifiable; 
+
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -48,5 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
+
+    public function studentAnswers()
+    {
+        return $this->hasMany(StudentAnswer::class, 'student_id');
+    }
+
 }

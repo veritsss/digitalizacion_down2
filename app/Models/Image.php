@@ -9,5 +9,9 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['path', 'is_correct'];
+    protected $fillable = [
+        'path',       // Ruta de la imagen
+        'folder',     // Carpeta de la imagen
+        'is_correct', // Indica si la imagen es correcta
+    ];
 }

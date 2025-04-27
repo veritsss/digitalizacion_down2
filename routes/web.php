@@ -47,15 +47,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/professor/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
     Route::get('/professor/select-correct-images/{folder}/{mode}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
     Route::post('/professor/save-correct-images/{folder}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
-
+    Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
+    Route::get('/professor/search-students', [ProfessorController::class, 'searchStudents'])->name('professor.searchStudents');
 
     //ETAPA 1
         Route::get('/manual1', [Manual1Controller::class, 'index'])->name('manual1');
         Route::get('/pareo-seleccion-dibujo', [Manual1Controller::class, 'pareoSeleccionDibujo'])->name('pareo-seleccion-dibujo');
         Route::get('/asociacion', [Manual1Controller::class, 'asociacion'])->name('asociacion');
         Route::get('/clasificacion', [Manual1Controller::class, 'clasificacion'])->name('clasificacion');
+        Route::get('/clasificacionCategoria', [Manual1Controller::class, 'clasificacionCategoria'])->name('clasificacionCategoria');
+        Route::get('/clasificacionHabitat', [Manual1Controller::class, 'clasificacionHabitat'])->name('clasificacionHabitat');
+        Route::get('/clasificacionColor', [Manual1Controller::class, 'clasificacionColor'])->name('clasificacionColor');
         Route::get('/pareo-igualdad', [Manual1Controller::class, 'pareoIgualdad'])->name('pareo-igualdad');
         Route::get('/series', [Manual1Controller::class, 'series'])->name('series');
+        Route::get('/seriesTamaño', [Manual1Controller::class, 'seriesTamaño'])->name('seriesTamaño');
+        Route::get('/seriesTemporales', [Manual1Controller::class, 'seriesTemporales'])->name('seriesTemporales');
     //ETAPA 2
 
         Route::get('/manual2', [Manual2Controller::class, 'index'])->name('manual2');
