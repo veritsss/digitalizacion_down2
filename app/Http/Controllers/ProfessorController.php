@@ -422,20 +422,23 @@ class ProfessorController extends Controller
     return view('manual1.select-configuration-mode', compact('folder'));
 }
 
-public function viewStudentResponses($studentId)
+public function viewStudentResponses(Request $request, $studentId)
 {
-    // Obtener al estudiante
     $student = User::where('id', $studentId)->where('role', 'Estudiante')->firstOrFail();
+    $type = $request->get('type');
 
-    // Obtener todas las respuestas del estudiante agrupadas por pregunta
     $responses = StudentAnswer::with(['question', 'image'])
         ->where('student_id', $studentId)
+        ->when($type, function ($query, $type) {
+            return $query->whereHas('question', function ($q) use ($type) {
+                $q->where('type', $type);
+            });
+        })
         ->get()
         ->groupBy('question_id');
 
-    return view('manual1.view-student-responses', compact('student', 'responses'));
+    return view('manual1.view-student-responses', compact('student', 'responses', 'type'));
 }
-
 public function searchStudents(Request $request)
 {
     $search = $request->input('search');

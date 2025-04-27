@@ -76,14 +76,12 @@ class StudentController extends Controller
             $isCorrect = empty(array_diff($correctImages, $selectedImages)) && empty(array_diff($selectedImages, $correctImages));
 
             // Guardar las respuestas del estudiante
-            foreach ($selectedImages as $imageId) {
-                StudentAnswer::create([
-                    'student_id' => $studentId,
-                    'question_id' => $questionId,
-                    'image_id' => $imageId,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
+            StudentAnswer::create([
+                'student_id' => $studentId,
+                'question_id' => $questionId,
+                'is_correct' => $isCorrect,
+                'selected_images' => json_encode($selectedImages), // Guardar las imágenes seleccionadas
+            ]);
 
             // Marcar las imágenes como respondidas
             QuestionImage::where('question_id', $questionId)
