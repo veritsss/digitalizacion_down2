@@ -19,7 +19,16 @@
         object-fit: cover; /* Asegura que las imágenes llenen el contenedor sin distorsión */
     }
 </style>
+
 <div class="container">
+    <a href="{{ route('professor.searchStudents') }}"
+       class="btn btn-lg btn-outline-primary d-flex align-items-center gap-2 shadow-sm rounded-pill mb-4 px-4 py-2"
+       aria-label="Volver al dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 7.5H14.5A.5.5 0 0 1 15 8z"/>
+        </svg>
+        <span class="fw-bold">Volver</span>
+    </a>
     <h1 class="text-primary fw-bold">Respuestas del Estudiante</h1>
     <h2 class="mb-4">Alumno: {{ $student->name }}</h2>
 
@@ -28,21 +37,22 @@
         <label for="type" class="form-label fw-bold">Seleccionar Tipo de Pregunta:</label>
         <select name="type" id="type" class="form-select">
             <option value="">Todos</option>
+            <option value="pareoyseleccion" {{ request('type') == 'pareoyseleccion' ? 'selected' : '' }}>Pareo y Selección</option>
             <option value="asociacion" {{ request('type') == 'asociacion' ? 'selected' : '' }}>Asociación</option>
             <option value="clasificacionHabitat" {{ request('type') == 'clasificacionHabitat' ? 'selected' : '' }}>Clasificación por habitat</option>
             <option value="clasificacionColor" {{ request('type') == 'clasificacionColor' ? 'selected' : '' }}>Clasificación por color</option>
             <option value="clasificacionCategoria" {{ request('type') == 'clasificacionCategoria' ? 'selected' : '' }}>Clasificación por categoría</option>
-            <option value="pareoyseleccion" {{ request('type') == 'pareoyseleccion' ? 'selected' : '' }}>Pareo y Selección</option>
+            <option value="pareoporigualdad" {{ request('type') == 'pareoporigualdad' ? 'selected' : '' }}>Pareo Por Igualdad</option>
             <option value="seriesTamaño" {{ request('type') == 'seriesTamaño' ? 'selected' : '' }}>Series de tamaño</option>
             <option value="seriesTemporales" {{ request('type') == 'seriesTemporales' ? 'selected' : '' }}>Series temporales</option>
-            <option value="pareoporigualdad" {{ request('type') == 'pareoporigualdad' ? 'selected' : '' }}>Pareo Por Igualdad</option>
+
         </select>
         <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
     </form>
 
     @if($responses->isEmpty())
         <div class="alert alert-info">
-            Este estudiante no ha respondido ninguna pregunta.
+            Este estudiante no ha respondido ninguna pregunta de este tipo.
         </div>
     @else
         @foreach($responses as $questionId => $answers)
@@ -59,16 +69,20 @@
                                         <img src="{{ asset($answer->image->path) }}" alt="Imagen {{ $answer->image->id }}" class="image-content">
                                     </div>
                                     <p class="mt-2">
-                                        <strong>Respuesta:</strong> {{ $answer->is_correct ? 'Correcta' : 'Incorrecta' }}
+                                        <strong>Respuesta:</strong> {{ $answer->is_correct ? 'Correcto' : 'Incorrecta' }}
                                     </p>
                                     <p>
-                                        <strong>Seleccionadas:</strong>
-                                        @foreach(json_decode($answer->selected_images, true) as $selectedImageId)
-                                            <img src="{{ asset($answers->first()->question->images->where('image_id', $selectedImageId)->first()->image->path) }}"
-                                                 alt="Seleccionada {{ $selectedImageId }}"
-                                                 class="image-content"
-                                                 style="width: 50px; height: 50px;">
-                                        @endforeach
+                                        <strong>Imágenes seleccionadas:</strong>
+                                        @php
+                                            $selectedImages = json_decode($answer->selected_images, true);
+                                        @endphp
+                                        @if($selectedImages)
+                                            @foreach($selectedImages as $selectedImageId)
+                                                <img src="{{ asset('path/to/images/' . $selectedImageId) }}" alt="Imagen seleccionada {{ $selectedImageId }}" class="image-content" style="width: 50px; height: 50px;">
+                                            @endforeach
+                                        @else
+                                            No se seleccionaron imágenes.
+                                        @endif
                                     </p>
                                 </div>
                             @endforeach

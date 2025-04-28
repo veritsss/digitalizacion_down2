@@ -31,9 +31,7 @@ Route::middleware(['auth', 'role:Estudiante'])->group(function () {
    // Rutas accesibles para todos los usuarios autenticados
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::get('/inicio', function () {
         return view('inicio');
@@ -45,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/professor/select-configuration-mode/{folder}', [ProfessorController::class, 'selectConfigurationMode'])->name('professor.selectConfigurationMode');
     Route::get('/professor/select-question-images/{folder}/{mode}', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
     Route::post('/professor/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
-    Route::get('/professor/select-correct-images/{folder}/{mode}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
+    Route::get('/professor/select-correct-images/{folder}/{mode}/{questionId}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
     Route::post('/professor/save-correct-images/{folder}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
     Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
     Route::get('/professor/search-students', [ProfessorController::class, 'searchStudents'])->name('professor.searchStudents');

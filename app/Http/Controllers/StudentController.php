@@ -49,6 +49,18 @@ class StudentController extends Controller
         elseif ($question->type === 'clasificacionCategoria') {
             return view('manual1.student-answer-pareo', compact('question'));
         }
+        elseif ($question->type === 'clasificacionHabitat') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'seriesTemporales') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'seriesTamaño') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'pareoporigualdad') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
 
         return back()->with('message', 'Tipo de actividad no reconocido.');
     }
@@ -73,15 +85,18 @@ class StudentController extends Controller
                 ->pluck('image_id')
                 ->toArray();
 
-            $isCorrect = empty(array_diff($correctImages, $selectedImages)) && empty(array_diff($selectedImages, $correctImages));
+
 
             // Guardar las respuestas del estudiante
-            StudentAnswer::create([
-                'student_id' => $studentId,
-                'question_id' => $questionId,
-                'is_correct' => $isCorrect,
-                'selected_images' => json_encode($selectedImages), // Guardar las imágenes seleccionadas
-            ]);
+            foreach ($selectedImages as $imageId) {
+                $isCorrect = in_array($imageId, $correctImages);
+                StudentAnswer::create([
+                    'student_id' => $studentId,
+                    'question_id' => $questionId,
+                    'image_id' => $imageId,
+                    'is_correct' => $isCorrect,
+                ]);
+            }
 
             // Marcar las imágenes como respondidas
             QuestionImage::where('question_id', $questionId)

@@ -11,8 +11,9 @@
      </svg>
      <span class="fw-bold">salir</span>
   </a>
-    <h1 class="text-primary fw-bold">Seleccionar Imágenes Correctas</h1>
-    <p class="text-muted fs-4">Selecciona las imágenes correctas de las seleccionadas anteriormente.</p>
+    <h1 class="text-primary fw-bold">Seleccionar Imágenes Correctas para la pregunta </h1>
+    <p class="text-muted fs-4">Pregunta: {{ $question->title }}</p>
+
 
     @if(session('message'))
         <div class="alert alert-success">

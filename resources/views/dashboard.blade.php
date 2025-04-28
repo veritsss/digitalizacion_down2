@@ -20,6 +20,17 @@
         .section-title {
             color: #6c757d;
         }
+        .btn-styled {
+            background: linear-gradient(90deg, #007bff, #0056b3); /* Gradiente azul */
+            color: #fff;
+            border: none;
+            border-radius: 50px; /* Bordes redondeados */
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+            transition: all 0.3s ease;
+        }
     </style>
 
 </head>
@@ -27,7 +38,7 @@
 <body>
 
     <!-- Navbar -->
-    @include('layouts.navbar') 
+    @include('layouts.navbar')
 
     <!-- Main content -->
     <main class="container mt-4 mb-5"> <!-- Se añadió mb-5 para evitar que el contenido se solape con el footer -->
@@ -37,6 +48,18 @@
         </header>
 
         <section>
+            @if($isProfessor)
+                @if(session('message'))
+                    <div class="alert alert-success">
+                    {{ session('message') }}
+                    </div>
+                @endif
+                <div class="text-center mb-5">
+                    <a href="{{ route('professor.searchStudents') }}" class="btn btn-styled">
+                        <i class="fas fa-users"></i> Ver Estudiantes
+                    </a>
+                </div>
+            @endif
             <h2 class="section-title fs-3 fw-bold">Manuales Disponibles</h2>
             <ul class="list-group mb-5"> <!-- Se añadió mb-5 para añadir un margen inferior -->
                 <li class="list-group-item py-3">

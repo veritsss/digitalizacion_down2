@@ -27,7 +27,7 @@ class ProfessorController extends Controller
     public function selectQuestionImages(Request $request)
 {
     $request->validate([
-        'title' => 'required|string|max:255', // Validar que el título sea obligatorio
+        'title' => 'required|string|max:255',
         'selected_images' => 'required|array',
         'selected_images.*' => 'exists:images,id',
     ]);
@@ -61,11 +61,12 @@ class ProfessorController extends Controller
         // Guardar el ID de la pregunta en la sesión
         session(['question_id' => $question->id]);
 
-        return redirect()->route('professor.selectCorrectImagesPage', ['folder' => $folder, 'mode' => $mode])
+        return redirect()->route('professor.selectCorrectImagesPage', ['folder' => $folder, 'mode' => $mode,
+        'questionId' => $question->id,])
             ->with('message', 'Imágenes seleccionadas correctamente.');
     }
 
-    public function selectCorrectImages($folder = 'pareoyseleccion', $mode = 'images')
+    public function selectCorrectImages($folder = 'pareoyseleccion', $mode = 'images', $questionId)
     {
         $questionImages = session('question_images', []);
 
@@ -73,10 +74,10 @@ class ProfessorController extends Controller
             return redirect()->route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => $mode])
                 ->with('message', 'No se seleccionaron imágenes para la pregunta.');
         }
-
+        $question = Question::findOrFail($questionId);
         $images = Image::whereIn('id', $questionImages)->get();
 
-        return view('manual1.select-correct-images', compact('images', 'folder', 'mode'));
+        return view('manual1.select-correct-images', compact('images', 'folder', 'mode', 'question'));
     }
     // Guardar las imágenes correctas
     public function saveCorrectImages(Request $request, $folder)
@@ -111,7 +112,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para selección de imágenes.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -133,7 +134,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociación.']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo ']);
             }
         }
 
@@ -150,7 +151,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociacion de imagenes.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -173,7 +174,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociación.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociación de imagenes por pares.']);
     }
         }
         // CLASIFICACIÓN POR COLOR
@@ -189,7 +190,7 @@ class ProfessorController extends Controller
                 ->whereIn('image_id', $request->selected_images)
                 ->update(['is_correct' => true]);
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificación de imagenes por Color.']);
         }
 
         elseif ($mode === 'pairs') {
@@ -212,7 +213,7 @@ class ProfessorController extends Controller
                     ]);
             }
 
-         return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificacion.']);
+         return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificación de imagenes por Color.']);
     }
 }
         // CLASIFICACIÓN POR HABITAT
@@ -228,7 +229,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Hábitat.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -251,7 +252,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificacion.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Hábitat.']);
         }
     }
         // CLASIFICACIÓN POR CATEGORÍA
@@ -267,7 +268,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Categoría (Selección).']);
             }
 
             elseif ($mode === 'pairs') {
@@ -290,7 +291,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificacion.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Categoría (Pares).']);
         }
         }
 
@@ -307,7 +308,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Pareo por Igualdad (Selección).']);
             }
 
             elseif ($mode === 'pairs') {
@@ -330,7 +331,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo por igualdad.']);
+        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo por igualdad (Pareo).']);
 
     }
     }
@@ -347,7 +348,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Por tamaño (Selección).']);
             }
 
             elseif ($mode === 'pairs') {
@@ -370,7 +371,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo por igualdad.']);
+        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Por tamaño (Parear).']);
 
     }
 }
@@ -387,7 +388,7 @@ class ProfessorController extends Controller
                 ->whereIn('image_id', $request->selected_images)
                 ->update(['is_correct' => true]);
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo (selección de imágenes).']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Temporales (Selección).']);
         }
 
         elseif ($mode === 'pairs') {
@@ -409,12 +410,12 @@ class ProfessorController extends Controller
                     ]);
             }
 
-    return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo por igualdad.']);
+    return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Temporales (Parear).']);
 
     }
 
 
-    return response()->json(['success' => false, 'message' => 'Tipo de actividad no reconocido.']);
+    return response()->json(['success' => false, 'message' => 'La actividad que intentas realizar no existe.']);
         }
     }
     public function selectConfigurationMode($folder = 'pareoyseleccion')
@@ -443,14 +444,20 @@ public function searchStudents(Request $request)
 {
     $search = $request->input('search');
 
-    // Buscar estudiantes por nombre o ID
+    // Buscar estudiantes por nombre, RUT o ID
     $students = User::where('role', 'Estudiante')
-        ->where(function ($query) use ($search) {
+        ->when($search, function ($query, $search) {
             $query->where('name', 'like', "%$search%")
-                ->orWhere('id', $search);
+                ->orWhere('rut', 'like', "%$search%"); // Buscar por RUT
         })
         ->get();
 
+    // Si es una solicitud AJAX, devolver los resultados como JSON
+    if ($request->ajax()) {
+        return response()->json($students);
+    }
+
+    // Si no es AJAX, cargar la vista con todos los estudiantes
     return view('manual1.search-students', compact('students'));
 }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('student_answers', function (Blueprint $table) {
-            $table->json('selected_images')->nullable(); // Campo para guardar las imágenes seleccionadas
+            $table->json('selected_images')->nullable()->after('is_correct'); // Agregar columna JSON para almacenar imágenes seleccionadas
         });
     }
 

@@ -15,9 +15,34 @@
 
    <!-- Título -->
    <div class="text-center mb-5">
-    <h1 class="text-primary fw-bold display-4">Seleccionar tipo de Configuración para las preguntas</h1>
-    <p class="text-muted fs-5">Elige cómo deseas configurar las respuestas correctas para esta pregunta.</p>
-</div>
+    @if($folder === 'pareoyseleccion')
+        <h1 class="text-primary fw-bold display-4">Configuración para Pareo y Selección</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Pareo y selección.</p>
+    @elseif($folder === 'asociacion')
+        <h1 class="text-primary fw-bold display-4">Configuración para Asociación</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Asociacion.</p>
+    @elseif($folder === 'clasificacionHabitat')
+        <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por habitat</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+    @elseif($folder === 'clasificacionColor')
+        <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por Color</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+        @elseif($folder === 'clasificacionCategoria')
+        <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por Categoría</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+        @elseif($folder === 'pareoporigualdad')
+        <h1 class="text-primary fw-bold display-4">Configuración para Pareo por Igualdad</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Pareo por Igualdad.</p>
+        @elseif($folder === 'seriesTamaño')
+        <h1 class="text-primary fw-bold display-4">Configuración para Series de Tamaño</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Series de Tamaño.</p>
+        @elseif($folder === 'seriesTemporales')
+        <h1 class="text-primary fw-bold display-4">Configuración para Series Temporales</h1>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Series Temporales.</p>
+    @else
+        <h1 class="text-primary fw-bold display-4">Configuración de Actividad</h1>
+        <p class="text-muted fs-5">Selecciona cómo deseas configurar las respuestas correctas.</p>
+    @endif
 
 <!-- Opciones de configuración -->
 <div class="row justify-content-center">
