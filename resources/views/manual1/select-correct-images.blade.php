@@ -199,56 +199,25 @@
                     @endforeach
                 @endif
             @elseif($folder === 'seriesTamaño')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                    @endforeach
-                @endif
-                @elseif($folder === 'seriesTemporales')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                    @endforeach
-                @endif
+            @if($mode === 'images')
+            <div class="col-12 text-center mb-4">
+                <h5 class="text-primary fw-bold">Configurar Series por Tamaño</h5>
+                <p class="text-muted">Asigna un grupo como correcto para las series por tamaño.</p>
+            </div>
+
+            <!-- Seleccionar el grupo correcto -->
+            <div class="col-12 text-center mb-4">
+                <label for="correct_group" class="form-label fw-bold">Seleccionar Grupo Correcto</label>
+                <select name="correct_group" id="correct_group" class="form-select">
+                    <option value="">Seleccionar Grupo Correcto</option>
+                    <option value="1">Pequeño</option>
+                    <option value="2">Mediano</option>
+                    <option value="3">Grande</option>
+                </select>
+            </div>
             @endif
+        @endif
+
         </div>
 
         <button type="button" id="save-button" class="btn btn-success btn-lg d-block text-center mt-3">Guardar Respuestas Correctas</button>

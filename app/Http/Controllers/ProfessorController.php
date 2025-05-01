@@ -339,42 +339,27 @@ class ProfessorController extends Controller
         elseif ($question->type === 'seriesTamaño'){
             if ($mode === 'images') {
                 $request->validate([
-                    'selected_images' => 'required|array',
-                    'selected_images.*' => 'exists:question_images,image_id',
+                    'correct_group' => 'required|in:1,2,3', // Validar que el grupo correcto sea 1, 2 o 3
                 ]);
 
+                $correctGroup = $request->input('correct_group');
+
+                // Reiniciar el estado de todas las imágenes asociadas a la pregunta
                 QuestionImage::where('question_id', $questionId)->update(['is_correct' => false]);
+
+                // Marcar como correctas las imágenes que pertenecen al grupo seleccionado
                 QuestionImage::where('question_id', $questionId)
-                    ->whereIn('image_id', $request->selected_images)
+                    ->whereHas('image', function ($query) use ($correctGroup) {
+                        $query->where('size', $correctGroup);
+                    })
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Por tamaño (Selección).']);
+                // Guardar el grupo correcto en la pregunta
+                $question->update(['correct_group' => $correctGroup]);
+
+                return response()->json(['success' => true, 'message' => 'Respuestas guardadas correctamente para Series por Tamaño.']);
             }
-
-            elseif ($mode === 'pairs') {
-                $request->validate([
-                    'pairs' => 'required|array',
-                    'pairs.*' => 'integer|min:1',
-                ]);
-
-
-                QuestionImage::where('question_id', $questionId)
-                    ->update(['is_correct' => false]);
-
-
-                foreach ($request->pairs as $imageId => $pairId) {
-                    QuestionImage::where('question_id', $questionId)
-                        ->where('image_id', $imageId)
-                        ->update([
-                            'pair_id' => $pairId,
-                            'is_correct' => true,
-                        ]);
-                }
-
-        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Por tamaño (Parear).']);
-
-    }
-}
+        }
     //SERIES TEMPORALES
     elseif ($question->type === 'seriesTemporales'){
         if ($mode === 'images') {
@@ -391,7 +376,7 @@ class ProfessorController extends Controller
             return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Temporales (Selección).']);
         }
 
-        elseif ($mode === 'pairs') {
+        elseif ($mode === 'model') {
             $request->validate([
                 'pairs' => 'required|array',
                 'pairs.*' => 'integer|min:1',

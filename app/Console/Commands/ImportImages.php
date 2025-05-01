@@ -8,7 +8,7 @@ use App\Models\Image;
 
 class ImportImages extends Command
 {
-    protected $signature = 'images:import {folder=asociacion}';
+    protected $signature = 'images:import {folder=seriesTamaño}';
     protected $description = 'Importar imágenes desde una carpeta específica a la base de datos';
 
     public function handle()

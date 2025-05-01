@@ -18,61 +18,174 @@
     @if($folder === 'pareoyseleccion')
         <h1 class="text-primary fw-bold display-4">Configuración para Pareo y Selección</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Pareo y selección.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-primary equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
+                        <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                                Seleccionar Imágenes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-success equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
+                        <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                                Seleccionar Pares
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @elseif($folder === 'asociacion')
         <h1 class="text-primary fw-bold display-4">Configuración para Asociación</h1>
-        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Asociacion.</p>
+        <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Asociación.</p>
+    <div class="row justify-content-center">
+        <div class="col-md-5 mb-4 d-flex">
+            <div class="card shadow-sm border-primary equal-height-card w-100">
+                <div class="card-body text-center d-flex flex-column">
+                    <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
+                    <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
+                    <div class="mt-auto">
+                        <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                            Seleccionar Imágenes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mb-4 d-flex">
+            <div class="card shadow-sm border-success equal-height-card w-100">
+                <div class="card-body text-center d-flex flex-column">
+                    <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
+                    <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                    <div class="mt-auto">
+                        <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                            Seleccionar Pares
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @elseif($folder === 'clasificacionHabitat')
         <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por habitat</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-primary equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
+                        <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                                Seleccionar Imágenes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @elseif($folder === 'clasificacionColor')
         <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por Color</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-success equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
+                        <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                                Seleccionar Pares
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @elseif($folder === 'clasificacionCategoria')
         <h1 class="text-primary fw-bold display-4">Configuración para Clasificación por Categoría</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Clasificación.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-primary equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
+                        <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                                Seleccionar Imágenes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-success equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
+                        <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                                Seleccionar Pares
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @elseif($folder === 'pareoporigualdad')
         <h1 class="text-primary fw-bold display-4">Configuración para Pareo por Igualdad</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Pareo por Igualdad.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-success equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
+                        <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
+                                Seleccionar Pares
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @elseif($folder === 'seriesTamaño')
         <h1 class="text-primary fw-bold display-4">Configuración para Series de Tamaño</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Series de Tamaño.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 d-flex">
+                <div class="card shadow-sm border-primary equal-height-card w-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-primary fw-bold">Agrupar los objetos según el tamaño, grande, mediano o pequeño </h5>
+                        <p class="card-text text-muted flex-grow-1">Selecciona las imágenes para luego configurar las respuestas correctas.</p>
+                        <div class="mt-auto">
+                            <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                                Agrupar imágenes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @elseif($folder === 'seriesTemporales')
         <h1 class="text-primary fw-bold display-4">Configuración para Series Temporales</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Series Temporales.</p>
-    @else
-        <h1 class="text-primary fw-bold display-4">Configuración de Actividad</h1>
-        <p class="text-muted fs-5">Selecciona cómo deseas configurar las respuestas correctas.</p>
-    @endif
+        @endif
 
-<!-- Opciones de configuración -->
-<div class="row justify-content-center">
-    <div class="col-md-5 mb-4 d-flex">
-        <div class="card shadow-sm border-primary equal-height-card w-100">
-            <div class="card-body text-center d-flex flex-column">
-                <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
-                <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
-                <div class="mt-auto">
-                    <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
-                        Seleccionar Imágenes
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-5 mb-4 d-flex">
-        <div class="card shadow-sm border-success equal-height-card w-100">
-            <div class="card-body text-center d-flex flex-column">
-                <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
-                <p class="card-text text-muted flex-grow-1">Asigna pares para configurar las respuestas correctas.</p>
-                <div class="mt-auto">
-                    <a href="{{ route('professor.selectQuestionImagesPage', ['folder' => $folder, 'mode' => 'pairs']) }}" class="btn btn-success btn-lg w-100 mt-auto">
-                        Seleccionar Pares
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 <style>
     .equal-height-card {
