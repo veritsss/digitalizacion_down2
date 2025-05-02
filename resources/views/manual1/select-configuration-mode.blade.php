@@ -184,6 +184,7 @@
         @elseif($folder === 'seriesTemporales')
         <h1 class="text-primary fw-bold display-4">Configuración para Series Temporales</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de Series Temporales.</p>
+
         @endif
 
 </div>

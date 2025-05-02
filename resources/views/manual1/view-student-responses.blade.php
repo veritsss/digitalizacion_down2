@@ -34,19 +34,39 @@
 
     <!-- Formulario para seleccionar el tipo -->
     <form method="GET" action="{{ route('professor.viewStudentResponses', ['studentId' => $student->id]) }}" class="mb-4">
-        <label for="type" class="form-label fw-bold">Seleccionar Tipo de Pregunta:</label>
-        <select name="type" id="type" class="form-select">
-            <option value="">Todos</option>
-            <option value="pareoyseleccion" {{ request('type') == 'pareoyseleccion' ? 'selected' : '' }}>Pareo y Selección</option>
-            <option value="asociacion" {{ request('type') == 'asociacion' ? 'selected' : '' }}>Asociación</option>
-            <option value="clasificacionHabitat" {{ request('type') == 'clasificacionHabitat' ? 'selected' : '' }}>Clasificación por habitat</option>
-            <option value="clasificacionColor" {{ request('type') == 'clasificacionColor' ? 'selected' : '' }}>Clasificación por color</option>
-            <option value="clasificacionCategoria" {{ request('type') == 'clasificacionCategoria' ? 'selected' : '' }}>Clasificación por categoría</option>
-            <option value="pareoporigualdad" {{ request('type') == 'pareoporigualdad' ? 'selected' : '' }}>Pareo Por Igualdad</option>
-            <option value="seriesTamaño" {{ request('type') == 'seriesTamaño' ? 'selected' : '' }}>Series de tamaño</option>
-            <option value="seriesTemporales" {{ request('type') == 'seriesTemporales' ? 'selected' : '' }}>Series temporales</option>
+        <div class="row">
+            <!-- Filtro por tipo -->
+            <div class="col-md-4">
+                <label for="type" class="form-label fw-bold">Seleccionar Tipo de Pregunta:</label>
+                <select name="type" id="type" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="pareoyseleccion" {{ request('type') == 'pareoyseleccion' ? 'selected' : '' }}>Pareo y Selección</option>
+                    <option value="asociacion" {{ request('type') == 'asociacion' ? 'selected' : '' }}>Asociación</option>
+                    <option value="clasificacionHabitat" {{ request('type') == 'clasificacionHabitat' ? 'selected' : '' }}>Clasificación por habitat</option>
+                    <option value="clasificacionColor" {{ request('type') == 'clasificacionColor' ? 'selected' : '' }}>Clasificación por color</option>
+                    <option value="clasificacionCategoria" {{ request('type') == 'clasificacionCategoria' ? 'selected' : '' }}>Clasificación por categoría</option>
+                    <option value="pareoporigualdad" {{ request('type') == 'pareoporigualdad' ? 'selected' : '' }}>Pareo Por Igualdad</option>
+                    <option value="seriesTamaño" {{ request('type') == 'seriesTamaño' ? 'selected' : '' }}>Series de tamaño</option>
+                    <option value="seriesTemporales" {{ request('type') == 'seriesTemporales' ? 'selected' : '' }}>Series temporales</option>
+                </select>
+            </div>
 
-        </select>
+            <!-- Filtro por nombre -->
+            <div class="col-md-4">
+                <label for="filter" class="form-label fw-bold">Filtrar por Nombre:</label>
+                <input type="text" name="filter" id="filter" class="form-control" placeholder="Buscar por nombre" value="{{ request('filter') }}">
+            </div>
+
+            <!-- Ordenar por fecha -->
+            <div class="col-md-4">
+                <label for="order" class="form-label fw-bold">Ordenar por Fecha:</label>
+                <select name="order" id="order" class="form-select">
+                    <option value="desc" {{ request('order') == 'desc' ? 'selected' : '' }}>Más recientes primero</option>
+                    <option value="asc" {{ request('order') == 'asc' ? 'selected' : '' }}>Más antiguas primero</option>
+                </select>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
     </form>
 

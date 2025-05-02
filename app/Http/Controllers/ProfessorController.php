@@ -410,20 +410,41 @@ class ProfessorController extends Controller
 
 public function viewStudentResponses(Request $request, $studentId)
 {
-    $student = User::where('id', $studentId)->where('role', 'Estudiante')->firstOrFail();
-    $type = $request->get('type');
+    $student = User::findOrFail($studentId);
 
-    $responses = StudentAnswer::with(['question', 'image'])
-        ->where('student_id', $studentId)
+    // Obtener el tipo de pregunta seleccionado
+    $type = $request->input('type');
+
+    // Obtener el orden seleccionado (ascendente o descendente)
+    $order = $request->input('order', 'desc'); // Por defecto, descendente
+
+    // Obtener el filtro por nombre (si existe)
+    $filter = $request->input('filter');
+
+    // Consultar las respuestas del estudiante
+    $responsesQuery = StudentAnswer::where('student_id', $studentId)
         ->when($type, function ($query, $type) {
             return $query->whereHas('question', function ($q) use ($type) {
                 $q->where('type', $type);
             });
         })
-        ->get()
-        ->groupBy('question_id');
+        ->when($filter, function ($query, $filter) {
+            return $query->whereHas('question', function ($q) use ($filter) {
+                $q->where('title', 'like', "%$filter%");
+            });
+        })
+        ->orderBy('created_at', $order);
 
-    return view('manual1.view-student-responses', compact('student', 'responses', 'type'));
+    $responses = $responsesQuery->get()->groupBy('question_id');
+
+    // Si es una solicitud AJAX, devolver solo las respuestas
+    if ($request->ajax()) {
+        return response()->json([
+            'html' => view('manual1.partials.student-responses', compact('responses', 'type'))->render(),
+        ]);
+    }
+
+    return view('manual1.view-student-responses', compact('student', 'responses', 'type', 'order', 'filter'));
 }
 public function searchStudents(Request $request)
 {
@@ -444,6 +465,47 @@ public function searchStudents(Request $request)
 
     // Si no es AJAX, cargar la vista con todos los estudiantes
     return view('manual1.search-students', compact('students'));
+}
+public function saveTemporalSequence(Request $request, $folder)
+{
+    $request->validate([
+        'order' => 'required|array', // Validar que se envíe un array de órdenes
+        'order.*' => 'integer|min:1', // Validar que cada orden sea un número entero mayor o igual a 1
+    ]);
+
+    $questionId = $request->input('question_id'); // Asegúrate de que el ID de la pregunta esté disponible
+
+    // Reiniciar el orden de todas las imágenes asociadas a la pregunta
+    QuestionImage::where('question_id', $questionId)->update(['sequence_order' => null]);
+
+    // Guardar el orden asignado a cada imagen
+    foreach ($request->input('order') as $imageId => $order) {
+        QuestionImage::where('question_id', $questionId)
+            ->where('image_id', $imageId)
+            ->update(['sequence_order' => $order]);
+    }
+
+    return redirect()->back()->with('success', 'Secuencia temporal guardada correctamente.');
+}
+public function validateTemporalSequence(Request $request, $questionId)
+{
+    $request->validate([
+        'selected_images' => 'required|array', // Validar que se envíen imágenes seleccionadas
+        'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan
+    ]);
+
+    // Obtener la secuencia correcta basada en el campo `sequence_order`
+    $correctSequence = QuestionImage::where('question_id', $questionId)
+        ->orderBy('sequence_order', 'asc') // Ordenar por el campo `sequence_order`
+        ->pluck('image_id')
+        ->toArray();
+
+    // Comparar la secuencia seleccionada con la secuencia correcta
+    if ($request->input('selected_images') === $correctSequence) {
+        return response()->json(['success' => true, 'message' => 'Secuencia correcta.']);
+    }
+
+    return response()->json(['success' => false, 'message' => 'La secuencia es incorrecta.']);
 }
 }
 

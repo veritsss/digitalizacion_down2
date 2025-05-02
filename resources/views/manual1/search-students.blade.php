@@ -68,7 +68,7 @@
                     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
                     li.innerHTML = `
                         ${student.name} (${student.rut || 'Sin RUT'})
-                        <a href="/professor/view-student-responses/${student.id}" class="btn btn-sm btn-primary">Ver Respuestas</a>
+                        <a href="/professor/student/${student.id}/responses" class="btn btn-sm btn-primary">Ver Respuestas</a>
                     `;
                     ul.appendChild(li);
                 });
