@@ -91,22 +91,15 @@
                                     <p class="mt-2">
                                         <strong>Respuesta:</strong> {{ $answer->is_correct ? 'Correcto' : 'Incorrecta' }}
                                     </p>
-                                    <p>
-                                        <strong>Imágenes seleccionadas:</strong>
-                                        @php
-                                            $selectedImages = json_decode($answer->selected_images, true);
-                                        @endphp
-                                        @if($selectedImages)
-                                            @foreach($selectedImages as $selectedImageId)
-                                                <img src="{{ asset('path/to/images/' . $selectedImageId) }}" alt="Imagen seleccionada {{ $selectedImageId }}" class="image-content" style="width: 50px; height: 50px;">
-                                            @endforeach
-                                        @else
-                                            No se seleccionaron imágenes.
-                                        @endif
-                                    </p>
                                 </div>
                             @endforeach
                         </div>
+                        <p>
+
+                            Respuestas correctas del estudiante: {{ $statistics[$questionId]['student_correct_answers'] }}<br>
+                            Total de imágenes correctas esperadas: {{ $statistics[$questionId]['total_correct_images'] }}<br>
+                            Total de imágenes: {{ $statistics[$questionId]['total_images'] }}<br>
+                        </p>
                     </div>
                 </div>
             @endif

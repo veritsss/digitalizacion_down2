@@ -407,7 +407,6 @@ class ProfessorController extends Controller
 {
     return view('manual1.select-configuration-mode', compact('folder'));
 }
-
 public function viewStudentResponses(Request $request, $studentId)
 {
     $student = User::findOrFail($studentId);
@@ -437,15 +436,23 @@ public function viewStudentResponses(Request $request, $studentId)
 
     $responses = $responsesQuery->get()->groupBy('question_id');
 
-    // Si es una solicitud AJAX, devolver solo las respuestas
-    if ($request->ajax()) {
-        return response()->json([
-            'html' => view('manual1.partials.student-responses', compact('responses', 'type'))->render(),
-        ]);
+    // Calcular estadísticas para cada pregunta
+    $statistics = [];
+    foreach ($responses as $questionId => $answers) {
+        $totalImages = QuestionImage::where('question_id', $questionId)->count();
+        $totalCorrectImages = QuestionImage::where('question_id', $questionId)->where('is_correct', true)->count();
+        $studentCorrectAnswers = $answers->where('is_correct', true)->count();
+
+        $statistics[$questionId] = [
+            'total_images' => $totalImages,
+            'total_correct_images' => $totalCorrectImages,
+            'student_correct_answers' => $studentCorrectAnswers,
+        ];
     }
 
-    return view('manual1.view-student-responses', compact('student', 'responses', 'type', 'order', 'filter'));
+    return view('manual1.view-student-responses', compact('student', 'responses', 'type', 'order', 'filter', 'statistics'));
 }
+
 public function searchStudents(Request $request)
 {
     $search = $request->input('search');
