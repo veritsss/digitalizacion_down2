@@ -12,6 +12,5 @@ class Image extends Model
     protected $fillable = [
         'path',       // Ruta de la imagen
         'folder',     // Carpeta de la imagen
-        'is_correct', // Indica si la imagen es correcta
     ];
 }

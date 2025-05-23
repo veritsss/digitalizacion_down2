@@ -187,6 +187,44 @@ class StudentController extends Controller
             // Si quedan imágenes, recargar la misma pregunta
             return redirect()->route('student.showQuestion', $questionId)
                 ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+        } elseif ($question->type === 'seriesTemporales') {
+            // Validar que se envíen respuestas para cada grupo
+            $request->validate([
+                'respuesta' => 'required|array',
+            ]);
+
+            $series = [];
+            foreach ($request->input('respuesta') as $group => $imagenes) {
+                // Ordenar por el valor ingresado por el estudiante (el orden que seleccionó)
+                $ordenEstudiante = collect($imagenes)->sortBy(fn($orden) => $orden)->keys()->toArray();
+
+                // Obtener el orden correcto desde la base de datos
+                $ordenCorrecto = $question->images
+                    ->where('image.sequence_group', $group)
+                    ->sortBy('image.sequence_order')
+                    ->pluck('image_id')
+                    ->toArray();
+
+                // Guardar la respuesta del estudiante
+                foreach ($imagenes as $imageId => $ordenSeleccionado) {
+                    StudentAnswer::create([
+                        'student_id' => $studentId,
+                        'question_id' => $questionId,
+                        'image_id' => $imageId,
+                        'sequence_group' => $group,
+                        'selected_order' => $ordenSeleccionado,
+                        'is_correct' => ($ordenCorrecto[$ordenSeleccionado - 1] ?? null) == $imageId,
+                    ]);
+                }
+
+                // Validar si la secuencia es correcta
+                if ($ordenEstudiante !== $ordenCorrecto) {
+                    $isCorrect = false;
+                }
+            }
+
+            // Redirigir según resultado
+            return redirect()->route('manual1')->with('message', '¡Respuesta enviada!');
         }
     }
 }

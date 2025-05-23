@@ -9,8 +9,9 @@
         align-items: center;
         justify-content: center;
         overflow: hidden; /* Oculta el contenido que exceda el contenedor */
-        border-radius: 8px; /* Bordes redondeados opcionales */
-        border: 1px solid #ddd; /* Borde opcional para mejor visualización */
+        border-radius: 8px; /* Bordes redondeados */
+        border: 1px solid #ddd; /* Borde opcional */
+
     }
 
     .image-content {
@@ -18,9 +19,26 @@
         max-width: 100%; /* Ajusta el ancho máximo al contenedor */
         object-fit: cover; /* Asegura que las imágenes llenen el contenedor sin distorsión */
     }
+
+    .card-header {
+        background-color: #2c3e50; /* Fondo azul */
+        color: white; /* Texto blanco */
+
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
 </style>
 
 <div class="container">
+    <!-- Botón de volver -->
     <a href="{{ route('professor.searchStudents') }}"
        class="btn btn-lg btn-outline-primary d-flex align-items-center gap-2 shadow-sm rounded-pill mb-4 px-4 py-2"
        aria-label="Volver al dashboard">
@@ -29,12 +47,12 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-primary fw-bold">Respuestas del Estudiante</h1>
-    <h2 class="mb-4">Alumno: {{ $student->name }}</h2>
 
-    <!-- Formulario para seleccionar el tipo -->
+    <h1 class="text-primary fw-bold mb-4">Respuestas del Estudiante: {{ $student->name }}</h1>
+
+    <!-- Formulario de filtros -->
     <form method="GET" action="{{ route('professor.viewStudentResponses', ['studentId' => $student->id]) }}" class="mb-4">
-        <div class="row">
+        <div class="row g-3">
             <!-- Filtro por tipo -->
             <div class="col-md-4">
                 <label for="type" class="form-label fw-bold">Seleccionar Tipo de Pregunta:</label>
@@ -70,21 +88,23 @@
         <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
     </form>
 
+    <!-- Mensaje si no hay respuestas -->
     @if($responses->isEmpty())
         <div class="alert alert-info">
             Este estudiante no ha respondido ninguna pregunta de este tipo.
         </div>
     @else
+        <!-- Respuestas -->
         @foreach($responses as $questionId => $answers)
             @if(!$type || $answers->first()->question->type == $type)
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0">Pregunta: {{ $answers->first()->question->title }}</h5>
+                        Pregunta: {{ $answers->first()->question->title }}
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row g-3">
                             @foreach($answers as $answer)
-                                <div class="col-6 col-md-3 text-center mb-4">
+                                <div class="col-6 col-md-3 text-center">
                                     <div class="image-container">
                                         <img src="{{ asset($answer->image->path) }}" alt="Imagen {{ $answer->image->id }}" class="image-content">
                                     </div>
@@ -94,18 +114,17 @@
                                 </div>
                             @endforeach
                         </div>
-                        <p>
-
-                            Respuestas correctas del estudiante: {{ $statistics[$questionId]['student_correct_answers'] }}<br>
-                            Total de imágenes correctas esperadas: {{ $statistics[$questionId]['total_correct_images'] }}<br>
-                            Total de imágenes: {{ $statistics[$questionId]['total_images'] }}<br>
+                        <p class="mt-3">
+                            <strong>Respuestas correctas del estudiante:</strong> {{ $statistics[$questionId]['student_correct_answers'] }}<br>
+                            <strong>Total de imágenes correctas esperadas:</strong> {{ $statistics[$questionId]['total_correct_images'] }}<br>
+                            <strong>Total de imágenes:</strong> {{ $statistics[$questionId]['total_images'] }}
                         </p>
                     </div>
                 </div>
             @endif
         @endforeach
     @endif
-
-    <a href="{{ route('manual1') }}" class="btn btn-secondary">Volver</a>
+    <a href="{{ route('manual1') }}" class="btn btn-secondary mt-4">Volver</a>
 </div>
+<br>
 @endsection

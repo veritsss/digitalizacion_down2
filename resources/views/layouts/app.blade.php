@@ -11,11 +11,11 @@
 
     @include('layouts.navbar')
 
-    <main class="container-fluid mt-4 mb-5">
+    <main class="container mt-4">
         @yield('contenido')
     </main>
-        @include('layouts.footer')
 
+    @include('layouts.footer')
 
 </body>
 </html>

@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     })->name('inicio');
 
 
+    Route::get('/professor/dashboard', [ProfessorController::class, 'index'])->name('professor.dashboard');
+    Route::get('/professor/estudiante/{id}/detalle', [ProfessorController::class, 'detalle'])->name('professor.studentDetail');
 
 
     Route::get('/professor/select-configuration-mode/{folder}', [ProfessorController::class, 'selectConfigurationMode'])->name('professor.selectConfigurationMode');

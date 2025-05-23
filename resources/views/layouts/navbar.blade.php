@@ -1,25 +1,14 @@
 <nav class="navbar navbar-expand-lg" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
-        <!-- Logo -->
-        <a class="navbar-brand" href="{{ route('dashboard') }}" aria-label="Ir al Dashboard">
-            <x-application-logo class="h-9 w-auto" alt="Logo de la aplicación" />
+        <!-- Logo (Imagen) -->
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}" aria-label="Ir al Dashboard">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="height: 40px;">
         </a>
 
         <!-- Botón de hamburguesa (responsive) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- Menú de navegación -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <!-- Enlace de Dashboard -->
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" aria-label="Ir a la página principal">
-                        Inicio
-                    </a>
-                </li>
-            </ul>
 
             <!-- Opciones de usuario autenticado -->
             @auth
@@ -28,8 +17,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de usuario">
                             {{ Auth::user()->name }}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="max-width: 200px;">
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}" aria-label="Ir al perfil de usuario">Perfil</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                          <!--  <li><a class="dropdown-item" href="{{ route('profile.edit') }}" aria-label="Ir al perfil de usuario">Perfil</a></li>-->
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -40,6 +29,18 @@
                     </li>
                 </ul>
             @endauth
+            <!-- Opciones para usuarios no autenticados -->
+            @guest
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}" aria-label="Iniciar sesión">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}" aria-label="Registrarse">Registrarse</a>
+                    </li>
+                </ul>
+            @endguest
+            <!-- Enlace de ayuda -->
         </div>
     </div>
 </nav>
@@ -52,8 +53,9 @@
 
     .navbar {
         z-index: 1000; /* Asegura que la barra de navegación esté siempre arriba */
-        background-color: #2c3e50; /* Fondo oscuro, igual que el footer */
+        background-color: #2c3e50 !important; /* Fondo oscuro consistente */
         color: #ecf0f1; /* Texto claro para contraste */
+        box-shadow: none; /* Elimina cualquier sombra que pueda alterar la percepción del color */
     }
 
     .navbar-toggler {

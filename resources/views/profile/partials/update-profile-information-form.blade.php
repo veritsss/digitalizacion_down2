@@ -1,10 +1,10 @@
 <section>
     <header class="mb-6">
-        <h2 id="profile-header" class="text-lg font-medium text-primary">
+        <h2 id="profile-header" class="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {{ __('Su perfil') }}
         </h2>
 
-        <p id="profile-description" class="mt-1 text-sm text-muted">
+        <p id="profile-description" class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __("Actualice la información del perfil y la dirección de correo electrónico de su cuenta.") }}
         </p>
     </header>
@@ -13,49 +13,49 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         @csrf
         @method('patch')
 
         <!-- Campo para nombre -->
         <div>
-            <x-input-label for="name" :value="__('Nombre')" />
+            <x-input-label for="name" :value="__('Nombre')" class="text-gray-700 dark:text-gray-300" />
             <x-text-input
                 id="name"
                 name="name"
                 type="text"
-                class="input-field"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 :value="old('name', $user->name)"
                 required
                 autofocus
                 autocomplete="name"
                 aria-describedby="name-error"
             />
-            <x-input-error id="name-error" class="mt-2" :messages="$errors->get('name')" />
+            <x-input-error id="name-error" class="mt-2 text-sm text-red-600" :messages="$errors->get('name')" />
         </div>
 
         <!-- Campo para correo electrónico -->
         <div>
-            <x-input-label for="email" :value="__('Correo')" />
+            <x-input-label for="email" :value="__('Correo')" class="text-gray-700 dark:text-gray-300" />
             <x-text-input
                 id="email"
                 name="email"
                 type="email"
-                class="input-field"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 :value="old('email', $user->email)"
                 required
                 autocomplete="username"
                 aria-describedby="email-error"
             />
-            <x-input-error id="email-error" class="mt-2" :messages="$errors->get('email')" />
+            <x-input-error id="email-error" class="mt-2 text-sm text-red-600" :messages="$errors->get('email')" />
 
             <!-- Verificación de correo -->
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div class="mt-4">
-                    <p class="text-sm">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
                         {{ __('Su correo electrónico no ha sido verificado') }}
 
-                        <button form="send-verification" class="underline text-sm hover:text-primary dark:hover:text-primary-light rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800">
+                        <button form="send-verification" class="underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">
                             {{ __('Haga click aquí para reenviar la verificación.') }}
                         </button>
                     </p>
@@ -71,7 +71,7 @@
 
         <!-- Botón de guardar -->
         <div class="flex items-center gap-4 mt-6">
-            <x-primary-button class="w-full sm:w-auto">
+            <x-primary-button class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">
                 {{ __('Guardar') }}
             </x-primary-button>
 

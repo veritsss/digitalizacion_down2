@@ -12,8 +12,11 @@ class CreateStudentAnswersTable extends Migration
             $table->id(); // ID de la respuesta
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade'); // Relación con el estudiante
             $table->foreignId('question_id')->constrained()->onDelete('cascade'); // Relación con la pregunta
-            $table->foreignId('image_id')->constrained()->onDelete('cascade'); // Imagen seleccionada por el estudiante
+            $table->foreignId('image_id')->constrained()->onDelete('cascade'); // Imagen seleccionada por el estudiante\
             $table->boolean('is_correct')->default(false); // Indica si la respuesta fue correcta
+            $table->boolean('is_answered')->default(false); // Indica si la pregunta fue respondida
+            $table->json('selected_images')->nullable(); // Agregar columna JSON para almacenar imágenes seleccionadas
+
             $table->timestamps(); // Campos created_at y updated_at
         });
     }

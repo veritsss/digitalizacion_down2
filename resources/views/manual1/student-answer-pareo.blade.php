@@ -83,18 +83,33 @@
                 </label>
             </div>
         @endforeach
+       @elseif($question->mode === 'seriesTemporales')
+            <!-- Modo: Series Temporales -->
+            @php
+                $series = $question->images->groupBy('image.sequence_group');
+            @endphp
+            @foreach($series as $group => $imagenes)
+                <h5>Serie {{ $group }}</h5>
+                <div class="row mb-4">
+                    @foreach($imagenes->sortBy('image.sequence_order') as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <img src="{{ asset($image->image->path) }}" class="image-content mb-2">
+                            <input type="number" name="respuesta[{{ $group }}][{{ $image->image_id }}]" min="1" max="{{ count($imagenes) }}" class="form-control" placeholder="Orden">
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
         @endif
     </div>
 
-        <!-- Botón de Enviar Respuesta -->
-        <button type="submit" class="btn btn-success btn-lg btn-submit">Enviar Respuesta</button>
-    </form>
+    <!-- Botón de Enviar Respuesta -->
+    <button type="submit" class="btn btn-success btn-lg btn-submit">Enviar Respuesta</button>
+</form>
 
-    <!-- Botón de Salir -->
-    <div class="d-flex justify-content-center mt-4">
-        <a href="{{ route('manual1') }}" class="btn btn-exit">
-            Salir
-        </a>
-    </div>
+<!-- Botón de Salir -->
+<div class="d-flex justify-content-center mt-4">
+    <a href="{{ route('manual1') }}" class="btn btn-exit">
+        Salir
+    </a>
 </div>
 @endsection

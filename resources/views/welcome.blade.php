@@ -1,99 +1,54 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
+@section('title', 'Manual Etapa 1')
 
-        <title>Bienvenido</title>
+@section('contenido')
+<div class="container mb-5">
+    <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">Digitalización del manual Palabras + Palabras</h1>
+        <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+    </div>
 
-        <!-- Styles -->
-        <style>
-            body {
-                font-family: 'Instrument Sans', sans-serif;
-                background-color: #f4f4f4;
-                color: #333;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            Este manual cuenta con un conjunto de recursos didácticos para favorecer el acceso temprano a la lectura para estudiantes no lectores que presentan NEE.
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            Material elaborado en el año 2008 por la Fundación Down-21 en colaboración con la Unidad de Educación Especial del Ministerio de Educación. Esta propuesta consta de material organizado en cuadernillos dirigido a niños y niñas, otro a las familias y otro dirigido a los profesores y profesoras.
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            Se presenta de manera gradual, paulatina y práctica; exponiendo en detalle los pasos a seguir, las secuencias de trabajo y los errores que hay que evitar, para conseguir que los niños, niñas y jóvenes logren los aprendizajes esperados. Para alcanzar este propósito se utiliza un lenguaje claro y simple, sin gran tecnicismo, lo que sin duda, posibilita su aplicación tanto por profesores y profesoras de educación regular, especial y la familia.
+        </p>
+       <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Consta de 5 Manuales:</h2>
+        <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+            <li>
+                <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para los y las docentes
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Familia.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para la familia
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 1ª etapa
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapa2.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 2ª etapa
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapas_3y4.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 3ª y 4ª etapa
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+@endsection
 
-            .container {
-                text-align: center;
-                background: #fff;
-                padding: 2rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                width: 100%;
-            }
 
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 1rem;
-                color: #222;
-            }
-
-            p {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-                color: #555;
-            }
-
-            .btn {
-                display: inline-block;
-                padding: 0.75rem 1.5rem;
-                font-size: 1rem;
-                color: #fff;
-                background-color: #007bff;
-                border: none;
-                border-radius: 4px;
-                text-decoration: none;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn:hover {
-                background-color: #0056b3;
-            }
-
-            .links {
-                margin-top: 1.5rem;
-            }
-
-            .links a {
-                color: #007bff;
-                text-decoration: none;
-                margin: 0 0.5rem;
-                font-size: 0.9rem;
-            }
-
-            .links a:hover {
-                text-decoration: underline;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Bienvenido</h1>
-            @if (Route::has('login'))
-                <div>
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn">Ir al Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn">Iniciar Sesión</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn" style="background-color: #28a745;">Registrarse</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-        </div>
-    </body>
-</html>

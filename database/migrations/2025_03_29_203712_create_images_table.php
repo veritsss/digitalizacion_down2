@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('path'); // Ruta de la imagen
-            $table->boolean('is_correct')->default(false); // Indica si esta imagen es la correcta
+            $table->string('folder')->nullable(); // Carpeta de la imagen
+            $table->integer('size')->nullable(); // Tamaño predefinido: 1 (pequeño), 2 (mediano), 3 (grande)
+            $table->integer('sequence_group')->nullable();
+            $table->integer('sequence_order')->nullable(); // Campo para almacenar el orden de la secuencia
             $table->timestamps();
         });
     }

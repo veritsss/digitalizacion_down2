@@ -361,47 +361,27 @@ class ProfessorController extends Controller
             }
         }
     //SERIES TEMPORALES
-    elseif ($question->type === 'seriesTemporales'){
-        if ($mode === 'images') {
-            $request->validate([
-                'selected_images' => 'required|array',
-                'selected_images.*' => 'exists:question_images,image_id',
-            ]);
+    elseif ($question->type === 'seriesTemporales') {
+    if ($mode === 'seriesTemporales') {
+        $request->validate([
+            'selected_images' => 'required|array',
+            'selected_images.*' => 'exists:question_images,image_id',
+        ]);
 
-            QuestionImage::where('question_id', $questionId)->update(['is_correct' => false]);
-            QuestionImage::where('question_id', $questionId)
-                ->whereIn('image_id', $request->selected_images)
-                ->update(['is_correct' => true]);
+        // Primero, desmarcar todas como no correctas
+        QuestionImage::where('question_id', $questionId)->update(['is_correct' => false]);
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Temporales (Selección).']);
-        }
+        // Marcar solo las seleccionadas como correctas
+        QuestionImage::where('question_id', $questionId)
+            ->whereIn('image_id', $request->selected_images)
+            ->update(['is_correct' => true]);
 
-        elseif ($mode === 'model') {
-            $request->validate([
-                'pairs' => 'required|array',
-                'pairs.*' => 'integer|min:1',
-            ]);
-
-
-            QuestionImage::where('question_id', $questionId)
-                ->update(['is_correct' => false]);
-
-            foreach ($request->pairs as $imageId => $pairId) {
-                QuestionImage::where('question_id', $questionId)
-                    ->where('image_id', $imageId)
-                    ->update([
-                        'pair_id' => $pairId,
-                        'is_correct' => true,
-                    ]);
-            }
-
-    return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Series Temporales (Parear).']);
-
+        return response()->json(['success' => true, 'message' => 'Imágenes guardadas para Series Temporales.']);
     }
 
-
-    return response()->json(['success' => false, 'message' => 'La actividad que intentas realizar no existe.']);
-        }
+    }
+        // Si el tipo de actividad no coincide con ninguno de los anteriores
+        return response()->json(['success' => false, 'message' => 'La actividad que intentas realizar no existe.']);
     }
     public function selectConfigurationMode($folder = 'pareoyseleccion')
 {
@@ -514,6 +494,117 @@ public function validateTemporalSequence(Request $request, $questionId)
 
     return response()->json(['success' => false, 'message' => 'La secuencia es incorrecta.']);
 }
+public function index()
+{
+    $total_questions = Question::count();
+
+    $students = User::where('role', 'estudiante')->get();
+
+    $students = $students->filter(function($student) use ($total_questions) {
+        // IDs de preguntas que respondió el estudiante
+        $answered_question_ids = StudentAnswer::where('student_id', $student->id)
+            ->pluck('question_id')
+            ->unique();
+
+        if ($answered_question_ids->isEmpty()) {
+            return false;
+        }
+
+        // Total de imágenes correctas posibles solo en las preguntas respondidas
+        $total_correct_images = QuestionImage::whereIn('question_id', $answered_question_ids)
+            ->where('is_correct', 1)
+            ->count();
+
+        // Total de aciertos del estudiante
+        $student_correct = StudentAnswer::where('student_id', $student->id)
+            ->where('is_correct', 1)
+            ->count();
+
+        // Cantidad de preguntas respondidas
+        $student->questions_answered = $answered_question_ids->count();
+        $student->questions_total = $total_questions;
+
+        $student->total_correct = $student_correct;
+        $student->total_possible = $total_correct_images;
+        $student->accuracy = $total_correct_images > 0
+            ? round(($student_correct / $total_correct_images) * 100, 2)
+            : 0;
+
+        return true;
+    });
+
+    return view('professor.dashboard', ['students' => $students]);
+}
+public function detalle($id)
+{
+    $student = User::findOrFail($id);
+
+    // Obtener los tipos de pregunta
+    $types = Question::distinct()->pluck('type');
+
+    $detalles = [];
+
+    foreach ($types as $type) {
+        // IDs de preguntas de este tipo
+        $question_ids = Question::where('type', $type)->pluck('id');
+
+        // Total de preguntas de este tipo
+        $total_preguntas = $question_ids->count();
+
+        // Preguntas respondidas por el estudiante de este tipo
+        $preguntas_respondidas = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $question_ids)
+            ->pluck('question_id')
+            ->unique()
+            ->count();
+
+        // Total de imágenes correctas posibles en esas preguntas
+        $total_imagenes = QuestionImage::whereIn('question_id', $question_ids)
+            ->where('is_correct', 1)
+            ->count();
+
+        // Imágenes respondidas por el estudiante (de esas preguntas)
+        $imagenes_respondidas = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $question_ids)
+            ->count();
+
+        // Imágenes correctas respondidas
+        $imagenes_correctas = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $question_ids)
+            ->where('is_correct', 1)
+            ->count();
+
+        // Imágenes incorrectas respondidas
+        $imagenes_incorrectas = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $question_ids)
+            ->where('is_correct', 0)
+
+            ->count();
+
+
+        $omitidas = $total_imagenes - $imagenes_respondidas;
+
+
+        if ($total_preguntas > 0) {
+            $detalles[] = [
+                'type' => $type,
+                'total_preguntas' => $total_preguntas,
+                'preguntas_respondidas' => $preguntas_respondidas,
+                'total_imagenes' => $total_imagenes,
+                'imagenes_respondidas' => $imagenes_respondidas,
+                'imagenes_correctas' => $imagenes_correctas,
+                'imagenes_incorrectas' => $imagenes_incorrectas,
+                'omitidas' => $omitidas,
+                'porcentaje' => $imagenes_respondidas > 0
+                    ? round(($imagenes_correctas / $imagenes_respondidas) * 100, 2)
+                    : 0,
+            ];
+        }
+    }
+
+    return view('professor.student-detail', compact('student', 'detalles'));
+}
+
 }
 
 

@@ -216,8 +216,18 @@
                 </select>
             </div>
             @endif
-        @endif
-
+            @elseif ($folder === 'seriesTemporales')
+                @if ($mode === 'seriesTemporales')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                @endif
+            @endif
         </div>
 
         <button type="button" id="save-button" class="btn btn-success btn-lg d-block text-center mt-3">Guardar Respuestas Correctas</button>

@@ -49,17 +49,20 @@
 
         <section>
             @if($isProfessor)
-                @if(session('message'))
-                    <div class="alert alert-success">
-                    {{ session('message') }}
-                    </div>
-                @endif
-                <div class="text-center mb-5">
-                    <a href="{{ route('professor.searchStudents') }}" class="btn btn-styled">
-                        <i class="fas fa-users"></i> Ver Estudiantes
-                    </a>
-                </div>
-            @endif
+    @if(session('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        <a href="{{ route('professor.searchStudents') }}" class="btn btn-styled">
+            <i class="fas fa-users"></i> Ver respuestas
+        </a>
+        <a href="{{ route('professor.dashboard') }}" class="btn btn-styled">
+            <i class="fas fa-users"></i> Ver Estadísticas
+        </a>
+    </div>
+@endif
             <h2 class="section-title fs-3 fw-bold">Manuales Disponibles</h2>
             <ul class="list-group mb-5"> <!-- Se añadió mb-5 para añadir un margen inferior -->
                 <li class="list-group-item py-3">

@@ -8,7 +8,7 @@ class QuestionImage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['question_id', 'image_id', 'is_correct'];
+    protected $fillable = ['question_id', 'image_id', 'is_correct', 'is_answered', 'selected_images'];
 
     public function question()
     {

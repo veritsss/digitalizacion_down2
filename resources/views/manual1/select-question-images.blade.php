@@ -58,9 +58,11 @@
                 </label>
             </div>
         @endforeach
-    </div>
 
-    <button type="submit" class="btn btn-success btn-lg d-block text-center mt-3">Guardar Pregunta</button>
+    <div class="d-flex justify-content-center mt-3">
+        <button type="submit" class="btn btn-success btn-lg px-5 py-3 w-50">Guardar Pregunta</button>
+    </div>
 </form>
 </div>
+<br>
 @endsection

@@ -4,16 +4,17 @@
             <!-- Columna 1: Sobre nosotros -->
             <div class="col-12 col-md-4 mb-3 mb-md-0">
                 <h5>Sobre nosotros</h5>
-                <p>We are a company dedicated to providing the best services and products to our customers.</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit architecto eligendi tempore ea libero iste nisi ipsa velit ab vero soluta consequuntur officia fugiat eos aperiam, aliquam sint excepturi debitis.</p>
             </div>
             <!-- Columna 2: Otros enlaces -->
             <div class="col-12 col-md-4 mb-3 mb-md-0">
                 <h5>Otros enlaces</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{{ route('inicio') }}" class="text-white">Inicio</a></li>
+                    <li><a href="/" class="text-white">Ver manuales</a></li>
                     <li><a href="#" class="text-white">¿Quiénes somos?</a></li>
                     <li><a href="#" class="text-white">Historia</a></li>
                     <li><a href="#" class="text-white">Contacto</a></li>
+
                 </ul>
             </div>
             <!-- Columna 3: Contáctanos -->
@@ -44,9 +45,10 @@
     }
 
     footer {
-        background-color: #2c3e50; /* Fondo oscuro */
+        background-color: #2c3e50 !important; /* Fondo oscuro consistente */
         color: #ecf0f1; /* Texto claro */
         padding: 1rem 0;
+        box-shadow: none; /* Elimina cualquier sombra que pueda alterar la percepción del color */
     }
 
     footer h5 {

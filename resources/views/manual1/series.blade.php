@@ -36,7 +36,7 @@
     <a href="{{ route('professor.selectConfigurationMode','seriesTamaño') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
         Comenzar con las Series por Tamaño
     </a>
-    <a href="{{ route('professor.selectConfigurationMode','seriesTemporales') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+    <a href="{{ route('professor.selectConfigurationMode','seriesTemporales') }}" class="btn btn-success btn-lg d-block text-center mt-3">
         Comenzar con las Series Temporales
     </a>
 
@@ -51,7 +51,7 @@
         <a href="{{ route('student.answer', ['type' => 'seriesTamaño']) }}" class="btn btn-primary btn-lg">
             Responder Preguntas de Series de Tamaño
         </a>
-        <a href="{{ route('student.answer', ['type' => 'seriesTemporales']) }}" class="btn btn-primary btn-lg">
+        <a href="{{ route('student.answer', ['type' => 'seriesTemporales']) }}" class="btn btn-success btn-lg">
             Responder Preguntas de Series Temporales
         </a>
         @endif

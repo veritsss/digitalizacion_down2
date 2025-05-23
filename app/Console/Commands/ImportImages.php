@@ -8,34 +8,47 @@ use App\Models\Image;
 
 class ImportImages extends Command
 {
-    protected $signature = 'images:import {folder=seriesTemporales}';
-    protected $description = 'Importar imágenes desde una carpeta específica a la base de datos';
+    protected $signature = 'images:import {folder?}';
+    protected $description = 'Importar imágenes desde una carpeta específica o todas las carpetas a la base de datos';
 
     public function handle()
     {
         $folder = $this->argument('folder');
-        $imagePath = public_path('images/' . $folder);
+        $basePath = public_path('images');
 
-        if (!File::exists($imagePath)) {
-            $this->error("La carpeta {$folder} no existe en public/images.");
-            return;
+        if ($folder) {
+            $folders = [ $folder ];
+        } else {
+            // Obtener todas las carpetas dentro de public/images
+            $folders = array_filter(scandir($basePath), function($dir) use ($basePath) {
+                return $dir !== '.' && $dir !== '..' && is_dir($basePath . DIRECTORY_SEPARATOR . $dir);
+            });
         }
 
-        $files = File::files($imagePath);
+        foreach ($folders as $folderName) {
+            $imagePath = $basePath . DIRECTORY_SEPARATOR . $folderName;
+            if (!File::exists($imagePath)) {
+                $this->error("La carpeta {$folderName} no existe en public/images.");
+                continue;
+            }
 
-        foreach ($files as $file) {
-            if (in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {
-                if (!Image::where('path', 'images/' . $folder . '/' . $file->getFilename())->exists()) {
-                    Image::create([
-                        'path' => 'images/' . $folder . '/' . $file->getFilename(),
-                        'folder' => $folder,
-                        'is_correct' => false,
-                    ]);
-                    $this->info('Imagen importada: ' . $file->getFilename());
+            $files = File::files($imagePath);
+
+            foreach ($files as $file) {
+                if (in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {
+                    $dbPath = 'images/' . $folderName . '/' . $file->getFilename();
+                    if (!Image::where('path', $dbPath)->exists()) {
+                        Image::create([
+                            'path' => $dbPath,
+                            'folder' => $folderName,
+                            'is_correct' => false,
+                        ]);
+                        $this->info('Imagen importada: ' . $dbPath);
+                    }
                 }
             }
         }
 
-        $this->info('Todas las imágenes de la carpeta han sido importadas.');
+        $this->info('Todas las imágenes han sido importadas.');
     }
 }
