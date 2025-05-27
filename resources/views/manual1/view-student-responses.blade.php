@@ -124,7 +124,7 @@
             @endif
         @endforeach
     @endif
-    <a href="{{ route('manual1') }}" class="btn btn-secondary mt-4">Volver</a>
+    <a href="{{ route('professor.searchStudents') }}" class="btn btn-secondary mt-4">Volver</a>
 </div>
 <br>
 @endsection

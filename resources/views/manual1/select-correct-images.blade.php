@@ -230,21 +230,31 @@
             @endif
         </div>
 
-        <button type="button" id="save-button" class="btn btn-success btn-lg d-block text-center mt-3">Guardar Respuestas Correctas</button>
-        <div class="d-flex justify-content-between mt-4">
+       <div class="d-flex justify-content-center gap-3 mt-4">
+    <button type="button" id="save-button" class="btn btn-success btn-lg w-50 py-3">
+        Guardar Respuestas Correctas
+    </button>
+    <a href="{{ route('professor.selectConfigurationMode', ['folder' => $folder]) }}" class="btn btn-primary btn-lg w-50 py-3" id="next-button">
+        Siguiente
+    </a>
+    </div>
 
-
-
-        <a href="{{ route('professor.selectConfigurationMode', ['folder' => $folder]) }}" class="btn btn-primary btn-lg">
-            Siguiente
-        </a>
     </div>
     </form>
 </div>
 
 <script>
+    // Deshabilitar botones hasta guardar
+    document.querySelector('a.btn-primary').classList.add('disabled');
+    document.querySelector('a.btn-outline-danger').classList.add('disabled');
+    let respuestasGuardadas = false;
+
+    // Validar selección antes de guardar
     document.getElementById('save-button').addEventListener('click', function () {
         const form = document.getElementById('correct-images-form');
+
+
+
         const formData = new FormData(form);
 
         fetch("{{ route('professor.saveCorrectImages',['folder' => $folder]) }}", {
@@ -262,14 +272,52 @@
         })
         .then(data => {
             if (data.success) {
-                alert(data.message || 'Respuestas correctas guardadas.');
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Guardado!',
+                    text: data.message || 'Respuestas correctas guardadas.'
+                });
+                respuestasGuardadas = true;
+                // Habilitar botones
+                document.querySelector('a.btn-primary').classList.remove('disabled');
+                document.querySelector('a.btn-outline-danger').classList.remove('disabled');
             } else {
-                alert(data.message || 'Ocurrió un error al guardar las respuestas.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message || 'Ocurrió un error al guardar las respuestas.'
+                });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error inesperado',
+                text: 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.'
+            });
+        });
+    });
+
+    // Prevenir salir si no se ha guardado
+    window.addEventListener('beforeunload', function (e) {
+        if (!respuestasGuardadas) {
+            e.preventDefault();
+            e.returnValue = 'Debes guardar las respuestas antes de salir.';
+        }
+    });
+
+    // Prevenir click en salir/siguiente si no se ha guardado
+    document.querySelectorAll('a.btn-primary, a.btn-outline-danger').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            if (!respuestasGuardadas) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Debes guardar las respuestas antes de salir o avanzar.'
+                });
+            }
         });
     });
 </script>

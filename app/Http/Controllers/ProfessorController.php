@@ -112,7 +112,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para selección de imágenes.']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -134,7 +134,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo ']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas. ']);
             }
         }
 
@@ -151,7 +151,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociacion de imagenes.']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -174,7 +174,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para asociación de imagenes por pares.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
     }
         }
         // CLASIFICACIÓN POR COLOR
@@ -190,7 +190,7 @@ class ProfessorController extends Controller
                 ->whereIn('image_id', $request->selected_images)
                 ->update(['is_correct' => true]);
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificación de imagenes por Color.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
         }
 
         elseif ($mode === 'pairs') {
@@ -213,7 +213,7 @@ class ProfessorController extends Controller
                     ]);
             }
 
-         return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para clasificación de imagenes por Color.']);
+         return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
     }
 }
         // CLASIFICACIÓN POR HABITAT
@@ -229,7 +229,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Hábitat.']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -252,7 +252,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Hábitat.']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
         }
     }
         // CLASIFICACIÓN POR CATEGORÍA
@@ -268,7 +268,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Categoría (Selección).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -291,7 +291,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Clasificación por Categoría (Pares).']);
+            return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
         }
         }
 
@@ -308,7 +308,7 @@ class ProfessorController extends Controller
                     ->whereIn('image_id', $request->selected_images)
                     ->update(['is_correct' => true]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para Pareo por Igualdad (Selección).']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
 
             elseif ($mode === 'pairs') {
@@ -331,7 +331,7 @@ class ProfessorController extends Controller
                         ]);
                 }
 
-        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas para pareo por igualdad (Pareo).']);
+        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
 
     }
     }
@@ -357,7 +357,7 @@ class ProfessorController extends Controller
                 // Guardar el grupo correcto en la pregunta
                 $question->update(['correct_group' => $correctGroup]);
 
-                return response()->json(['success' => true, 'message' => 'Respuestas guardadas correctamente para Series por Tamaño.']);
+                return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
             }
         }
     //SERIES TEMPORALES
@@ -376,7 +376,7 @@ class ProfessorController extends Controller
             ->whereIn('image_id', $request->selected_images)
             ->update(['is_correct' => true]);
 
-        return response()->json(['success' => true, 'message' => 'Imágenes guardadas para Series Temporales.']);
+        return response()->json(['success' => true, 'message' => 'Respuestas correctas guardadas.']);
     }
 
     }
@@ -472,7 +472,7 @@ public function saveTemporalSequence(Request $request, $folder)
             ->update(['sequence_order' => $order]);
     }
 
-    return redirect()->back()->with('success', 'Secuencia temporal guardada correctamente.');
+    return redirect()->back()->with('success', 'Respuestas correctas guardadas.');
 }
 public function validateTemporalSequence(Request $request, $questionId)
 {
@@ -557,6 +557,17 @@ public function detalle($id)
             ->pluck('question_id')
             ->unique()
             ->count();
+        $preguntas_respondidas_ids = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $question_ids)
+            ->pluck('question_id')
+            ->unique();
+
+        $preguntas_respondidas = $preguntas_respondidas_ids->count();
+
+        // Solo imágenes correctas de preguntas respondidas
+        $imagenes_correctas_ids = QuestionImage::whereIn('question_id', $preguntas_respondidas_ids)
+            ->where('is_correct', 1)
+            ->pluck('id');
 
         // Total de imágenes correctas posibles en esas preguntas
         $total_imagenes = QuestionImage::whereIn('question_id', $question_ids)
@@ -582,8 +593,13 @@ public function detalle($id)
             ->count();
 
 
-        $omitidas = $total_imagenes - $imagenes_respondidas;
+          $imagenes_correctas_respondidas_ids = StudentAnswer::where('student_id', $student->id)
+            ->whereIn('question_id', $preguntas_respondidas_ids)
+            ->whereIn('image_id', $imagenes_correctas_ids)
+            ->pluck('image_id')
+            ->unique();
 
+        $omitidas = ($imagenes_correctas_ids->diff($imagenes_correctas_respondidas_ids)->count())- $imagenes_respondidas ;
 
         if ($total_preguntas > 0) {
             $detalles[] = [
