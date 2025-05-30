@@ -39,14 +39,24 @@
         }
     </style>
 
-<form action="{{ route('professor.selectQuestionImages') }}" method="POST">
+<form action="{{ route('professor.selectQuestionImages') }}" method="POST" id="correct-images-form">
     @csrf
     <input type="hidden" name="folder" value="{{ $folder }}">
     <input type="hidden" name="mode" value="{{ $mode }}">
 
     <div class="mb-3">
         <label for="title" class="form-label">Título de la Pregunta</label>
-        <input type="text" id="title" name="title" class="form-control" placeholder="Escribe el título de la pregunta" required>
+        <div class="input-group">
+            <!-- Selección de opciones predefinidas -->
+            <select id="predefined-title" class="form-select" required>
+                <option value="" disabled selected>Selecciona un tipo de pregunta</option>
+                <option value="Seleccionar la imagen correcta: ">Seleccionar la imagen correcta:</option>
+                <option value="Parear imágenes iguales: ">Parear imágenes iguales:</option>
+                <option value="Completar la secuencia: ">Completar la secuencia:</option>
+            </select>
+            <!-- Campo para completar el título -->
+            <input type="text" id="custom-title" name="title" class="form-control" placeholder="Escribe aquí...">
+        </div>
     </div>
     <!-- Mostrar las imágenes -->
     <div class="row">
@@ -68,4 +78,84 @@
 </form>
 </div>
 <br>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const predefinedTitle = document.getElementById('predefined-title');
+    const customTitle = document.getElementById('custom-title');
+    const folder = document.querySelector('input[name="folder"]').value; // Obtener el valor de folder
+
+    // Opciones predefinidas según el folder (type)
+    const optionsByFolder = {
+        pareoyseleccion: [
+            "Seleccionar la imagen correcta: ",
+            "Parear imágenes iguales: ",
+            "Seleccionar la imagen que corresponde: "
+        ],
+        asociacion: [
+            "Asociar imágenes con palabras: ",
+            "Seleccionar la imagen que representa: ",
+            "Relacionar conceptos con imágenes: "
+        ],
+        clasificacionHabitat: [
+            "Completar la secuencia: ",
+            "Ordenar las imágenes en secuencia: ",
+            "Seleccionar la imagen que sigue: "
+        ],
+        clasificacionColor: [
+            "Clasificar imágenes por color: ",
+            "Seleccionar la imagen del color correcto: ",
+
+        ],
+        clasificacionCategoria: [
+            "Clasificar imágenes por categoría: ",
+            "Seleccionar la imagen de la categoría correcta: ",
+            "Agrupar imágenes por categoría: "
+        ],
+        pareoporigualdad: [
+            "Relacionar imágenes iguales: "
+        ],
+        seriesTamaño: [
+            "Completar la serie por tamaño: ",
+            "Seleccionar la imagen que completa la serie: ",
+            "Ordenar imágenes por tamaño: "
+        ],
+        seriesTemporales: [
+            "Completar la serie temporal: ",
+            "Seleccionar la imagen que sigue en la secuencia: ",
+            "Ordenar imágenes en secuencia temporal: "
+        ]
+    };
+
+    // Llenar las opciones del select según el folder
+    if (optionsByFolder[folder]) {
+        predefinedTitle.innerHTML = ""; // Limpiar opciones existentes
+        predefinedTitle.innerHTML = '<option value="" disabled selected>Selecciona un tipo de pregunta</option>';
+        optionsByFolder[folder].forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            predefinedTitle.appendChild(opt);
+        });
+    } else {
+        console.error(`No se encontraron opciones para el folder: ${folder}`);
+    }
+
+    // Validar antes de enviar el formulario
+    document.getElementById('correct-images-form').addEventListener('submit', function (e) {
+        if (!predefinedTitle.value) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                text: 'Por favor, selecciona un tipo de pregunta.',
+            });
+            return;
+        }
+
+        // Combinar el título predefinido con el texto personalizado (si existe)
+        document.getElementById('custom-title').value = predefinedTitle.value + (customTitle.value || '');
+    });
+});
+</script>
 @endsection

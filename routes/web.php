@@ -111,6 +111,3 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
-

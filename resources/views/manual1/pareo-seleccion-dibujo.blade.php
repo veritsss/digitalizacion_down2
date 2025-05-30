@@ -25,6 +25,27 @@
     <li>Trabajar los diferentes niveles del lenguaje de forma lúdica</li>
 </ul>
 
+<h3>Sugerencias de actividades para el pareo y selección</h3>
+<ul>
+    <li>Mostrar la imagen que se nombra.</li>
+    <li>Parear las partes del cuerpo que son iguales.</li>
+    <li>Buscar dónde está “….” con la imagen tapada. </li>
+
+</ul>
+<p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales</strong></p>
+<ul>
+        <li>
+            <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                Manual para los y las docentes
+            </a>
+        </li>
+        <li>
+            <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                Manual para estudiantes 1ª etapa
+            </a>
+        </li>
+    </p>
+</ul>
     @if($isProfessor)
 
         @if(session('message'))
@@ -57,4 +78,5 @@
         @endif
     @endif
 </div>
+<br>
 @endsection

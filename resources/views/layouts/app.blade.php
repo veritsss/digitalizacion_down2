@@ -21,26 +21,6 @@
 
     @include('layouts.footer')
 
-    @if(session('message'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: '{{ session('message') }}',
-            confirmButtonColor: '#3085d6'
-        });
-    </script>
-    @endif
-    @if(session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '¡Error!',
-            text: '{{ session('error') }}',
-            confirmButtonColor: '#d33'
-        });
-    </script>
-    @endif
 
 
 </body>

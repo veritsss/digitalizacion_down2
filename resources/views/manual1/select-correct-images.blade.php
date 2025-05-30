@@ -230,6 +230,7 @@
             @endif
         </div>
 
+
        <div class="d-flex justify-content-center gap-3 mt-4">
     <button type="button" id="save-button" class="btn btn-success btn-lg w-50 py-3">
         Guardar Respuestas Correctas
@@ -316,6 +317,33 @@
                     icon: 'warning',
                     title: 'Atención',
                     text: 'Debes guardar las respuestas antes de salir o avanzar.'
+                });
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const predefinedTitle = document.getElementById('predefined-title');
+        const customTitle = document.getElementById('custom-title');
+        const combinedTitle = document.getElementById('combined-title');
+
+        // Actualizar el campo oculto con el título combinado
+        function updateCombinedTitle() {
+            combinedTitle.value = predefinedTitle.value + (customTitle.value || '');
+        }
+
+        // Escuchar cambios en el select y el input
+        predefinedTitle.addEventListener('change', updateCombinedTitle);
+        customTitle.addEventListener('input', updateCombinedTitle);
+
+        // Validar antes de enviar el formulario
+        document.getElementById('correct-images-form').addEventListener('submit', function (e) {
+            if (!predefinedTitle.value || !customTitle.value) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Por favor, selecciona un tipo de pregunta y completa el título.',
                 });
             }
         });

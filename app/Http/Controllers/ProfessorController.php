@@ -599,7 +599,7 @@ public function detalle($id)
             ->pluck('image_id')
             ->unique();
 
-        $omitidas = ($imagenes_correctas_ids->diff($imagenes_correctas_respondidas_ids)->count())- $imagenes_respondidas ;
+        $omitidas = ($imagenes_correctas_ids->diff($imagenes_correctas_respondidas_ids)->count()) -  $imagenes_respondidas;
 
         if ($total_preguntas > 0) {
             $detalles[] = [
@@ -620,7 +620,56 @@ public function detalle($id)
 
     return view('professor.student-detail', compact('student', 'detalles'));
 }
+public function editQuestion($id)
+{
+    $question = Question::with('images')->findOrFail($id);
+    $folder = $question->type;
+    $mode = $question->mode;
 
+    // Obtener todas las imágenes disponibles en la carpeta
+    $images = Image::where('path', 'like', 'images/' . $folder . '/%')->get();
+
+    return view('manual1.select-correct-images2', compact('question', 'images', 'folder', 'mode'));
+}
+public function indexQuestions()
+{
+    $questions = Question::with('images')->paginate(10); // Listar preguntas con paginación
+    return view('manual1.questions.index', compact('questions'));
+}
+public function updateQuestion(Request $request, $id)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'selected_images' => 'required|array',
+        'selected_images.*' => 'exists:images,id',
+    ]);
+
+    $question = Question::findOrFail($id);
+    $question->update([
+        'title' => $request->input('title'),
+        'type' => $request->input('folder'),
+        'mode' => $request->input('mode'),
+    ]);
+
+    // Actualizar las imágenes asociadas
+    QuestionImage::where('question_id', $id)->delete();
+    foreach ($request->selected_images as $imageId) {
+        QuestionImage::create([
+            'question_id' => $question->id,
+            'image_id' => $imageId,
+            'is_correct' => false,
+        ]);
+    }
+
+    return redirect()->route('professor.questions.index')->with('message', 'Pregunta actualizada correctamente.');
+}
+public function deleteQuestion($id)
+{
+    $question = Question::findOrFail($id);
+    $question->delete();
+
+    return redirect()->route('professor.questions.index')->with('message', 'Pregunta eliminada correctamente.');
+}
 }
 
 

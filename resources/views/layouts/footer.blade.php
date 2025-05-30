@@ -3,8 +3,12 @@
         <div class="row">
             <!-- Columna 1: Sobre nosotros -->
             <div class="col-12 col-md-4 mb-3 mb-md-0">
-                <h5>Sobre nosotros</h5>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit architecto eligendi tempore ea libero iste nisi ipsa velit ab vero soluta consequuntur officia fugiat eos aperiam, aliquam sint excepturi debitis.</p>
+                <h5>Sobre el Sitio Web</h5>
+                <p>
+                    Esta plataforma digitaliza los manuales <strong>Palabras + Palabras. Aprendamos a Leer</strong>, facilitando su acceso y uso en línea.
+                    Puedes consultar los manuales originales en el sitio oficial del Mineduc:
+                    <a href="https://especial.mineduc.cl/recursos-apoyo-al-aprendizaje/recursos-las-los-docentes/manuales-palabras-palabras-aprendamos-leer/" target="_blank">Ver página</a>.
+                </p>
             </div>
             <!-- Columna 2: Otros enlaces -->
             <div class="col-12 col-md-4 mb-3 mb-md-0">

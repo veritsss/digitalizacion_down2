@@ -225,6 +225,9 @@ class StudentController extends Controller
 
             // Redirigir según resultado
             return redirect()->route('manual1')->with('message', '¡Respuesta enviada!');
+
         }
     }
+
 }
+
