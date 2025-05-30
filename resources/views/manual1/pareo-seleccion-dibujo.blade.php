@@ -13,27 +13,27 @@
         <span class="fw-bold">Volver</span>
     </a>
 
-<h1 class="text-primary fw-bold">PAREO SELECCIÓN Y DIBUJO</h1>
-<!-- Contenido para Profesores -->
-<h2>¿Qué es el Pareo?</h2>
-<p>El pareo es un ejercicio de correlación que se utiliza en la lectoescritura para asociar palabras, símbolos, números, frases u oraciones. Es una actividad que ayuda a los niños a desarrollar habilidades perceptivas y discriminativas.</p>
-<h3>Objetivo del pareo en la lectoescritura</h3>
-<ul>
-    <li>Desarrollar habilidades de aprendizaje de la lectoescritura en etapas iniciales</li>
-    <li>Construir el aprendizaje de forma significativa</li>
-    <li>Reconocer sílabas</li>
-    <li>Trabajar los diferentes niveles del lenguaje de forma lúdica</li>
-</ul>
+    <h1 class="text-primary fw-bold">PAREO SELECCIÓN Y DIBUJO</h1>
+    <!-- Contenido para Profesores -->
+    <h2>¿Qué es el Pareo?</h2>
+    <p>El pareo es un ejercicio de correlación que se utiliza en la lectoescritura para asociar palabras, símbolos, números, frases u oraciones. Es una actividad que ayuda a los niños a desarrollar habilidades perceptivas y discriminativas.</p>
+    <h3>Objetivo del pareo en la lectoescritura</h3>
+    <ul>
+        <li>Desarrollar habilidades de aprendizaje de la lectoescritura en etapas iniciales</li>
+        <li>Construir el aprendizaje de forma significativa</li>
+        <li>Reconocer sílabas</li>
+        <li>Trabajar los diferentes niveles del lenguaje de forma lúdica</li>
+    </ul>
 
-<h3>Sugerencias de actividades para el pareo y selección</h3>
-<ul>
-    <li>Mostrar la imagen que se nombra.</li>
-    <li>Parear las partes del cuerpo que son iguales.</li>
-    <li>Buscar dónde está “….” con la imagen tapada. </li>
+    <h3>Sugerencias de actividades para el pareo y selección</h3>
+    <ul>
+        <li>Mostrar la imagen que se nombra.</li>
+        <li>Parear las partes del cuerpo que son iguales.</li>
+        <li>Buscar dónde está “….” con la imagen tapada. </li>
 
-</ul>
-<p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales</strong></p>
-<ul>
+    </ul>
+    <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
+    <ul>
         <li>
             <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
                 Manual para los y las docentes
@@ -78,5 +78,4 @@
         @endif
     @endif
 </div>
-<br>
 @endsection

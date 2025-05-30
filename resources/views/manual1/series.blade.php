@@ -25,6 +25,30 @@
         <li>Estimular la organización del discurso oral y escrito.</li>
         <li>Trabajar la estructura y coherencia textual desde etapas tempranas.</li>
     </ul>
+    <h3>Sugerencias de actividades para las Series</h3>
+    <ul>
+        <li>Agrupar todos los objetos grandes.</li>
+        <li>Agrupar todos los objetos pequeños.</li>
+        <li>Completar según el modelo.</li>
+        <li>Agrupar los objetos según el tamaño, grande, mediano o pequeño.</li>
+        <li>Completar la secuencia según el modelo.</li>
+        <li>Observar y describir las láminas.</li>
+        <li>Ordenar la secuencia.</li>
+    </ul>
+    <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
+    <ul>
+        <li>
+            <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                Manual para los y las docentes
+            </a>
+        </li>
+        <li>
+            <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                Manual para estudiantes 1ª etapa
+            </a>
+        </li>
+    </p>
+</ul>
 
     @if($isProfessor)
 

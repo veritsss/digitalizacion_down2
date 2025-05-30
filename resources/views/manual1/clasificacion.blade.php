@@ -25,7 +25,28 @@
         <li>Ampliar el vocabulario y comprensión semántica.</li>
         <li>Trabajar la categorización como base del lenguaje.</li>
     </ul>
-
+    <h3>Sugerencias de actividades para la Clasificación</h3>
+    <ul>
+        <li>Agrupar las fichas según el color.</li>
+        <li>Parear las imágenes iguales y reconocer las categorías a las que pertenecen.</li>
+        <li>Agrupar y pegar según la categoría a la que corresponde.</li>
+        <li>Agrupar y pegar todos los animales que viven en el campo.</li>
+        <li>Agrupar y pegar todos los animales que viven en la selva.</li>
+    </ul>
+    <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
+    <ul>
+            <li>
+                <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para los y las docentes
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 1ª etapa
+                </a>
+            </li>
+        </p>
+    </ul>
 
     @if($isProfessor)
     @if(session('message'))

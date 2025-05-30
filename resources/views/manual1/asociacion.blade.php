@@ -24,6 +24,26 @@
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
+    <h3>Sugerencias de actividades para la asociación</h3>
+    <ul>
+        <li>Muestra los objetos según su uso o funcionalidad.</li>
+        <li>Parear los objetos que se asocian por uso o funcionalidad.</li>
+
+    </ul>
+    <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
+    <ul>
+            <li>
+                <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para los y las docentes
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 1ª etapa
+                </a>
+            </li>
+        </p>
+    </ul>
 
     @if($isProfessor)
 

@@ -24,7 +24,24 @@
         <li>Potenciar la memoria visual.</li>
         <li>Servir como base para la identificación de gráficas en etapas iniciales.</li>
     </ul>
-
+    <h3>Sugerencias de actividades para el Pareo por igualdad</h3>
+    <ul>
+        <li>Parear los dibujos iguales.</li>
+    </ul>
+    <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
+    <ul>
+            <li>
+                <a href="{{ asset('manuals/Manual_Profesor.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para los y las docentes
+                </a>
+            </li>
+            <li>
+                <a href="{{ asset('manuals/Manual_Estudiantes_Etapa1.pdf') }}" target="_blank" class="text-blue-600 hover:underline">
+                    Manual para estudiantes 1ª etapa
+                </a>
+            </li>
+        </p>
+    </ul>
     @if($isProfessor)
 
     @if(session('message'))

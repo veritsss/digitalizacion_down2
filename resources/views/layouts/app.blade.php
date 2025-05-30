@@ -18,7 +18,7 @@
     <main class="container mt-4">
         @yield('contenido')
     </main>
-
+    <br>
     @include('layouts.footer')
 
 

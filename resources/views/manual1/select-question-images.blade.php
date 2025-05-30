@@ -88,42 +88,34 @@
     // Opciones predefinidas según el folder (type)
     const optionsByFolder = {
         pareoyseleccion: [
-            "Seleccionar la imagen correcta: ",
-            "Parear imágenes iguales: ",
-            "Seleccionar la imagen que corresponde: "
+            "Seleccione la imagen que corresponda a: ",
+            "Pareee las partes del cuerpo que son iguales ",
         ],
         asociacion: [
-            "Asociar imágenes con palabras: ",
-            "Seleccionar la imagen que representa: ",
-            "Relacionar conceptos con imágenes: "
-        ],
-        clasificacionHabitat: [
-            "Completar la secuencia: ",
-            "Ordenar las imágenes en secuencia: ",
-            "Seleccionar la imagen que sigue: "
-        ],
-        clasificacionColor: [
-            "Clasificar imágenes por color: ",
-            "Seleccionar la imagen del color correcto: ",
+            "Muestre los objetos que se usen para: ",
+            "Paree los objetos que están relacionados: ",
 
         ],
+        clasificacionHabitat: [
+            "Agrupar y pegar todos los animales que viven en el campo",
+            "Agrupar y pegar todos los animales que viven en la selva ",
+        ],
+        clasificacionColor: [
+            "Agrupar las fichas según el color ",
+        ],
         clasificacionCategoria: [
-            "Clasificar imágenes por categoría: ",
-            "Seleccionar la imagen de la categoría correcta: ",
-            "Agrupar imágenes por categoría: "
+            "Parear las imágenes iguales ",
+            "Parear las imágenes que correspondan a la categoría: ",
         ],
         pareoporigualdad: [
-            "Relacionar imágenes iguales: "
+            " Paree los dibujos iguales "
         ],
         seriesTamaño: [
-            "Completar la serie por tamaño: ",
-            "Seleccionar la imagen que completa la serie: ",
-            "Ordenar imágenes por tamaño: "
+            "Ordenar imágenes por tamaño: ",
+            "Completar según el modelo "
         ],
         seriesTemporales: [
-            "Completar la serie temporal: ",
-            "Seleccionar la imagen que sigue en la secuencia: ",
-            "Ordenar imágenes en secuencia temporal: "
+            "Ordena la secuencia",
         ]
     };
 
