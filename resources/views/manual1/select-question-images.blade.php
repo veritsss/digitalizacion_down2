@@ -60,14 +60,14 @@
     </div>
     <!-- Mostrar las imágenes -->
     <div class="row">
-        @foreach($images as $image)
-            <div class="col-6 col-md-3 text-center mb-4">
-                <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
-                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                </label>
-            </div>
-        @endforeach
+    @foreach($images as $image)
+        <div class="col-6 col-md-3 text-center mb-4">
+            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+            <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+            </label>
+        </div>
+    @endforeach
     </div>
 
     <div class="d-flex justify-content-center gap-3 mt-4">
@@ -83,40 +83,43 @@
     document.addEventListener('DOMContentLoaded', function () {
     const predefinedTitle = document.getElementById('predefined-title');
     const customTitle = document.getElementById('custom-title');
-    const folder = document.querySelector('input[name="folder"]').value; // Obtener el valor de folder
+    const folder = document.querySelector('input[name="folder"]').value.trim(); // Obtener el valor de folder y eliminar espacios
 
     // Opciones predefinidas según el folder (type)
     const optionsByFolder = {
         pareoyseleccion: [
             "Seleccione la imagen que corresponda a: ",
-            "Pareee las partes del cuerpo que son iguales ",
+            "Pareee las partes del cuerpo que son iguales: ",
         ],
         asociacion: [
             "Muestre los objetos que se usen para: ",
             "Paree los objetos que están relacionados: ",
-
         ],
         clasificacionHabitat: [
-            "Agrupar y pegar todos los animales que viven en el campo",
-            "Agrupar y pegar todos los animales que viven en la selva ",
+            "Agrupar y pegar todos los animales que viven en el campo:",
+            "Agrupar y pegar todos los animales que viven en la selva: ",
         ],
         clasificacionColor: [
-            "Agrupar las fichas según el color ",
+            "Agrupar las fichas según el color: ",
         ],
         clasificacionCategoria: [
-            "Parear las imágenes iguales ",
+            "Parear las imágenes iguales: ",
             "Parear las imágenes que correspondan a la categoría: ",
         ],
         pareoporigualdad: [
-            " Paree los dibujos iguales "
+            "Paree los dibujos iguales: ",
         ],
         seriesTamaño: [
             "Ordenar imágenes por tamaño: ",
-            "Completar según el modelo "
+            "Completar según el modelo: ",
         ],
         seriesTemporales: [
-            "Ordena la secuencia",
-        ]
+            "Ordena la secuencia: ",
+        ],
+        'tarjetas-foto': [ // Clave con guion
+            "Seleccione el texto asociado a cada imagen: ",
+            "Asocie las imágenes con sus textos correspondientes: ",
+        ],
     };
 
     // Llenar las opciones del select según el folder

@@ -12,6 +12,7 @@ class Question extends Model
 
     public function images()
     {
-        return $this->hasMany(QuestionImage::class);
+        return $this->hasMany(QuestionImage::class, 'question_id');
+
     }
 }

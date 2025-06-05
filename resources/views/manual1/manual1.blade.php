@@ -4,7 +4,7 @@
 @section('contenido')
 <div class="container mb-5"> <!-- Se añadió el margen inferior aquí -->
     <!-- Botón de regreso mejorado -->
-    <a href="{{ route('dashboard') }}" 
+    <a href="{{ route('dashboard') }}"
        class="btn btn-lg btn-outline-primary d-flex align-items-center gap-2 shadow-sm rounded-pill mb-4 px-4 py-2"
        aria-label="Volver al dashboard">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -49,4 +49,17 @@
         </li>
     </ul>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Error!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 @endsection

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class Manual2Controller extends Controller
@@ -23,7 +23,16 @@ class Manual2Controller extends Controller
 
     public function carteles()
     {
-        return view('manual2.carteles');
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual2.carteles', [
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual2.carteles', [
+                'isProfessor' => false,
+            ]);
+        }
+        abort(403, 'No tienes permisos para acceder a esta página.');
     }
 
     public function componer()
@@ -42,9 +51,24 @@ class Manual2Controller extends Controller
     }
 
     public function tarjetasFotos()
-    {
-        return view('manual2.tarjetas-fotos');
-    }
+      {
+        $images = \App\Models\Image::where('path', 'like', 'images/tarjetas-foto/%')->get();
+
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual2.tarjetas-fotos', [
+                'images' => $images,
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual2.tarjetas-fotos', [
+                'images' => $images,
+                'isProfessor' => false,
+            ]);
+        }
+
+        abort(403, 'No tienes permisos para acceder a esta página.');
+       }
+
 
     public function unir()
     {

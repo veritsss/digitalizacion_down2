@@ -11,6 +11,13 @@ class Image extends Model
 
     protected $fillable = [
         'path',       // Ruta de la imagen
-        'folder',     // Carpeta de la imagen
+        'folder',
+        'usage_type',
+        'associated_text',
+        'cartel_id' // Carpeta de la imagen
     ];
+ public function cartel()
+    {
+         return $this->belongsTo(Cartel::class, 'cartel_id');
+    }
 }

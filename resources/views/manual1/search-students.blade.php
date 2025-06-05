@@ -11,7 +11,13 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-primary fw-bold">Buscar Estudiantes</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary fw-bold mb-0">Buscar Estudiantes</h1>
+        <!-- Botón para ir a la lista de preguntas -->
+       <a href="{{ route('professor.questions.list') }}" class="btn btn-danger btn-sm text-white">
+            Eliminar Preguntas
+        </a>
+    </div>
 
     <!-- Campo de búsqueda -->
     <form id="search-form" class="mb-4">

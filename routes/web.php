@@ -10,6 +10,7 @@ use App\Http\Controllers\Manual4Controller;
 use App\Http\Controllers\Manual3Controller;
 use App\Http\Controllers\Manual2Controller;
 use App\Http\Controllers\Manual1Controller;
+use App\Http\Controllers\CartelController;
 
 
 Route::get('/', function () {
@@ -98,6 +99,7 @@ Route::middleware('auth')->group(function () {
 
     // Mostrar la pregunta al estudiante
     Route::get('/student/question/{question}', [StudentController::class, 'showQuestion'])->name('student.showQuestion');
+    Route::delete('/professor/question/{id}', [ProfessorController::class, 'deleteQuestion'])->name('professor.deleteQuestion');
 
     // Mostrar la primera pregunta no respondida
     Route::get('/student/answer/{type}', [StudentController::class, 'getFirstUnansweredQuestion'])->name('student.answer');
@@ -111,3 +113,8 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/professor/questions', [ProfessorController::class, 'listQuestions'])->name('professor.questions.list');
+Route::delete('/professor/question/{id}', [ProfessorController::class, 'deleteQuestion'])->name('professor.deleteQuestion');
+
+Route::get('/associate-carteles-tarjetas', [CartelController::class, 'showAssociateForm'])->name('cartel.showAssociateForm');
+Route::post('/associate-carteles-tarjetas', [CartelController::class, 'associateTarjetaFoto'])->name('cartel.associateTarjetaFoto');

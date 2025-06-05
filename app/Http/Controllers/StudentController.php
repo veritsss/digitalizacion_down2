@@ -9,34 +9,37 @@ use App\Models\QuestionImage;
 class StudentController extends Controller
 {
     // Mostrar la primera pregunta no respondida por el estudiante
-    public function getFirstUnansweredQuestion($type)
-    {
-        $studentId = auth()->id(); // Obtener el ID del estudiante autenticado
+   public function getFirstUnansweredQuestion($type)
+{
+    $studentId = auth()->id(); // Obtener el ID del estudiante autenticado
 
-        // Obtener el ID de las preguntas que el estudiante ya respondió
-        $answeredQuestions = StudentAnswer::where('student_id', $studentId)
-            ->pluck('question_id')
-            ->toArray();
+    // Obtener el ID de las preguntas que el estudiante ya respondió
+    $answeredQuestions = StudentAnswer::where('student_id', $studentId)
+        ->pluck('question_id')
+        ->toArray();
 
-        // Obtener la primera pregunta no respondida del tipo especificado
-        $question = Question::where('type', $type) // Filtrar por tipo
-            ->whereNotIn('id', $answeredQuestions)
-            ->with('images.image') // Cargar las imágenes asociadas
-            ->first();
+    // Obtener la primera pregunta no respondida del tipo especificado
+    $question = Question::where('type', $type) // Filtrar por tipo
+        ->whereNotIn('id', $answeredQuestions)
+        ->with('images.image') // Cargar las imágenes asociadas
+        ->first();
 
-        if (!$question) {
-            // Si no hay preguntas sin responder, redirigir con un mensaje
-            return redirect()->back()->with('message', 'No hay preguntas disponibles para esta actividad.');
-        }
-
-        // Cargar la vista correspondiente
-        return view('manual1.student-answer-pareo', compact('question'));
+    if (!$question) {
+        // Si no hay preguntas sin responder, redirigir con un mensaje
+        session()->flash('message', 'No hay preguntas disponibles para esta actividad.');
+        session()->flash('alert-type', 'info'); // Tipo de alerta (info, success, error, etc.)
+        return redirect()->back();
     }
+
+    // Cargar la vista correspondiente
+    return view('manual1.student-answer-pareo', compact('question'));
+}
 
     // Mostrar la pregunta al estudiante
     public function showQuestion($questionId)
     {
-        $question = Question::with('images.image')->findOrFail($questionId);
+        $question = Question::with('images.image.cartel')->findOrFail($questionId);
+
 
         if ($question->type === 'pareoyseleccion') {
             return view('manual1.student-answer-pareo', compact('question'));
@@ -59,6 +62,9 @@ class StudentController extends Controller
             return view('manual1.student-answer-pareo', compact('question'));
         }
         elseif ($question->type === 'pareoporigualdad') {
+            return view('manual1.student-answer-pareo', compact('question'));
+        }
+        elseif ($question->type === 'tarjetas-foto') {
             return view('manual1.student-answer-pareo', compact('question'));
         }
 
@@ -89,31 +95,35 @@ class StudentController extends Controller
 
             // Guardar las respuestas del estudiante
             foreach ($selectedImages as $imageId) {
-                $isCorrect = in_array($imageId, $correctImages);
-                StudentAnswer::create([
-                    'student_id' => $studentId,
-                    'question_id' => $questionId,
-                    'image_id' => $imageId,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
+    $isCorrect = in_array($imageId, $correctImages);
+    StudentAnswer::create([
+        'student_id' => $studentId,
+        'question_id' => $questionId,
+        'image_id' => $imageId,
+        'is_correct' => $isCorrect,
+    ]);
+}
 
-            // Marcar las imágenes como respondidas
-            QuestionImage::where('question_id', $questionId)
-                ->whereIn('image_id', $selectedImages)
-                ->update(['is_answered' => true]);
+// Marcar las imágenes como respondidas
+QuestionImage::where('question_id', $questionId)
+    ->whereIn('image_id', $selectedImages)
+    ->update(['is_answered' => true]);
 
-            // Verificar si hay más preguntas sin responder
-            $nextQuestion = Question::where('type', $question->type)
-                ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
-                ->first();
+// Verificar si hay más preguntas sin responder
+$nextQuestion = Question::where('type', $question->type)
+    ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+    ->first();
 
-            if ($nextQuestion) {
-                return redirect()->route('student.showQuestion', $nextQuestion->id)
-                    ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
-            } else {
-                return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas!');
-            }
+if ($nextQuestion) {
+    session()->flash('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la respuesta
+    return redirect()->route('student.showQuestion', $nextQuestion->id);
+}else {
+    $finalMessage = ($isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.') . ' ¡Has completado todas las preguntas!';
+    session()->flash('message', $finalMessage);
+    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la última respuesta
+    return redirect()->route('manual1');
+}
         } elseif ($mode === 'pairs') {
             // Validar las imágenes seleccionadas
             $request->validate([
@@ -135,9 +145,8 @@ class StudentController extends Controller
                 }
             }
 
-            $isCorrect = true; // Asumimos que todos los pares son correctos inicialmente
+            $isCorrect = true; // Inicialmente asumimos que la respuesta es correcta
 
-            // Verificar cada par
             foreach ($pairs as $pairId => $images) {
                 if (count($images) < 2) {
                     $isCorrect = false; // Si un par no tiene exactamente 2 imágenes, es incorrecto
@@ -175,18 +184,23 @@ class StudentController extends Controller
                     ->first();
 
                 if ($nextQuestion) {
-                    // Redirigir a la siguiente pregunta no respondida
-                    return redirect()->route('student.showQuestion', $nextQuestion->id)
-                        ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+                    session()->flash('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+                    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la respuesta
+                    return redirect()->route('student.showQuestion', $nextQuestion->id);
                 } else {
-                    // No hay más preguntas, redirigir a una página final
-                    return redirect()->route('manual1')->with('message', '¡Has completado todas las preguntas!');
+                    $finalMessage = ($isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.') . ' ¡Has completado todas las preguntas!';
+                    session()->flash('message', $finalMessage);
+                    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la última respuesta
+                    return redirect()->route('manual1');
                 }
             }
 
             // Si quedan imágenes, recargar la misma pregunta
-            return redirect()->route('student.showQuestion', $questionId)
-                ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+
+            session()->flash('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+            session()->flash('alert-type', $isCorrect ? 'success' : 'error');
+            return redirect()->route('student.showQuestion', $questionId);
+
         } elseif ($question->type === 'seriesTemporales') {
             // Validar que se envíen respuestas para cada grupo
             $request->validate([
@@ -223,10 +237,48 @@ class StudentController extends Controller
                 }
             }
 
-            // Redirigir según resultado
-            return redirect()->route('manual1')->with('message', '¡Respuesta enviada!');
+           return redirect()->route('manual1')
+            ->with('message', '¡Respuesta enviada!')
+            ->with('alert-type', 'success');
 
         }
+    elseif ($question->type === 'tarjetas-foto') {
+    // Validar las respuestas enviadas
+    $request->validate([
+        'answers' => 'required|array',
+        'answers.*' => 'exists:cartels,id', // Validar que los IDs de los carteles existan
+    ]);
+
+    $isCorrect = true;
+
+    foreach ($question->images as $image) {
+        $selectedCartelId = intval($request->input("answers.{$image->image_id}")); // ID seleccionado por el estudiante
+        $correctCartelId = intval($image->cartel_id); // ID correcto desde la tabla `images`
+
+        $isAnswerCorrect = $selectedCartelId === $correctCartelId; // Comparar como enteros
+
+        logger("Imagen ID: {$image->image_id}, Cartel Seleccionado: {$selectedCartelId}, Cartel Correcto: {$correctCartelId}, Resultado: " . ($isAnswerCorrect ? 'Correcto' : 'Incorrecto'));
+
+        // Guardar la respuesta del estudiante
+        StudentAnswer::create([
+            'student_id' => $studentId,
+            'question_id' => $questionId,
+            'image_id' => $image->image_id,
+            'selected_cartel_id' => $selectedCartelId,
+            'is_correct' => $isAnswerCorrect,
+        ]);
+
+        // Si alguna respuesta es incorrecta, marcar la pregunta como incorrecta
+        if (!$isAnswerCorrect) {
+            $isCorrect = false;
+        }
+    }
+
+    // Redirigir con un mensaje de éxito o error
+    return redirect()->route('manual1')
+        ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Algunas respuestas son incorrectas.')
+        ->with('alert-type', $isCorrect ? 'success' : 'error');
+}
     }
 
 }

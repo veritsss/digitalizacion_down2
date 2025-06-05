@@ -10,7 +10,7 @@ class StudentAnswer extends Model
     use HasFactory;
 
     // Definir los campos que pueden ser llenados en masa
-    protected $fillable = ['student_id', 'question_id', 'image_id', 'is_correct', 'is_answered', 'selected_images'];
+    protected $fillable = ['student_id', 'question_id', 'image_id', 'is_correct', 'is_answered', 'selected_images','selected_text', 'selected_cartel_id'];
 
     // Relación con el modelo Question
     public function question()

@@ -22,7 +22,8 @@ class Manual1Controller extends Controller
     public function pareoSeleccionDibujo()
     {
 
-     $images = \App\Models\Image::where('path', 'like', 'images/pareoyseleccion/%')->get();
+     $images = \App\Models\Image::where('path', 'like', 'images/pareoyseleccion/%')
+     ->whereRaw("FIND_IN_SET('images', usage_type)")->get();
 
      if (Auth::user()->role === 'Profesor') {
          return view('manual1.pareo-seleccion-dibujo', [

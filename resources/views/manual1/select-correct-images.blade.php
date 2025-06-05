@@ -11,15 +11,9 @@
      </svg>
      <span class="fw-bold">salir</span>
   </a>
-    <h1 class="text-primary fw-bold">Seleccionar Imágenes Correctas para la pregunta </h1>
-    <p class="text-muted fs-4">Pregunta: {{ $question->title }}</p>
+    <h1 class="text-primary fw-bold">Pregunta: {{ $question->title }} </h1>
+    <p class="text-muted fs-4">Seleccionar Imágenes Correctas para la pregunta</p>
 
-
-    @if(session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
 
     <style>
         .image-container {
@@ -36,6 +30,22 @@
             max-width: 100%; /* Ajusta el ancho máximo al contenedor */
             object-fit: cover; /* Asegura que las imágenes llenen el cuadro sin distorsión */
         }
+        .cartel-button {
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: default; /* Cambia el cursor para indicar que no es clickeable */
+    }
+
+    .cartel-text {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
     </style>
 
 <form id="correct-images-form" action="{{ route('professor.saveCorrectImages', ['folder' => $folder]) }}" method="POST">
@@ -43,8 +53,8 @@
         <input type="hidden" name="question_id" value="{{ session('question_id') }}">
         <input type="hidden" name="folder" value="{{ $folder }}">
         <input type="hidden" name="mode" value="{{ $mode }}">
-
-        <div class="row">
+        <input type="hidden" name="image_order" id="image-order">
+        <div class="row" >
             @if($folder === 'asociacion')
                 @if($mode === 'images')
                     @foreach($images as $image)
@@ -61,12 +71,7 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
+
                         </div>
                     @endforeach
                 @endif
@@ -86,12 +91,7 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
+
                         </div>
                     @endforeach
                 @endif
@@ -111,12 +111,7 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
+
                         </div>
                     @endforeach
                 @endif
@@ -137,12 +132,7 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
+
                         </div>
                     @endforeach
                 @endif
@@ -163,12 +153,7 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
+
                         </div>
                     @endforeach
                 @endif
@@ -189,12 +174,6 @@
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-                            <select name="pairs[{{ $image->id }}]" id="pair_{{ $image->id }}" class="form-select mt-2">
-                                <option value="">Seleccionar Par</option>
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">Par {{ $i }}</option>
-                                @endfor
-                            </select>
                         </div>
                     @endforeach
                 @endif
@@ -204,7 +183,6 @@
                 <h5 class="text-primary fw-bold">Configurar Series por Tamaño</h5>
                 <p class="text-muted">Asigna un grupo como correcto para las series por tamaño.</p>
             </div>
-
             <!-- Seleccionar el grupo correcto -->
             <div class="col-12 text-center mb-4">
                 <label for="correct_group" class="form-label fw-bold">Seleccionar Grupo Correcto</label>
@@ -219,15 +197,29 @@
             @elseif ($folder === 'seriesTemporales')
                 @if ($mode === 'seriesTemporales')
                     @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <div class="col-6 col-md-3 text-center mb-4"  id="images-container">
+                            <label for="image_{{ $image->id }}" class=" btn-lg w-100 image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </label>
                         </div>
                     @endforeach
                 @endif
+            @elseif ($folder === 'tarjetas-foto')
+               @if ($mode === 'tarjetas-foto')
+        @foreach ($images as $image)
+            <div class="col-6 col-md-3 text-center mb-4" id="images-container">
+                <label for="image_{{ $image->id }}" class="btn-lg w-100 image-container">
+                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                </label>
+                <div class="btn btn-outline-primary btn-lg w-100 cartel-button" style="pointer-events: none;">
+                    <p class="cartel-text">{{ $image->cartel->text ?? 'Sin cartel asociado' }}</p>
+                </div>
+                <input type="hidden" name="cartel_ids[{{ $image->id }}]" value="{{ $image->cartel->id ?? '' }}">
+            </div>
+        @endforeach
+    @endif
             @endif
+
         </div>
 
 
@@ -235,14 +227,99 @@
     <button type="button" id="save-button" class="btn btn-success btn-lg w-50 py-3">
         Guardar Respuestas Correctas
     </button>
+    <!-- Botón de Previsualización -->
+    <button type="button" class="btn btn-info btn-lg w-50 py-3" data-bs-toggle="modal" data-bs-target="#previewModal">
+        Previsualizar
+    </button>
     <a href="{{ route('professor.selectConfigurationMode', ['folder' => $folder]) }}" class="btn btn-primary btn-lg w-50 py-3" id="next-button">
         Siguiente
     </a>
+</div>
+
+
+<!-- Modal de Previsualización -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Previsualización de la Pregunta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-primary fw-bold text-center">{{ $question->title }}</h3>
+                <div class="row">
+                    @if($mode === 'images')
+                        @foreach($images as $image)
+                            <div class="col-6 col-md-3 text-center mb-4">
+                                <label class="btn btn-outline-primary btn-lg w-100 image-container">
+                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                                </label>
+                            </div>
+                        @endforeach
+                    @elseif($mode === 'pairs')
+                        @foreach($images as $image)
+                            <div class="col-6 col-md-3 text-center mb-4">
+                                <label class="btn btn-outline-primary btn-lg w-100 image-container">
+                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                                </label>
+                            </div>
+                        @endforeach
+                    @elseif($mode === 'tarjetas-foto')
+                        @foreach($images as $image)
+                            <div class="col-6 col-md-3 text-center mb-4">
+                                <div class="image-container">
+                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                                </div>
+                                <p class="mt-2 fw-bold text-primary">{{ $image->associated_text ?? 'Sin texto asociado' }}</p>
+                            </div>
+                        @endforeach
+                    @elseif($mode === 'seriesTemporales')
+                        @php
+                            $series = $images->groupBy('sequence_group');
+                        @endphp
+                        @foreach($series as $group => $imagenes)
+                            <div class="row">
+                                @foreach($imagenes->sortBy('sequence_order') as $image)
+                                    <div class="col-6 col-md-3 text-center mb-4">
+                                        <label class="image-container">
+                                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                                        </label>
+                                        <select class="form-select mt-2">
+                                            <option value="" disabled selected>Seleccionar orden</option>
+                                            @for($i = 1; $i <= count($imagenes); $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
+</div>
 
     </div>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Error!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, warning, info)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 
 <script>
     // Deshabilitar botones hasta guardar
@@ -299,7 +376,6 @@
             });
         });
     });
-
     // Prevenir salir si no se ha guardado
     window.addEventListener('beforeunload', function (e) {
         if (!respuestasGuardadas) {
@@ -321,6 +397,31 @@
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('correct-images-form');
+    const previewButton = document.querySelector('[data-bs-target="#previewModal"]');
+    const previewContainer = document.getElementById('preview-images-container');
+
+    previewButton.addEventListener('click', function () {
+        // Limpiar el contenedor de previsualizaciónImágenes seleccionadas correctamente.
+        previewContainer.innerHTML = '';
+
+        // Recopilar todas las imágenes disponibles
+        const allImages = Array.from(form.querySelectorAll('input[name="selected_images[]"]'));
+
+        // Mostrar todas las imágenes en el modal
+        allImages.forEach(input => {
+            const imageElement = document.querySelector(`#${input.id}`).nextElementSibling.querySelector('img');
+            if (imageElement) {
+                const previewImage = document.createElement('div');
+                previewImage.className = 'col-6 col-md-3 text-center mb-4';
+                previewImage.innerHTML = `<div class="image-container"><img src="${imageElement.src}" alt="Imagen ${input.value}" class="image-content"></div>`;
+                previewContainer.appendChild(previewImage);
+            }
+        });
+    });
+});
 
     document.addEventListener('DOMContentLoaded', function () {
         const predefinedTitle = document.getElementById('predefined-title');

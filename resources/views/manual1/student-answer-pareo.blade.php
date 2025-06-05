@@ -12,14 +12,19 @@
         <span class="fw-bold">Volver</span>
     </a>
     <h1 class="text-primary fw-bold text-center">{{ $question->title }}</h1>
-    <p class="text-muted fs-4 text-center">Selecciona las imágenes que consideres correctas.</p>
 
-    @if(session('message'))
-        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
-            {{ session('message') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Error!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 
     <style>
         .image-container {
@@ -83,23 +88,47 @@
                 </label>
             </div>
         @endforeach
-       @elseif($question->mode === 'seriesTemporales')
-            <!-- Modo: Series Temporales -->
-            @php
-                $series = $question->images->groupBy('image.sequence_group');
-            @endphp
-            @foreach($series as $group => $imagenes)
-                <h5>Serie {{ $group }}</h5>
-                <div class="row mb-4">
-                    @foreach($imagenes->sortBy('image.sequence_order') as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <img src="{{ asset($image->image->path) }}" class="image-content mb-2">
-                            <input type="number" name="respuesta[{{ $group }}][{{ $image->image_id }}]" min="1" max="{{ count($imagenes) }}" class="form-control" placeholder="Orden">
-                        </div>
+
+    @elseif($question->mode === 'tarjetas-foto')
+    @foreach($question->images as $image)
+    <div class="col-6 col-md-4 text-center mb-4">
+        <div class="card shadow-sm">
+            <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="card-img-top img-fluid" style="max-height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <select name="answers[{{ $image->image_id }}]" class="form-select" required>
+                    <option value="" disabled selected>Selecciona el cartel</option>
+                    @foreach($question->images as $option)
+                        <option value="{{ $option->cartel->id }}">{{ $option->cartel->text ?? 'Sin cartel asociado' }}</option>
                     @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+      @elseif($question->mode === 'seriesTemporales')
+    <!-- Modo: Series Temporales -->
+    @php
+        $series = $question->images->groupBy('image.sequence_group');
+    @endphp
+    @foreach($series as $group => $imagenes)
+        <div class="row mb-4">
+            @foreach($imagenes->sortBy('image.sequence_order') as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <label for="image_{{ $image->image_id }}" class="w-100 image-container">
+                        <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
+                    </label>
+                    <select name="respuesta[{{ $group }}][{{ $image->image_id }}]" class="form-select mt-2">
+                        <option value="" disabled selected>Seleccionar orden</option>
+                        @for($i = 1; $i <= count($imagenes); $i++)
+                            <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
                 </div>
             @endforeach
-        @endif
+        </div>
+    @endforeach
+@endif
     </div>
 
     <!-- Botón de Enviar Respuesta -->
