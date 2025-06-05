@@ -3,7 +3,7 @@
 
 @section('contenido')
 <div class="container">
-    <a href="{{ route('manual1') }}"
+    <a href="{{ route('manual2') }}"
     class="btn btn-outline-danger btn-lg d-flex align-items-center gap-2 shadow-sm rounded-pill mb-4 px-4 py-2"
     aria-label="Volver a la página anterior">
      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -48,7 +48,7 @@
     }
     </style>
 
-<form id="correct-images-form" action="{{ route('professor.saveCorrectImages', ['folder' => $folder]) }}" method="POST">
+<form id="correct-images-form" action="{{ route('professor.saveCorrectImagesE2', ['folder' => $folder]) }}" method="POST">
         @csrf
         <input type="hidden" name="question_id" value="{{ session('question_id') }}">
         <input type="hidden" name="folder" value="{{ $folder }}">
@@ -231,7 +231,7 @@
     <button type="button" class="btn btn-info btn-lg w-50 py-3" data-bs-toggle="modal" data-bs-target="#previewModal">
         Previsualizar
     </button>
-    <a href="{{ route('professor.selectConfigurationMode', ['folder' => $folder]) }}" class="btn btn-primary btn-lg w-50 py-3" id="next-button">
+    <a href="{{ route('professor.selectConfigurationModeE2', ['folder' => $folder]) }}" class="btn btn-primary btn-lg w-50 py-3" id="next-button">
         Siguiente
     </a>
 </div>
@@ -335,7 +335,7 @@
 
         const formData = new FormData(form);
 
-        fetch("{{ route('professor.saveCorrectImages',['folder' => $folder]) }}", {
+        fetch("{{ route('professor.saveCorrectImagesE2',['folder' => $folder]) }}", {
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": "{{ csrf_token() }}"

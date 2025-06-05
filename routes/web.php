@@ -11,6 +11,8 @@ use App\Http\Controllers\Manual3Controller;
 use App\Http\Controllers\Manual2Controller;
 use App\Http\Controllers\Manual1Controller;
 use App\Http\Controllers\CartelController;
+use App\Http\Controllers\ProfessorE1Controller;
+use App\Http\Controllers\ProfessorE2Controller;
 
 
 Route::get('/', function () {
@@ -43,11 +45,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/professor/estudiante/{id}/detalle', [ProfessorController::class, 'detalle'])->name('professor.studentDetail');
 
 
-    Route::get('/professor/select-configuration-mode/{folder}', [ProfessorController::class, 'selectConfigurationMode'])->name('professor.selectConfigurationMode');
-    Route::get('/professor/select-question-images/{folder}/{mode}', [ProfessorController::class, 'selectQuestionImagesPage'])->name('professor.selectQuestionImagesPage');
-    Route::post('/professor/select-question-images', [ProfessorController::class, 'selectQuestionImages'])->name('professor.selectQuestionImages');
-    Route::get('/professor/select-correct-images/{folder}/{mode}/{questionId}', [ProfessorController::class, 'selectCorrectImages'])->name('professor.selectCorrectImagesPage');
-    Route::post('/professor/save-correct-images/{folder}', [ProfessorController::class, 'saveCorrectImages'])->name('professor.saveCorrectImages');
+    //ETAPA 1 PROFESOR
+    Route::get('/professor/e1/select-configuration-mode/{folder}', [ProfessorE1Controller::class, 'selectConfigurationModeE1'])->name('professor.selectConfigurationModeE1');
+    Route::get('/professor/e1/select-question-images/{folder}/{mode}', [ProfessorE1Controller::class, 'selectQuestionImagesPageE1'])->name('professor.selectQuestionImagesPageE1');
+    Route::post('/professor/e1/select-question-images', [ProfessorE1Controller::class, 'selectQuestionImagesE1'])->name('professor.selectQuestionImagesE1');
+    Route::get('/professor/e1/select-correct-images/{folder}/{mode}/{questionId}', [ProfessorE1Controller::class, 'selectCorrectImagesE1'])->name('professor.selectCorrectImagesPageE1');
+    Route::post('/professor/e1/save-correct-images/{folder}', [ProfessorE1Controller::class, 'saveCorrectImagesE1'])->name('professor.saveCorrectImagesE1');
+
+    //ETAPA 2 PROFESOR
+    Route::get('/professor/e2/select-configuration-mode/{folder}', [ProfessorE2Controller::class, 'selectConfigurationModeE2'])->name('professor.selectConfigurationModeE2');
+    Route::get('/professor/e2/select-question-images/{folder}/{mode}', [ProfessorE2Controller::class, 'selectQuestionImagesPageE2'])->name('professor.selectQuestionImagesPageE2');
+    Route::post('/professor/e2/select-question-images', [ProfessorE2Controller::class, 'selectQuestionImagesE2'])->name('professor.selectQuestionImagesE2');
+    Route::get('/professor/e2/select-correct-images/{folder}/{mode}/{questionId}', [ProfessorE2Controller::class, 'selectCorrectImagesE2'])->name('professor.selectCorrectImagesPageE2');
+    Route::post('/professor/e2/save-correct-images/{folder}', [ProfessorE2Controller::class, 'saveCorrectImagesE2'])->name('professor.saveCorrectImagesE2');
+
+    //PROFESOR GENERAL
     Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
     Route::get('/professor/search-students', [ProfessorController::class, 'searchStudents'])->name('professor.searchStudents');
 

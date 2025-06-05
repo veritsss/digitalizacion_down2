@@ -56,15 +56,15 @@
     @endif
 
     <div class="mt-4">
-        <a href="{{ route('professor.selectConfigurationMode','clasificacionColor') }}"
+        <a href="{{ route('professor.selectConfigurationModeE1','clasificacionColor') }}"
            class="btn btn-primary btn-lg d-block text-center mt-3">
             Clasificación por Color
         </a>
-        <a href="{{ route('professor.selectConfigurationMode','clasificacionCategoria') }}"
+        <a href="{{ route('professor.selectConfigurationModeE1','clasificacionCategoria') }}"
            class="btn btn-success btn-lg d-block text-center mt-3">
             Clasificación por Categoría
         </a>
-        <a href="{{ route('professor.selectConfigurationMode','clasificacionHabitat') }}"
+        <a href="{{ route('professor.selectConfigurationModeE1','clasificacionHabitat') }}"
            class="btn btn-warning btn-lg d-block text-center mt-3">
             Clasificación por Hábitat
         </a>

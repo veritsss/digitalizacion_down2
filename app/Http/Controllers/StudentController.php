@@ -32,7 +32,7 @@ class StudentController extends Controller
     }
 
     // Cargar la vista correspondiente
-    return view('manual1.student-answer-pareo', compact('question'));
+    return view('student.student-answer-etapa1', compact('question'));
 }
 
     // Mostrar la pregunta al estudiante
@@ -42,30 +42,30 @@ class StudentController extends Controller
 
 
         if ($question->type === 'pareoyseleccion') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         } elseif ($question->type === 'asociacion') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'clasificacionColor') {
-            return view('manual1.student-answer-pareo', compact('question'));
+           return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'clasificacionCategoria') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'clasificacionHabitat') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'seriesTemporales') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'seriesTamaño') {
-            return view('manual1.student-answer-pareo', compact('question'));
+            return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'pareoporigualdad') {
-            return view('manual1.student-answer-pareo', compact('question'));
+           return view('student.student-answer-etapa1', compact('question'));
         }
         elseif ($question->type === 'tarjetas-foto') {
-            return view('manual1.student-answer-pareo', compact('question'));
+           return view('student.student-answer-etapa1', compact('question'));
         }
 
         return back()->with('message', 'Tipo de actividad no reconocido.');

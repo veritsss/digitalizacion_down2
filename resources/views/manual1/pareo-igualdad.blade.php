@@ -49,7 +49,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('professor.selectConfigurationMode','pareoporigualdad') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+    <a href="{{ route('professor.selectConfigurationModeE1','pareoporigualdad') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
         Comenzar con el Pareo por igualdad
     </a>
 

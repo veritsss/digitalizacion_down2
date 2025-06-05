@@ -39,7 +39,7 @@
         }
     </style>
 
-<form action="{{ route('professor.selectQuestionImages') }}" method="POST" id="correct-images-form">
+<form action="{{ route('professor.selectQuestionImagesE1') }}" method="POST" id="correct-images-form">
     @csrf
     <input type="hidden" name="folder" value="{{ $folder }}">
     <input type="hidden" name="mode" value="{{ $mode }}">

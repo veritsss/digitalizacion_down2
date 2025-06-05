@@ -57,10 +57,10 @@
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('professor.selectConfigurationMode','seriesTamaño') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+    <a href="{{ route('professor.selectConfigurationModeE1','seriesTamaño') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
         Comenzar con las Series por Tamaño
     </a>
-    <a href="{{ route('professor.selectConfigurationMode','seriesTemporales') }}" class="btn btn-success btn-lg d-block text-center mt-3">
+    <a href="{{ route('professor.selectConfigurationModeE1','seriesTemporales') }}" class="btn btn-success btn-lg d-block text-center mt-3">
         Comenzar con las Series Temporales
     </a>
 

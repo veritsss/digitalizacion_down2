@@ -53,7 +53,7 @@
                 {{ session('message') }}
             </div>
         @endif
-        <a href="{{ route('professor.selectConfigurationMode','pareoyseleccion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+        <a href="{{ route('professor.selectConfigurationModeE1','pareoyseleccion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
             Comenzar con el Pareo, selección y dibujo
         </a>
 
