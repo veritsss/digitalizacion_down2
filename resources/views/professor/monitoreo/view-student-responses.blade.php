@@ -66,6 +66,7 @@
                     <option value="pareoporigualdad" {{ request('type') == 'pareoporigualdad' ? 'selected' : '' }}>Pareo Por Igualdad</option>
                     <option value="seriesTamaño" {{ request('type') == 'seriesTamaño' ? 'selected' : '' }}>Series de tamaño</option>
                     <option value="seriesTemporales" {{ request('type') == 'seriesTemporales' ? 'selected' : '' }}>Series temporales</option>
+                    <option value="tarjetas-foto" {{ request('type') == 'tarjetas-foto' ? 'selected' : '' }}>Tarjetas Foto</option>
                 </select>
             </div>
 

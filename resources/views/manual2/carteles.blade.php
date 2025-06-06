@@ -54,8 +54,8 @@
                 {{ session('message') }}
             </div>
         @endif
-        <a href="{{ route('professor.selectConfigurationModeE2','tarjetas-foto') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con las Tarjetas-Fotos
+        <a href="{{ route('professor.selectConfigurationModeE2','carteles') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+            Comenzar con los carteles
         </a>
 
         @else
@@ -66,8 +66,8 @@
                     {{ $message }}
                 </div>
             @else
-            <a href="{{ route('student.answer', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
-                Responder Preguntas de Tarjetas-Fotos
+            <a href="{{ route('student.answerE2', ['type' => 'carteles']) }}" class="btn btn-primary btn-lg">
+                Responder Preguntas de los carteles
             </a>
             @endif
         </div>

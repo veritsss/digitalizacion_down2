@@ -3,7 +3,7 @@
 
 @section('contenido')
 <div class="container">
-    <a href="{{ route('manual1') }}"
+    <a href="{{ route('manual2') }}"
        class="btn btn-lg btn-outline-primary d-flex align-items-center gap-2 shadow-sm rounded-pill mb-4 px-4 py-2"
        aria-label="Volver a la página anterior">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -63,22 +63,12 @@
         }
     </style>
 
-    <form action="{{ route('student.saveAnswer', $question->id) }}" method="POST">
+    <form action="{{ route('student.saveAnswerE2', $question->id) }}" method="POST">
         @csrf
         <input type="hidden" name="mode" value="{{ $question->mode }}">
         <div class="row">
-            @if($question->mode === 'images')
-            <!-- Modo: Imágenes -->
-            @foreach($question->images as $image)
-                <div class="col-6 col-md-3 text-center mb-4">
-                    <input type="checkbox" name="selected_images[]" value="{{ $image->image_id }}" id="image_{{ $image->image_id }}" class="btn-check">
-                    <label for="image_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
-                        <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
-                    </label>
-                </div>
-            @endforeach
-        @elseif($question->mode === 'pairs')
-            <!-- Modo: Pares -->
+            @if($question->mode === 'pairs')
+
             @php
                 $answeredImages = \App\Models\StudentAnswer::where('student_id', auth()->id())
                     ->where('question_id', $question->id)
@@ -113,29 +103,6 @@
         </div>
     </div>
 @endforeach
-
-      @elseif($question->mode === 'seriesTemporales')
-    <!-- Modo: Series Temporales -->
-    @php
-        $series = $question->images->groupBy('image.sequence_group');
-    @endphp
-    @foreach($series as $group => $imagenes)
-        <div class="row mb-4">
-            @foreach($imagenes->sortBy('image.sequence_order') as $image)
-                <div class="col-6 col-md-3 text-center mb-4">
-                    <label for="image_{{ $image->image_id }}" class="w-100 image-container">
-                        <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
-                    </label>
-                    <select name="respuesta[{{ $group }}][{{ $image->image_id }}]" class="form-select mt-2">
-                        <option value="" disabled selected>Seleccionar orden</option>
-                        @for($i = 1; $i <= count($imagenes); $i++)
-                            <option value="{{ $i }}">{{ $i }}</option>
-                        @endfor
-                    </select>
-                </div>
-            @endforeach
-        </div>
-    @endforeach
 @endif
     </div>
 
@@ -145,7 +112,7 @@
 
 <!-- Botón de Salir -->
 <div class="d-flex justify-content-center mt-4">
-    <a href="{{ route('manual1') }}" class="btn btn-exit">
+    <a href="{{ route('manual2') }}" class="btn btn-exit">
         Salir
     </a>
 </div>

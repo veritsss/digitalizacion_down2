@@ -127,80 +127,74 @@ if ($nextQuestion) {
         } elseif ($mode === 'pairs') {
             // Validar las imágenes seleccionadas
             $request->validate([
-                'selected_images' => 'required|array', // Validar que se seleccionen imágenes
-                'selected_images.*' => 'exists:question_images,image_id', // Validar que las imágenes existan
+                'selected_images' => 'required|array|size:2', // Deben seleccionarse exactamente 2 imágenes para un par
+                'selected_images.*' => 'exists:question_images,image_id',
             ]);
 
             $selectedImages = $request->input('selected_images');
-            $pairs = []; // Almacenar los pares seleccionados
+            // Obtener los pares de las imágenes seleccionadas
+            $pairIds = QuestionImage::where('question_id', $questionId)
+                ->whereIn('image_id', $selectedImages)
+                ->pluck('pair_id', 'image_id')
+                ->toArray();
 
-            // Agrupar las imágenes seleccionadas en pares
+            // Verificar si ambas imágenes pertenecen al mismo par
+            $isCorrect = count(array_unique($pairIds)) === 1;
+
             foreach ($selectedImages as $imageId) {
-                $pairId = QuestionImage::where('question_id', $questionId)
-                    ->where('image_id', $imageId)
-                    ->value('pair_id');
-
-                if ($pairId !== null) {
-                    $pairs[$pairId][] = $imageId;
-                }
-            }
-
-            $isCorrect = true; // Inicialmente asumimos que la respuesta es correcta
-
-            foreach ($pairs as $pairId => $images) {
-                if (count($images) < 2) {
-                    $isCorrect = false; // Si un par no tiene exactamente 2 imágenes, es incorrecto
-                }
-
-                // Guardar cada imagen como respuesta del estudiante
-                foreach ($images as $imageId) {
-                    StudentAnswer::create([
+                StudentAnswer::updateOrCreate(
+                    [
                         'student_id' => $studentId,
                         'question_id' => $questionId,
                         'image_id' => $imageId,
-                        'pair_id' => $pairId,
+                    ],
+                    [
+                        'pair_id' => $pairIds[$imageId] ?? null,
                         'is_correct' => $isCorrect,
-                    ]);
-
-                    // Marcar la imagen como respondida
-                    QuestionImage::where('question_id', $questionId)
-                        ->where('image_id', $imageId)
-                        ->update(['is_answered' => true]);
-                }
+                        'is_answered' => true,
+                    ]
+                );
             }
 
-            // Verificar si quedan imágenes sin responder en la pregunta
+            // Obtener imágenes ya respondidas por el estudiante para esta pregunta
+            $answeredImages = StudentAnswer::where('student_id', $studentId)
+                ->where('question_id', $questionId)
+                ->where('is_answered', true)
+                ->pluck('image_id')
+                ->toArray();
+
+            // Verificar si quedan imágenes sin responder por el estudiante
             $remainingImages = QuestionImage::where('question_id', $questionId)
-                ->where('is_answered', false)
+                ->whereNotIn('image_id', $answeredImages)
                 ->count();
 
-            if ($remainingImages === 0) {
-                // Obtener el tipo de la pregunta para redirigir al mismo tipo
+            if ($remainingImages < 2) {
+                // Pasar a la siguiente pregunta si no quedan pares
                 $type = $question->type;
+                $answeredQuestions = StudentAnswer::where('student_id', $studentId)
+                    ->pluck('question_id')
+                    ->toArray();
 
-                // Verificar si hay más preguntas sin responder
                 $nextQuestion = Question::where('type', $type)
-                    ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+                    ->whereNotIn('id', $answeredQuestions)
                     ->first();
 
                 if ($nextQuestion) {
-                    session()->flash('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
-                    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la respuesta
+                    session()->flash('message', $isCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+                    session()->flash('alert-type', $isCorrect ? 'success' : 'error');
                     return redirect()->route('student.showQuestion', $nextQuestion->id);
                 } else {
-                    $finalMessage = ($isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.') . ' ¡Has completado todas las preguntas!';
+                    $finalMessage = ($isCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
                     session()->flash('message', $finalMessage);
-                    session()->flash('alert-type', $isCorrect ? 'success' : 'error'); // Tipo de alerta basado en la última respuesta
+                    session()->flash('alert-type', $isCorrect ? 'success' : 'error');
                     return redirect()->route('manual1');
                 }
             }
 
-            // Si quedan imágenes, recargar la misma pregunta
-
-            session()->flash('message', $isCorrect ? '¡Respuesta correcta!' : 'Respuesta incorrecta.');
+            // Si quedan pares, recargar la misma pregunta
+            session()->flash('message', $isCorrect ? '¡Par correcto!' : 'Par incorrecto.');
             session()->flash('alert-type', $isCorrect ? 'success' : 'error');
             return redirect()->route('student.showQuestion', $questionId);
-
         } elseif ($question->type === 'seriesTemporales') {
             // Validar que se envíen respuestas para cada grupo
             $request->validate([
@@ -246,7 +240,7 @@ if ($nextQuestion) {
     // Validar las respuestas enviadas
     $request->validate([
         'answers' => 'required|array',
-        'answers.*' => 'exists:cartels,id', // Validar que los IDs de los carteles existan
+        'answers.*' => 'exists:carteles,id', // Validar que los IDs de los carteles existan
     ]);
 
     $isCorrect = true;

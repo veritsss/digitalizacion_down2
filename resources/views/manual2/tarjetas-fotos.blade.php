@@ -66,7 +66,7 @@
                     {{ $message }}
                 </div>
             @else
-            <a href="{{ route('student.answer', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('student.answerE2', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de Tarjetas-Fotos
             </a>
             @endif

@@ -20,4 +20,8 @@ class Image extends Model
     {
          return $this->belongsTo(Cartel::class, 'cartel_id');
     }
+ public function carteles()
+    {
+        return $this->belongsToMany(\App\Models\Cartel::class, 'cartel_image');
+    }
 }

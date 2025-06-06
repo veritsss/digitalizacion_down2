@@ -12,7 +12,10 @@ class Question extends Model
 
     public function images()
     {
-        return $this->hasMany(QuestionImage::class, 'question_id');
-
+        return $this->hasMany(QuestionImage::class);
+    }
+    public function carteles()
+    {
+        return $this->belongsToMany(\App\Models\Cartel::class, 'cartel_question');
     }
 }

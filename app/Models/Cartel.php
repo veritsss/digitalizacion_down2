@@ -15,4 +15,12 @@ class Cartel extends Model
     {
         return $this->hasMany(Image::class);
     }
+    public function questions()
+    {
+        return $this->belongsToMany(\App\Models\Question::class, 'cartel_question');
+    }
+    public function images()
+    {
+        return $this->belongsToMany(\App\Models\Image::class, 'cartel_image');
+    }
 }

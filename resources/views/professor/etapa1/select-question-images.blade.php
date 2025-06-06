@@ -58,13 +58,17 @@
             <input type="text" id="custom-title" name="title" class="form-control" placeholder="Escribe aquí...">
         </div>
     </div>
+    <!-- Buscador de imágenes o carteles -->
+    <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel...">
+    </div>
     <!-- Mostrar las imágenes -->
     <div class="row">
     @foreach($images as $image)
         <div class="col-6 col-md-3 text-center mb-4">
             <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
             <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
-                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
             </label>
         </div>
     @endforeach
@@ -150,6 +154,27 @@
 
         // Combinar el título predefinido con el texto personalizado (si existe)
         document.getElementById('custom-title').value = predefinedTitle.value + (customTitle.value || '');
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', function () {
+        const search = this.value.toLowerCase();
+        document.querySelectorAll('.row > div').forEach(function (item) {
+            const img = item.querySelector('img');
+            let path = '';
+            if (img) {
+                path = img.getAttribute('data-path') ? img.getAttribute('data-path').toLowerCase() : '';
+            }
+            if (path.includes(search)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     });
 });
 </script>

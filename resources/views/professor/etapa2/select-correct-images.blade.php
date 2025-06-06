@@ -75,6 +75,26 @@
                         </div>
                     @endforeach
                 @endif
+             @elseif($folder === 'carteles')
+                @if($mode === 'images')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                @elseif($mode === 'pairs')
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                @endif
             @elseif($folder === 'pareoyseleccion')
                 @if($mode === 'images')
                     @foreach($images as $image)

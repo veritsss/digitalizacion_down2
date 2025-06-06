@@ -13,6 +13,7 @@ use App\Http\Controllers\Manual1Controller;
 use App\Http\Controllers\CartelController;
 use App\Http\Controllers\ProfessorE1Controller;
 use App\Http\Controllers\ProfessorE2Controller;
+use App\Http\Controllers\StudentControllerE2;
 
 
 Route::get('/', function () {
@@ -41,8 +42,13 @@ Route::middleware('auth')->group(function () {
     })->name('inicio');
 
 
+    //PROFESOR GENERAL
+    Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
+    Route::get('/professor/search-students', [ProfessorController::class, 'searchStudents'])->name('professor.searchStudents');
+    Route::delete('/professor/question/{id}', [ProfessorController::class, 'deleteQuestion'])->name('professor.deleteQuestion');
     Route::get('/professor/dashboard', [ProfessorController::class, 'index'])->name('professor.dashboard');
     Route::get('/professor/estudiante/{id}/detalle', [ProfessorController::class, 'detalle'])->name('professor.studentDetail');
+    Route::get('/professor/questions', [ProfessorController::class, 'listQuestions'])->name('professor.questions.list');
 
 
     //ETAPA 1 PROFESOR
@@ -58,10 +64,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/professor/e2/select-question-images', [ProfessorE2Controller::class, 'selectQuestionImagesE2'])->name('professor.selectQuestionImagesE2');
     Route::get('/professor/e2/select-correct-images/{folder}/{mode}/{questionId}', [ProfessorE2Controller::class, 'selectCorrectImagesE2'])->name('professor.selectCorrectImagesPageE2');
     Route::post('/professor/e2/save-correct-images/{folder}', [ProfessorE2Controller::class, 'saveCorrectImagesE2'])->name('professor.saveCorrectImagesE2');
-
-    //PROFESOR GENERAL
-    Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
-    Route::get('/professor/search-students', [ProfessorController::class, 'searchStudents'])->name('professor.searchStudents');
 
     //ETAPA 1
         Route::get('/manual1', [Manual1Controller::class, 'index'])->name('manual1');
@@ -106,18 +108,18 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // RUTAS PARA ESTUDIANTES
         Route::get('/pareo-seleccion-dibujo/student-select-images', [StudentController::class, 'showSelectionPage'])->name('student.showSelectionPage');
-    Route::post('/pareo-seleccion-dibujo/check-answer', [StudentController::class, 'checkAnswer'])->name('student.checkAnswer');
+        Route::post('/pareo-seleccion-dibujo/check-answer', [StudentController::class, 'checkAnswer'])->name('student.checkAnswer');
+        Route::get('/student/question/{question}', [StudentController::class, 'showQuestion'])->name('student.showQuestion');
+        Route::get('/student/answer/{type}', [StudentController::class, 'getFirstUnansweredQuestion'])->name('student.answer');
+        Route::post('/student/question/{question}/save', [StudentController::class, 'saveAnswer'])->name('student.saveAnswer');
 
-    // Mostrar la pregunta al estudiante
-    Route::get('/student/question/{question}', [StudentController::class, 'showQuestion'])->name('student.showQuestion');
-    Route::delete('/professor/question/{id}', [ProfessorController::class, 'deleteQuestion'])->name('professor.deleteQuestion');
-
-    // Mostrar la primera pregunta no respondida
-    Route::get('/student/answer/{type}', [StudentController::class, 'getFirstUnansweredQuestion'])->name('student.answer');
-
-// Guardar la respuesta del estudiante
-Route::post('/student/question/{question}/save', [StudentController::class, 'saveAnswer'])->name('student.saveAnswer');
+        Route::get('/E2/pareo-seleccion-dibujo/student-select-images', [StudentControllerE2::class, 'showSelectionPageE2'])->name('student.showSelectionPageE2');
+        Route::post('/E2/pareo-seleccion-dibujo/check-answer', [StudentControllerE2::class, 'checkAnswerE2'])->name('student.checkAnswerE2');
+        Route::get('/E2/student/question/{question}', [StudentControllerE2::class, 'showQuestionE2'])->name('student.showQuestionE2');
+        Route::get('/E2/student/answer/{type}', [StudentControllerE2::class, 'getFirstUnansweredQuestionE2'])->name('student.answerE2');
+        Route::post('/E2/student/question/{question}/save', [StudentControllerE2::class, 'saveAnswerE2'])->name('student.saveAnswerE2');
     });
 
 
@@ -125,8 +127,7 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/professor/questions', [ProfessorController::class, 'listQuestions'])->name('professor.questions.list');
-Route::delete('/professor/question/{id}', [ProfessorController::class, 'deleteQuestion'])->name('professor.deleteQuestion');
+
 
 Route::get('/associate-carteles-tarjetas', [CartelController::class, 'showAssociateForm'])->name('cartel.showAssociateForm');
 Route::post('/associate-carteles-tarjetas', [CartelController::class, 'associateTarjetaFoto'])->name('cartel.associateTarjetaFoto');
