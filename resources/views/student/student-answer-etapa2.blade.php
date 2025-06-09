@@ -66,6 +66,8 @@
     <form action="{{ route('student.saveAnswerE2', $question->id) }}" method="POST">
         @csrf
         <input type="hidden" name="mode" value="{{ $question->mode }}">
+
+
         <div class="row">
             @if($question->mode === 'pairs')
 
@@ -103,6 +105,109 @@
         </div>
     </div>
 @endforeach
+@elseif($question->mode === 'unir')
+@php
+    $cartels = $cartels ?? collect();
+    $tarjetas = $tarjetas ?? collect();
+    $maxPairs = min($cartels->count(), $tarjetas->count());
+@endphp
+
+<div id="pareo-app">
+    <div class="row justify-content-center align-items-start mb-4">
+        <div class="col-md-6">
+            <h4 class="text-center text-primary">Carteles (Palabras)</h4>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($cartels as $cartel)
+                    <div class="col-6 col-md-3 text-center mb-4">
+                        <div class="image-container cartel-img"
+                             data-id="{{ $cartel->image_id }}"
+                             onclick="selectCartel(this)">
+                            <img src="{{ asset($cartel->image->path) }}" alt="Cartel {{ $cartel->image_id }}" class="image-content">
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($tarjetas as $tarjeta)
+                    <div class="col-6 col-md-3 text-center mb-4">
+                        <div class="image-container tarjeta-img"
+                             data-id="{{ $tarjeta->image_id }}"
+                             onclick="selectTarjeta(this)">
+                            <img src="{{ asset($tarjeta->image->path) }}" alt="Tarjeta {{ $tarjeta->image_id }}" class="image-content">
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <!-- Pares seleccionados -->
+    <div class="mt-4">
+        <h5>Pares seleccionados:</h5>
+        <div id="pares-list" class="mb-3"></div>
+    </div>
+    <!-- Inputs ocultos para enviar los pares -->
+    <div id="pares-inputs"></div>
+</div>
+
+<script>
+    let selectedCartel = null;
+    let selectedTarjeta = null;
+    let pares = [];
+
+    function selectCartel(element) {
+        document.querySelectorAll('.cartel-img').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedCartel = element.getAttribute('data-id');
+        tryAddPar();
+    }
+
+    function selectTarjeta(element) {
+        document.querySelectorAll('.tarjeta-img').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedTarjeta = element.getAttribute('data-id');
+        tryAddPar();
+    }
+
+    function tryAddPar() {
+        if (selectedCartel && selectedTarjeta) {
+            // Evitar pares repetidos
+            if (pares.find(par => par.cartel === selectedCartel || par.tarjeta === selectedTarjeta)) {
+                alert('Ya seleccionaste ese cartel o esa tarjeta en otro par.');
+                return;
+            }
+            pares.push({cartel: selectedCartel, tarjeta: selectedTarjeta});
+            updatePares();
+            // Limpiar selección
+            document.querySelectorAll('.cartel-img').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.tarjeta-img').forEach(el => el.classList.remove('selected'));
+            selectedCartel = null;
+            selectedTarjeta = null;
+        }
+    }
+
+    function updatePares() {
+        let paresList = document.getElementById('pares-list');
+        let paresInputs = document.getElementById('pares-inputs');
+        paresList.innerHTML = '';
+        paresInputs.innerHTML = '';
+        pares.forEach((par, idx) => {
+            paresList.innerHTML += `<div>Pareja ${idx+1}: Cartel #${par.cartel} ⇄ Tarjeta #${par.tarjeta}</div>`;
+            paresInputs.innerHTML += `<input type="hidden" name="cartel_ids[]" value="${par.cartel}">`;
+            paresInputs.innerHTML += `<input type="hidden" name="selected_images[]" value="${par.tarjeta}">`;
+        });
+    }
+</script>
+
+<style>
+    .image-container.selected {
+        border: 3px solid #007bff;
+        box-shadow: 0 0 10px #007bff;
+    }
+</style>
 @endif
     </div>
 

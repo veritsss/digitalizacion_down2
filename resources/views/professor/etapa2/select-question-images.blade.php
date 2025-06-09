@@ -85,7 +85,7 @@
                     </label>
                 </div>
             @endforeach
-        @else
+        @elseif($folder === 'unir')
 
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">

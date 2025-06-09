@@ -110,27 +110,31 @@
         @endforeach
     @endif
      @elseif ($folder === 'unir')
-    @if ($mode === 'images')
+    @if ($mode === 'unir')
         <div class="row justify-content-center align-items-start mb-4">
             <div class="col-md-6">
                 <h4 class="text-center text-primary">Carteles (Palabras)</h4>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                     @foreach($cartels as $image)
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container" style="width:100px; height:140px;">
+                    @foreach($images as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
+                            </div>
+
+                        </div>
                     @endforeach
                 </div>
             </div>
             <div class="col-md-6">
                 <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    @foreach($images as $image)
-                        <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container" style="width:100px; height:140px;">
+                    @foreach($cartels as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
+                            </div>
+
+                        </div>
                     @endforeach
                 </div>
             </div>

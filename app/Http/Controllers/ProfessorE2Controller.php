@@ -200,14 +200,34 @@ private function handleTarjetasFoto(Request $request, $questionId)
 
     private function assignPairs($images)
     {
-        foreach ($images as $questionImage) {
-            QuestionImage::where('id', $questionImage->id)
-                ->update([
-                    'pair_id' => $questionImage->image->size,
-                    'is_correct' => true,
-                ]);
+    foreach ($images as $questionImage) {
+        QuestionImage::where('id', $questionImage->id)
+            ->update([
+                'pair_id' => $questionImage->image->size,
+                'is_correct' => true,
+            ]);
+    }
+
+    // --- MARCAR COMO INCORRECTOS LOS PARES SOLOS ---
+    // Obtener el question_id (todas las imágenes son de la misma pregunta)
+    $questionId = $images->first()->question_id ?? null;
+    if ($questionId) {
+        // Contar cuántas veces aparece cada pair_id
+        $pairCounts = QuestionImage::where('question_id', $questionId)
+            ->whereNotNull('pair_id')
+            ->pluck('pair_id')
+            ->countBy();
+
+        // Si un pair_id aparece solo una vez, marcarlo como incorrecto
+        foreach ($pairCounts as $pairId => $count) {
+            if ($count === 1 && $pairId !== null) {
+                QuestionImage::where('question_id', $questionId)
+                    ->where('pair_id', $pairId)
+                    ->update(['is_correct' => false]);
+            }
         }
     }
+}
 
     private function jsonResponse($success, $message)
     {
