@@ -12,17 +12,12 @@ use App\Models\User;
 class ProfessorE2Controller extends Controller
 {
     // Mostrar la página para seleccionar imágenes para la pregunta
- public function selectQuestionImagesPageE2($folder = 'pareoyseleccion', $mode = 'images')
+ public function selectQuestionImagesPageE2($folder = 'tarjetas-foto', $mode = 'images')
 {
-    // Construir el patrón de búsqueda para la carpeta
-    $pathPattern = 'images/' . $folder . '/%';
-
-    // Filtrar las imágenes según el usage_type
-    $images = Image::where('path', 'like', $pathPattern)
-                   ->whereRaw("FIND_IN_SET('$mode', usage_type)") // Filtrar por usage_type
-                   ->get();
-
-    return view('professor.etapa2.select-question-images', compact('images', 'folder', 'mode'));
+    // Obtener imágenes de tarjetas-foto y carteles
+    $images = Image::where('path', 'like', 'images/tarjetas-foto/%')->get();
+    $cartels = Image::where('path', 'like', 'images/carteles/%')->get();
+   return view('professor.etapa2.select-question-images', compact('images', 'cartels', 'folder', 'mode'));
 }
 
     // Guardar las imágenes seleccionadas para la pregunta
@@ -80,52 +75,67 @@ class ProfessorE2Controller extends Controller
                 ->with('message', 'No se seleccionaron imágenes para la pregunta.');
         }
         $question = Question::findOrFail($questionId);
-        $images = Image::whereIn('id', $questionImages)->get();
 
+        // Filtrar imágenes seleccionadas
+        $images = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/tarjetas-foto/%')
+            ->get();
+
+        // Filtrar carteles seleccionados
+        $cartels = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/carteles/%')
+            ->get();
+
+        if ($folder === 'unir' || $mode === 'unir') {
+            return view('professor.etapa2.select-correct-images', compact('images', 'cartels', 'folder', 'mode', 'question'));
+        }
+        elseif ($folder === 'carteles' || $mode === 'pairs') {
+            // Si es tarjetas-foto, envía las imágenes y los carteles
+            return view('professor.etapa2.select-correct-images', compact( 'cartels', 'folder', 'mode', 'question'));
+        }
+
+        // Para los demás casos, solo envía lo necesario
         return view('professor.etapa2.select-correct-images', compact('images', 'folder', 'mode', 'question'));
     }
     // Guardar las imágenes correctas
 public function saveCorrectImagesE2(Request $request, $folder)
-    {
-        $questionId = session('question_id');
+{
+    $questionId = session('question_id');
 
-        if (!$questionId) {
-            return $this->jsonResponse(false, 'No se encontró la pregunta asociada.');
-        }
-
-        $question = Question::find($questionId);
-        if (!$question) {
-            return $this->jsonResponse(false, 'La pregunta no existe.');
-        }
-
-        $mode = $request->input('mode');
-
-        // Manejar diferentes tipos de preguntas
-        switch ($question->type) {
-            case 'pareoyseleccion':
-            case 'asociacion':
-            case 'clasificacionColor':
-            case 'clasificacionHabitat':
-            case 'clasificacionCategoria':
-            case 'pareoporigualdad':
-            case 'carteles':
-
-                return $this->handleImagesOrPairs($request, $questionId, $mode);
-
-            case 'seriesTamaño':
-                return $this->handleSeriesTamaño($request, $questionId);
-
-            case 'seriesTemporales':
-                return $this->handleSeriesTemporales($questionId);
-
-            case 'tarjetas-foto':
-            return $this->handleTarjetasFoto($request, $questionId);
-
-            default:
-                return $this->jsonResponse(false, 'La actividad que intentas realizar no existe.');
-        }
+    if (!$questionId) {
+        return $this->jsonResponse(false, 'No se encontró la pregunta asociada.');
     }
 
+    $question = Question::find($questionId);
+    if (!$question) {
+        return $this->jsonResponse(false, 'La pregunta no existe.');
+    }
+
+    $mode = $request->input('mode');
+
+    // Manejar diferentes tipos de preguntas
+    switch ($question->type) {
+        case 'pareoyseleccion':
+        case 'asociacion':
+        case 'clasificacionColor':
+        case 'clasificacionHabitat':
+        case 'clasificacionCategoria':
+        case 'pareoporigualdad':
+
+            case 'unir':
+                $images = QuestionImage::where('question_id', $questionId)->with('image')->get();
+                $this->resetImages($questionId, ['pair_id' => null]);
+                $this->assignPairs($images); // Esto guarda el size en pair_id y marca como correctas
+                return $this->jsonResponse(true, 'Respuestas correctas guardadas por pares (criterio: size).');
+
+        case 'carteles':
+            return $this->handleImagesOrPairs($request, $questionId, $mode);
+
+        case 'tarjetas-foto':
+            return $this->handleTarjetasFoto($request, $questionId);
+
+    }
+}
     private function handleImagesOrPairs(Request $request, $questionId, $mode)
     {
         if ($mode === 'images') {
@@ -141,36 +151,12 @@ public function saveCorrectImagesE2(Request $request, $folder)
             return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
         }
     }
-
-    private function handleSeriesTamaño(Request $request, $questionId)
-    {
-        $request->validate([
-            'correct_group' => 'required|in:1,2,3',
-        ]);
-
-        $correctGroup = $request->input('correct_group');
-        $this->resetImages($questionId);
-        QuestionImage::where('question_id', $questionId)
-            ->whereHas('image', function ($query) use ($correctGroup) {
-                $query->where('size', $correctGroup);
-            })
-            ->update(['is_correct' => true]);
-
-        Question::find($questionId)->update(['correct_group' => $correctGroup]);
-        return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
-    }
-
-    private function handleSeriesTemporales($questionId)
-    {
-        QuestionImage::where('question_id', $questionId)->update(['is_correct' => true]);
-        return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
-    }
 private function handleTarjetasFoto(Request $request, $questionId)
 {
     // Validar los carteles asociados
     $request->validate([
         'cartel_ids' => 'required|array',
-        'cartel_ids.*' => 'exists:cartels,id',
+        'cartel_ids.*' => 'nullable|exists:images,id',
     ]);
 
     // Reiniciar las imágenes de la pregunta (marcar todas como no correctas)

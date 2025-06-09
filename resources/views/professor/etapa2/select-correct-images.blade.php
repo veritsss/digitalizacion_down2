@@ -86,141 +86,12 @@
                         </div>
                     @endforeach
                 @elseif($mode === 'pairs')
-                    @foreach($images as $image)
+                  @foreach($cartels as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
 
-                        </div>
-                    @endforeach
-                @endif
-            @elseif($folder === 'pareoyseleccion')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
-                        </div>
-                    @endforeach
-                @endif
-            @elseif($folder === 'clasificacionColor')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
-                        </div>
-                    @endforeach
-                @endif
-
-                @elseif($folder === 'clasificacionHabitat')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
-                        </div>
-                    @endforeach
-                @endif
-
-                @elseif($folder === 'clasificacionCategoria')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
-                        </div>
-                    @endforeach
-                @endif
-
-            @elseif($folder === 'pareoporigualdad')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-            @elseif($folder === 'seriesTamaño')
-            @if($mode === 'images')
-            <div class="col-12 text-center mb-4">
-                <h5 class="text-primary fw-bold">Configurar Series por Tamaño</h5>
-                <p class="text-muted">Asigna un grupo como correcto para las series por tamaño.</p>
-            </div>
-            <!-- Seleccionar el grupo correcto -->
-            <div class="col-12 text-center mb-4">
-                <label for="correct_group" class="form-label fw-bold">Seleccionar Grupo Correcto</label>
-                <select name="correct_group" id="correct_group" class="form-select">
-                    <option value="">Seleccionar Grupo Correcto</option>
-                    <option value="1">Pequeño</option>
-                    <option value="2">Mediano</option>
-                    <option value="3">Grande</option>
-                </select>
-            </div>
-            @endif
-            @elseif ($folder === 'seriesTemporales')
-                @if ($mode === 'seriesTemporales')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4"  id="images-container">
-                            <label for="image_{{ $image->id }}" class=" btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
                         </div>
                     @endforeach
                 @endif
@@ -237,6 +108,33 @@
                 <input type="hidden" name="cartel_ids[{{ $image->id }}]" value="{{ $image->cartel->id ?? '' }}">
             </div>
         @endforeach
+    @endif
+     @elseif ($folder === 'unir')
+    @if ($mode === 'images')
+        <div class="row justify-content-center align-items-start mb-4">
+            <div class="col-md-6">
+                <h4 class="text-center text-primary">Carteles (Palabras)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                     @foreach($cartels as $image)
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container" style="width:100px; height:140px;">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($images as $image)
+                        <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container" style="width:100px; height:140px;">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     @endif
             @endif
 
@@ -277,7 +175,7 @@
                             </div>
                         @endforeach
                     @elseif($mode === 'pairs')
-                        @foreach($images as $image)
+                        @foreach($cartels as $image)
                             <div class="col-6 col-md-3 text-center mb-4">
                                 <label class="btn btn-outline-primary btn-lg w-100 image-container">
                                     <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">

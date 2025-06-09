@@ -56,7 +56,7 @@ class StudentControllerE2 extends Controller
     public function saveAnswerE2(Request $request, $questionId)
     {
         $studentId = auth()->id();
-        $question = Question::with(['images.image.cartel', 'carteles'])->findOrFail($questionId);
+        $question = Question::with(['images.image.cartel'])->findOrFail($questionId);
         $mode = $request->input('mode', $question->type);
 
         // --- TARJETAS-FOTO ---
@@ -97,16 +97,15 @@ class StudentControllerE2 extends Controller
                 ->with('alert-type', $isCorrect ? 'success' : 'error');
         }
 
-        // --- CARTELES (PAREO) ---
+        // --- PAREO MIXTO (carteles y tarjetas-foto) ---
         elseif ($mode === 'pairs') {
-            // Validar las imágenes seleccionadas
             $request->validate([
                 'selected_images' => 'required|array|size:2', // Deben seleccionarse exactamente 2 imágenes para un par
                 'selected_images.*' => 'exists:question_images,image_id',
             ]);
 
             $selectedImages = $request->input('selected_images');
-            // Obtener los pares de las imágenes seleccionadas
+            // Obtener los pair_id de las imágenes seleccionadas
             $pairIds = QuestionImage::where('question_id', $questionId)
                 ->whereIn('image_id', $selectedImages)
                 ->pluck('pair_id', 'image_id')
@@ -170,6 +169,7 @@ class StudentControllerE2 extends Controller
             session()->flash('alert-type', $isCorrect ? 'success' : 'error');
             return redirect()->route('student.showQuestionE2', $questionId);
         }
+
         // --- OTROS MODOS ---
         return back()->with('message', 'Modo de actividad no reconocido.')->with('alert-type', 'error');
     }

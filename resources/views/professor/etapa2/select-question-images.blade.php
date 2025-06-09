@@ -58,20 +58,62 @@
             <input type="text" id="custom-title" name="title" class="form-control" placeholder="Escribe aquí...">
         </div>
     </div>
-    <!-- Buscador de imágenes o carteles -->
-    <div class="mb-3">
-        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel...">
+       <div class="row">
+        @if($folder === 'carteles')
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar cartel">
     </div>
-    <!-- Mostrar las imágenes -->
-    <div class="row">
-    @foreach($images as $image)
-        <div class="col-6 col-md-3 text-center mb-4">
-            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-            <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
-                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
-            </label>
+            <h4>Carteles</h4>
+            @foreach($cartels as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                </label>
+                </div>
+            @endforeach
+        @elseif($folder === 'tarjetas-foto')
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen ">
         </div>
-    @endforeach
+            <h4>Tarjetas Foto</h4>
+            @foreach($images as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                    <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+        @else
+
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
+        <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
+        </div>
+    </div>
+            <h4>Tarjetas Foto</h4>
+            @foreach($images as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                    <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+            <h4>Carteles</h4>
+            @foreach($cartels as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+        @endif
     </div>
 
     <div class="d-flex justify-content-center gap-3 mt-4">
@@ -159,23 +201,29 @@
         document.getElementById('custom-title').value = predefinedTitle.value + (customTitle.value || '');
     });
 
-    // Buscador para filtrar imágenes/carteles
+    // Buscador para filtrar imágenes/carteles por path o texto alternativo
     const searchInput = document.getElementById('search-input');
-    searchInput.addEventListener('input', function () {
-        const search = this.value.toLowerCase();
-        document.querySelectorAll('.row > div').forEach(function (item) {
-            const img = item.querySelector('img');
-            let path = '';
-            if (img) {
-                path = img.getAttribute('data-path') ? img.getAttribute('data-path').toLowerCase() : '';
-            }
-            if (path.includes(search)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
+searchInput.addEventListener('input', function () {
+    const search = this.value.toLowerCase();
+    document.querySelectorAll('#correct-images-form .col-6').forEach(function (item) {
+        let text = '';
+        const img = item.querySelector('img');
+        if (img) {
+            text += (img.getAttribute('alt') ? img.getAttribute('alt').toLowerCase() : '');
+            text += ' ';
+            text += (img.getAttribute('data-path') ? img.getAttribute('data-path').toLowerCase() : '');
+        }
+        const label = item.querySelector('label');
+        if (label) {
+            text += ' ' + label.textContent.toLowerCase();
+        }
+        if (text.includes(search)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
     });
+});
 });
 </script>
 @endsection
