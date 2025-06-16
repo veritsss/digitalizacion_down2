@@ -1,5 +1,254 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 
+/* Tus estilos personalizados van aquí */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #34495e;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Y todos los demás estilos que habíamos definido para app.css */
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #217dbb;
+    border-color: #217dbb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card-header {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-control {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.2rem; }
+    h5 { font-size: 1rem; }
+    h6 { font-size: 0.9rem; }
+}
+
+@media (max-width: 576px) {
+    body {
+        font-size: 14px;
+    }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; }
+}
+
+
+
+/* Y cualquier estilo específico de tu navbar y footer que tenías en bloques <style> */
+/* POR EJEMPLO: */
+.navbar {
+    z-index: 1000;
+    background-color: #2c3e50 !important;
+    color: #ecf0f1;
+    box-shadow: none;
+}
+
+ .image-container {
+            height: 200px; /* Altura fija para todos los cuadros */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Oculta cualquier contenido que exceda el cuadro */
+            border-radius: 8px; /* Opcional: bordes redondeados */
+        }
+
+        .image-content {
+            max-height: 100%; /* Ajusta la altura máxima al contenedor */
+            max-width: 100%; /* Ajusta el ancho máximo al contenedor */
+            object-fit: cover; /* Asegura que las imágenes llenen el cuadro sin distorsión */
+        }
+
+        .btn-submit {
+            font-size: 1.5rem; /* Tamaño de fuente más grande */
+            padding: 15px 30px; /* Más espacio interno */
+            display: block;
+            margin: 20px auto; /* Centrar el botón */
+        }
+
+        .btn-exit {
+            font-size: 1.2rem; /* Tamaño de fuente ligeramente más pequeño */
+            padding: 10px 20px; /* Espaciado interno más pequeño */
+            background-color: #dc3545; /* Rojo para el botón de salir */
+            color: white; /* Texto blanco */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        .btn-exit:hover {
+            background-color: #c82333; /* Rojo más oscuro al pasar el ratón */
+        }
+        .btn-exit:focus {
+            outline: 2px solid #f39c12; /* Resaltar al enfocar */
+            outline-offset: 2px; /* Espacio entre el borde y el botón */
+        }
+        .btn-exit:active {
+            transform: scale(0.95); /* Efecto de pulsación al hacer clic */
+        }
+        .btn-exit:disabled {
+            background-color: #6c757d; /* Gris para el botón deshabilitado */
+            cursor: not-allowed; /* Cambia el cursor al pasar por encima */
+        }
+        .btn-exit:disabled:hover {
+            background-color: #6c757d; /* Mantiene el color gris al pasar el ratón */
+        }
+        .btn-exit:disabled:focus {
+            outline: none; /* Sin resaltar al enfocar si está deshabilitado */
+        }
+
+/* Dentro de resources/css/app.css */
+
+/* ... (tus importaciones de Bootstrap y otros estilos generales) ... */
+
+/* Estilos base para el componente de enlace responsivo */
+.font-medium {
+    font-weight: 500; /* O 600 si prefieres más negrita, como 'font-semibold' de Tailwind */
+}
+
+/* Transición global para enlaces (similar a Tailwind) */
+a.transition {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out */
+}
+
+
+/* Estados para el enlace responsivo */
+
+/* Colores para el estado ACTIVO */
+.text-primary-active {
+    color: #3498db !important; /* Tu azul suave para el texto activo */
+}
+
+.bg-primary-subtle-active {
+    background-color: rgba(52, 152, 219, 0.1) !important; /* Azul suave muy claro para fondo activo */
+}
+
+/* Colores para el estado PREDETERMINADO (inactivo) */
+.text-light-secondary {
+    color: #ecf0f1 !important; /* Tu color de texto claro (de la navbar) */
+}
+
+/* Estados HOVER para el enlace PREDETERMINADO */
+.hover-text-primary:hover {
+    color: #3498db !important; /* Azul suave al pasar el mouse */
+}
+
+.hover-bg-light-hover:hover {
+    background-color: rgba(236, 240, 241, 0.1) !important; /* Un gris muy claro semi-transparente al pasar el mouse */
+}
+
+.hover-border-light-hover:hover {
+    border-color: #bdc3c7 !important; /* Un gris más oscuro para el borde al pasar el mouse */
+}
+
+/* Estilos de ENFOQUE (FOCUS) para ambos estados (activos e inactivos) */
+/* Usamos el borde amarillo ya definido en tu app.css para accesibilidad,
+   pero podríamos añadir más si quieres un color específico al enfocar */
+.responsive-nav-link-base:focus {
+    outline: none; /* Quitamos el outline por defecto del navegador */
+    box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.5); /* Sombra alrededor del elemento enfocado, usa tu color naranja */
+    /* Puedes ajustar el color del texto o fondo al enfocar si lo necesitas, similar a los estados hover/active */
+    /* text-decoration: underline; */
+}
+
+/* Ajustes específicos para el borde izquierdo si quieres que sea más grueso */
+/* Esto reemplaza 'border-l-4' de Tailwind */
+.border-start {
+    border-left-width: 0.25rem !important; /* 4px de ancho */
+}
+/* Estilos para contenedores de imágenes */
+.image-container {
+    height: 200px; /* Altura fija para todos los cuadros */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Oculta cualquier contenido que exceda el cuadro */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.image-content {
+    max-height: 100%; /* Ajusta la altura máxima al contenedor */
+    max-width: 100%; /* Ajusta el ancho máximo al contenedor */
+    object-fit: cover; /* Asegura que las imágenes llenen el cuadro sin distorsión */
+}
+
+/* Estilos para botones de cartel */
+.cartel-button {
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: default; /* Cambia el cursor para indicar que no es clickeable */
+}
+
+.cartel-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+/* Estilos para tarjetas de configuración */
+.equal-height-card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}

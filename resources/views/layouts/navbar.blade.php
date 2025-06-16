@@ -1,16 +1,17 @@
 <nav class="navbar navbar-expand-lg" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
-        <!-- Logo (Imagen) -->
         <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}" aria-label="Ir al Dashboard">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="height: 40px;">
         </a>
 
-        <!-- Botón de hamburguesa (responsive) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-            <!-- Opciones de usuario autenticado -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                </ul>
+
             @auth
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
@@ -18,7 +19,6 @@
                             {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                          <!--  <li><a class="dropdown-item" href="{{ route('profile.edit') }}" aria-label="Ir al perfil de usuario">Perfil</a></li>-->
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -29,7 +29,7 @@
                     </li>
                 </ul>
             @endauth
-            <!-- Opciones para usuarios no autenticados -->
+
             @guest
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -40,12 +40,10 @@
                     </li>
                 </ul>
             @endguest
-            <!-- Enlace de ayuda -->
         </div>
     </div>
 </nav>
 
-<!-- Ajustes CSS -->
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -63,7 +61,8 @@
     }
 
     .navbar-toggler-icon {
-        background-color: #ecf0f1; /* Icono de hamburguesa blanco */
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ecf0f1' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        /* Icono de hamburguesa blanco usando SVG directamente para mejor compatibilidad */
     }
 
     .nav-link.active {
@@ -74,10 +73,19 @@
         min-width: 10rem; /* Limitar el ancho máximo para que no se salga de la pantalla */
         max-width: 100%;
         box-sizing: border-box;
+        background-color: #2c3e50; /* Fondo del dropdown para que coincida con la navbar */
+        border: none; /* Elimina el borde predeterminado */
     }
 
     .dropdown-item {
         white-space: nowrap; /* Evitar que el texto se divida y salga de los márgenes */
+        color: #ecf0f1; /* Color del texto del item del dropdown */
+    }
+
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: #34495e; /* Color de fondo al pasar el mouse/enfocar */
+        color: #ecf0f1; /* Asegura que el texto siga siendo claro */
     }
 
     .navbar-nav .nav-link {

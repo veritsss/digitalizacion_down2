@@ -25,19 +25,24 @@ class Manual2Controller extends Controller
         abort(403, 'No tienes permisos para acceder a esta página.');
     }
 
-    public function asociar()
-    {
-        if (Auth::user()->role === 'Profesor') {
-            return view('manual2.asociar', [
-                'isProfessor' => true,
-            ]);
-        } elseif (Auth::user()->role === 'Estudiante') {
-            return view('manual2.asociar', [
-                'isProfessor' => false,
-            ]);
-        }
-        abort(403, 'No tienes permisos para acceder a esta página.');
+   public function asociar()
+{
+    $asociar = \App\Models\Image::where('path', 'like', 'images/asociar/%')->get();
+
+    if (Auth::user()->role === 'Profesor') {
+        return view('manual2.asociar', [
+            'images' => $asociar,
+            'isProfessor' => true,
+        ]);
+    } elseif (Auth::user()->role === 'Estudiante') {
+        return view('manual2.asociar', [
+            'images' => $asociar,
+            'isProfessor' => false,
+        ]);
     }
+
+    abort(403, 'No tienes permisos para acceder a esta página.');
+}
 
     public function carteles()
     {
@@ -54,8 +59,17 @@ class Manual2Controller extends Controller
     }
 
     public function componer()
-    {
-        return view('manual2.componer');
+     {
+        if (Auth::user()->role === 'Profesor') {
+            return view('manual2.componer', [
+                'isProfessor' => true,
+            ]);
+        } elseif (Auth::user()->role === 'Estudiante') {
+            return view('manual2.componer', [
+                'isProfessor' => false,
+            ]);
+        }
+        abort(403, 'No tienes permisos para acceder a esta página.');
     }
 
     public function librosPersonales()
@@ -112,12 +126,16 @@ class Manual2Controller extends Controller
 
     public function unir()
     {
-        if (Auth::user()->role === 'Profesor') {
+        $unir = \App\Models\Image::where('path', 'like', 'images/unir/%')->get();
+
+         if (Auth::user()->role === 'Profesor') {
             return view('manual2.unir', [
+                'images' => $unir,
                 'isProfessor' => true,
             ]);
         } elseif (Auth::user()->role === 'Estudiante') {
             return view('manual2.unir', [
+                'images' => $unir,
                 'isProfessor' => false,
             ]);
         }

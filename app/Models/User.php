@@ -54,5 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(StudentAnswer::class, 'student_id');
     }
+    public function learnedWords()
+{
+    return $this->hasMany(LearnedWord::class, 'student_id');
+}
 
 }

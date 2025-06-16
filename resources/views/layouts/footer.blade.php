@@ -1,8 +1,7 @@
 <footer class="custom-footer py-4">
     <div class="container">
-        <div class="row">
-            <!-- Columna 1: Sobre nosotros -->
-            <div class="col-12 col-md-4 mb-3 mb-md-0">
+        <div class="row justify-content-center text-center">
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                 <h5>Sobre el Sitio Web</h5>
                 <p>
                     Esta plataforma digitaliza los manuales <strong>Palabras + Palabras. Aprendamos a Leer</strong>, facilitando su acceso y uso en línea.
@@ -10,25 +9,21 @@
                     <a href="https://especial.mineduc.cl/recursos-apoyo-al-aprendizaje/recursos-las-los-docentes/manuales-palabras-palabras-aprendamos-leer/" target="_blank">Ver página</a>.
                 </p>
             </div>
-            <!-- Columna 2: Otros enlaces -->
-            <div class="col-12 col-md-4 mb-3 mb-md-0">
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                 <h5>Otros enlaces</h5>
                 <ul class="list-unstyled">
                     <li><a href="/" class="text-white">Ver manuales</a></li>
                     <li><a href="#" class="text-white">¿Quiénes somos?</a></li>
                     <li><a href="#" class="text-white">Historia</a></li>
                     <li><a href="#" class="text-white">Contacto</a></li>
-
                 </ul>
             </div>
-            <!-- Columna 3: Contáctanos -->
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                 <h5>Contáctanos</h5>
                 <p>Correo: info@example.com</p>
                 <p>Teléfono: +123 456 7890</p>
             </div>
         </div>
-        <!-- Línea inferior -->
         <div class="text-center mt-3">
             <p>&copy; {{ date('Y') }} Creado por Ignacio Vera</p>
         </div>
@@ -58,10 +53,16 @@
     footer h5 {
         color: #ecf0f1; /* Títulos en blanco */
         font-size: 1.25rem; /* Tamaño adecuado para títulos */
+        margin-bottom: 0.75rem; /* Add some space below headings */
     }
 
     footer p, footer ul li {
         color: #bdc3c7; /* Texto en gris claro */
+        margin-bottom: 0.5rem; /* Add some space below paragraphs and list items */
+    }
+
+    footer ul {
+        padding-left: 0; /* Remove default padding for unordered lists */
     }
 
     footer a {
@@ -78,13 +79,42 @@
         outline: 3px solid #f39c12; /* Resaltado al enfocarse */
     }
 
-    @media (max-width: 768px) {
+    /* Responsividad */
+    @media (max-width: 991.98px) { /* Bootstrap's 'md' breakpoint is 768px, 'lg' is 992px. Using 991.98px for consistent behavior before desktop */
+        .custom-footer .col-sm-6 {
+            margin-bottom: 1.5rem; /* Increase margin for stacked columns on small screens */
+        }
+        /* La siguiente regla se ha eliminado, ya no es necesaria */
+        /* .custom-footer .text-md-start { text-align: center !important; } */
+    }
+
+    @media (max-width: 767.98px) { /* Bootstrap's 'sm' breakpoint is 576px, 'md' is 768px. Using 767.98px */
         footer h5 {
-            font-size: 1.1rem; /* Reducir el tamaño de los títulos en pantallas pequeñas */
+            font-size: 1.1rem; /* Adjust title size for small screens */
         }
 
         footer p, footer ul li {
-            font-size: 0.9rem; /* Reducir el tamaño del texto en pantallas pequeñas */
+            font-size: 0.9rem; /* Adjust text size for small screens */
+        }
+
+        .custom-footer .col-12 {
+            margin-bottom: 1.5rem; /* Ensure consistent spacing when stacked */
+        }
+        .custom-footer .col-12:last-child {
+            margin-bottom: 0; /* Remove bottom margin for the last column when stacked */
+        }
+    }
+
+    @media (max-width: 575.98px) { /* Extra small devices (phones) */
+        footer h5 {
+            font-size: 1rem;
+        }
+
+        footer p, footer ul li {
+            font-size: 0.85rem;
+        }
+        footer {
+            padding: 0.75rem 0; /* Slightly reduce padding on extra small screens */
         }
     }
 </style>

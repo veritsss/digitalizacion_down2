@@ -118,6 +118,7 @@ class ProfessorE1Controller extends Controller
                 return $this->handleSeriesTemporales($questionId);
 
             case 'tarjetas-foto':
+
             return $this->handleTarjetasFoto($request, $questionId);
 
             default:

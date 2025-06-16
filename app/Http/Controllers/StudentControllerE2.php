@@ -30,44 +30,93 @@ class StudentControllerE2 extends Controller
     }
 
     // --- SEPARAR CARTELS Y TARJETAS SI ES UNIR ---
-    $cartels = collect();
-    $tarjetas = collect();
+    $unir2 = collect();
+    $unir = collect();
+    $asociar = collect();
+    $asociar2 = collect();
+    $seleccion = collect();
+    $seleccion2 = collect();
 
     if ($question->type === 'unir') {
-        $cartels = $question->images->filter(function($qi) {
-            return strpos($qi->image->path, 'images/carteles/') === 0;
+        $unir2 = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/cartelesUnir/') === 0;
         })->values();
 
-        $tarjetas = $question->images->filter(function($qi) {
-            return strpos($qi->image->path, 'images/tarjetas-foto/') === 0;
+        $unir = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/unir/') === 0;
+        })->values();
+    }
+    elseif ($question->type === 'asociar') {
+        $asociar = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/asociar/') === 0;
+        })->values();
+
+        $asociar2 = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/cartelesAsociar/') === 0;
+        })->values();
+    }
+    elseif ($question->type === 'seleccion') {
+        $seleccion = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/seleccionyasociacion/') === 0;
+        })->values();
+
+        $seleccion2 = $question->images->filter(function($qi) {
+            return strpos($qi->image->path, 'images/cartelesSeleccion/') === 0;
         })->values();
     }
 
-    return view('student.student-answer-etapa2', compact('question', 'cartels', 'tarjetas'));
+    return view('student.student-answer-etapa2', compact('question', 'unir', 'unir2', 'asociar', 'asociar2', 'seleccion', 'seleccion2'));
 }
 
     // Mostrar la pregunta al estudiante
     public function showQuestionE2($questionId)
-    {
-        $question = Question::with('images.image.cartel')->findOrFail($questionId);
+{
+    $studentId = auth()->id();
+    $question = Question::with('images.image')->findOrFail($questionId);
 
-        // Por defecto, colecciones vacías
-        $cartels = collect();
-        $tarjetas = collect();
+    // Obtener las imágenes ya respondidas por el estudiante
+    $answeredImages = StudentAnswer::where('student_id', $studentId)
+        ->where('question_id', $questionId)
+        ->pluck('image_id')
+        ->toArray();
 
-        if ($question->type === 'unir') {
-            // Separa carteles e imágenes según el path
-            $cartels = $question->images->filter(function($qi) {
-                return strpos($qi->image->path, 'images/carteles/') === 0;
-            })->values();
+    // Por defecto, colecciones vacías
+    $unir = collect();
+    $unir2 = collect();
+    $asociar = collect();
+    $asociar2 = collect();
+    $seleccion = collect();
+    $seleccion2 = collect();
 
-            $tarjetas = $question->images->filter(function($qi) {
-                return strpos($qi->image->path, 'images/tarjetas-foto/') === 0;
-            })->values();
-        }
+    if ($question->type === 'unir') {
+        $unir = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/unir/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
 
-        return view('student.student-answer-etapa2', compact('question', 'cartels', 'tarjetas'));
+        $unir2 = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/cartelesUnir/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
+    } elseif ($question->type === 'asociar') {
+        $asociar = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/asociar/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
+
+        $asociar2 = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/cartelesAsociar/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
     }
+    elseif ($question->type === 'seleccion') {
+        $seleccion = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/seleccionyasociacion/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
+
+        $seleccion2 = $question->images->filter(function($qi) use ($answeredImages) {
+            return strpos($qi->image->path, 'images/cartelesSeleccion/') === 0 && !in_array($qi->image_id, $answeredImages);
+        })->values();
+    }
+
+    return view('student.student-answer-etapa2', compact('question', 'unir', 'unir2', 'asociar', 'asociar2', 'seleccion', 'seleccion2'));
+}
 
     // Guardar la respuesta del estudiante
     public function saveAnswerE2(Request $request, $questionId)
@@ -80,7 +129,7 @@ class StudentControllerE2 extends Controller
         if ($mode === 'tarjetas-foto') {
             $request->validate([
                 'answers' => 'required|array',
-                'answers.*' => 'exists:carteles,id',
+                'answers.*' => 'exists:cartels,id',
             ]);
 
             $isCorrect = true;
@@ -187,160 +236,261 @@ class StudentControllerE2 extends Controller
             return redirect()->route('student.showQuestionE2', $questionId);
         }
         elseif ($mode === 'unir') {
+$request->validate([
+    'unir_id' => 'required|exists:question_images,image_id',
+    'unir2_id' => 'required|exists:question_images,image_id',
+]);
+
+$unirId = $request->input('unir_id');
+$unir2Id = $request->input('unir2_id');
+
+$pairUnir = QuestionImage::where('question_id', $questionId)->where('image_id', $unirId)->first();
+$pairUnir2 = QuestionImage::where('question_id', $questionId)->where('image_id', $unir2Id)->first();
+
+$isPairCorrect = $pairUnir && $pairUnir2 && $pairUnir->pair_id === $pairUnir2->pair_id;
+
+// Verificar si el pair_id aparece solo una vez en la pregunta
+$pairCounts = QuestionImage::where('question_id', $questionId)
+    ->whereNotNull('pair_id')
+    ->pluck('pair_id')
+    ->countBy();
+
+foreach ($pairCounts as $pairId => $count) {
+    if ($count === 1 && $pairId !== null) {
+        QuestionImage::where('question_id', $questionId)
+            ->where('pair_id', $pairId)
+            ->update(['is_correct' => 0]);
+    }
+}
+
+// Guardar la respuesta del estudiante para unir
+StudentAnswer::updateOrCreate(
+    [
+        'student_id' => $studentId,
+        'question_id' => $questionId,
+        'image_id' => $unirId,
+    ],
+    [
+        'pair_id' => $pairUnir->pair_id ?? null,
+        'is_correct' => $isPairCorrect,
+        'is_answered' => true,
+    ]
+);
+
+// Guardar la respuesta del estudiante para unir2
+StudentAnswer::updateOrCreate(
+    [
+        'student_id' => $studentId,
+        'question_id' => $questionId,
+        'image_id' => $unir2Id,
+    ],
+    [
+        'pair_id' => $pairUnir2->pair_id ?? null,
+        'is_correct' => $isPairCorrect,
+        'is_answered' => true,
+    ]
+);
+
+// Verificar si quedan imágenes de unir o unir2 sin responder
+$remainingUnir = QuestionImage::where('question_id', $questionId)
+    ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+        ->where('question_id', $questionId)
+        ->pluck('image_id')
+        ->toArray())
+    ->whereHas('image', function ($query) {
+        $query->where('path', 'LIKE', 'images/unir/%');
+    })
+    ->count();
+
+$remainingUnir2 = QuestionImage::where('question_id', $questionId)
+    ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+        ->where('question_id', $questionId)
+        ->pluck('image_id')
+        ->toArray())
+    ->whereHas('image', function ($query) {
+        $query->where('path', 'LIKE', 'images/cartelesUnir/%');
+    })
+    ->count();
+
+if ($remainingUnir === 0 || $remainingUnir2 === 0) {
+    // Pasar a la siguiente pregunta
+    $nextQuestion = Question::where('type', $question->type)
+        ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+        ->first();
+
+    if ($nextQuestion) {
+        return redirect()->route('student.showQuestionE2', $nextQuestion->id)
+            ->with('message', '¡Par guardado correctamente!')
+            ->with('alert-type', 'success');
+    } else {
+        return redirect()->route('manual2')
+            ->with('message', '¡Has completado todas las preguntas!')
+            ->with('alert-type', 'success');
+    }
+}
+
+return redirect()->route('student.showQuestionE2', $questionId)
+    ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
+    ->with('alert-type', $isPairCorrect ? 'success' : 'error');
+}
+elseif ($mode === 'asociar') {
     $request->validate([
-        'cartel_ids' => 'required|array',
-        'selected_images' => 'required|array',
-        'cartel_ids.*' => 'exists:question_images,image_id',
-        'selected_images.*' => 'exists:question_images,image_id',
+        'asociar_id' => 'required|exists:question_images,image_id',
+        'asociar2_id' => 'required|exists:question_images,image_id',
     ]);
 
-    $cartelIds = $request->input('cartel_ids');
-    $selectedImages = $request->input('selected_images');
+    $asociarId = $request->input('asociar_id');
+    $asociar2Id = $request->input('asociar2_id');
 
-    $pareadosCarteles = [];
-    $pareadosTarjetas = [];
+    $pairAsociar = QuestionImage::where('question_id', $questionId)->where('image_id', $asociarId)->first();
+    $pairAsociar2 = QuestionImage::where('question_id', $questionId)->where('image_id', $asociar2Id)->first();
 
-    // 1. Obtener todos los pair_id de la pregunta y contar cuántas veces aparece cada uno
-    $pairCounts = QuestionImage::where('question_id', $questionId)
-        ->whereNotNull('pair_id')
-        ->pluck('pair_id')
-        ->countBy();
+    $isPairCorrect = $pairAsociar && $pairAsociar2 && $pairAsociar->pair_id === $pairAsociar2->pair_id;
 
-    // 2. Si un pair_id aparece solo una vez, actualizar is_correct a 0 en question_images
-    foreach ($pairCounts as $pairId => $count) {
-        if ($count === 1 && $pairId !== null) {
-            QuestionImage::where('question_id', $questionId)
-                ->where('pair_id', $pairId)
-                ->update(['is_correct' => 0]);
+    // Guardar la respuesta del estudiante para asociar
+    StudentAnswer::updateOrCreate(
+        [
+            'student_id' => $studentId,
+            'question_id' => $questionId,
+            'image_id' => $asociarId,
+        ],
+        [
+            'pair_id' => $pairAsociar->pair_id ?? null,
+            'is_correct' => $isPairCorrect,
+            'is_answered' => true,
+        ]
+    );
+
+    // Guardar la respuesta del estudiante para asociar2
+    StudentAnswer::updateOrCreate(
+        [
+            'student_id' => $studentId,
+            'question_id' => $questionId,
+            'image_id' => $asociar2Id,
+        ],
+        [
+            'pair_id' => $pairAsociar2->pair_id ?? null,
+            'is_correct' => $isPairCorrect,
+            'is_answered' => true,
+        ]
+    );
+
+    // Verificar si quedan imágenes de asociar o asociar2 sin responder
+    $remainingAsociar = QuestionImage::where('question_id', $questionId)
+        ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+            ->where('question_id', $questionId)
+            ->pluck('image_id')
+            ->toArray())
+        ->whereHas('image', function ($query) {
+            $query->where('path', 'LIKE', 'images/asociar/%');
+        })
+        ->count();
+
+    $remainingAsociar2 = QuestionImage::where('question_id', $questionId)
+        ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+            ->where('question_id', $questionId)
+            ->pluck('image_id')
+            ->toArray())
+        ->whereHas('image', function ($query) {
+            $query->where('path', 'LIKE', 'images/cartelesAsociar/%');
+        })
+        ->count();
+
+    if ($remainingAsociar === 0 || $remainingAsociar2 === 0) {
+        // Pasar a la siguiente pregunta
+        $nextQuestion = Question::where('type', $question->type)
+            ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+            ->first();
+
+        if ($nextQuestion) {
+            return redirect()->route('student.showQuestionE2', $nextQuestion->id)
+                ->with('message', '¡Par guardado correctamente!')
+                ->with('alert-type', 'success');
+        } else {
+            return redirect()->route('manual2')
+                ->with('message', '¡Has completado todas las preguntas!')
+                ->with('alert-type', 'success');
         }
     }
 
-    // Marcar pares seleccionados
-    for ($i = 0; $i < max(count($cartelIds), count($selectedImages)); $i++) {
-        $cartelId = $cartelIds[$i] ?? null;
-        $tarjetaId = $selectedImages[$i] ?? null;
-
-        if (!$cartelId || !$tarjetaId) {
-            if ($cartelId) {
-                StudentAnswer::updateOrCreate(
-                    [
-                        'student_id' => $studentId,
-                        'question_id' => $questionId,
-                        'image_id' => $cartelId,
-                    ],
-                    [
-                        'pair_id' => null,
-                        'is_correct' => false,
-                        'is_answered' => true,
-                    ]
-                );
-            }
-            if ($tarjetaId) {
-                StudentAnswer::updateOrCreate(
-                    [
-                        'student_id' => $studentId,
-                        'question_id' => $questionId,
-                        'image_id' => $tarjetaId,
-                    ],
-                    [
-                        'pair_id' => null,
-                        'is_correct' => false,
-                        'is_answered' => true,
-                    ]
-                );
-            }
-            continue;
-        }
-
-        $pairCartel = QuestionImage::where('question_id', $questionId)->where('image_id', $cartelId)->first();
-        $pairTarjeta = QuestionImage::where('question_id', $questionId)->where('image_id', $tarjetaId)->first();
-
-        // Si el pair_id está solo (aparece solo una vez), es incorrecto
-        $isPairCorrect = false;
-        if ($pairCartel && $pairTarjeta && $pairCartel->pair_id === $pairTarjeta->pair_id && $pairCartel->pair_id !== null) {
-            $pairId = $pairCartel->pair_id;
-            $isPairCorrect = ($pairCounts[$pairId] ?? 0) > 1;
-        }
-
-        StudentAnswer::updateOrCreate(
-            [
-                'student_id' => $studentId,
-                'question_id' => $questionId,
-                'image_id' => $cartelId,
-            ],
-            [
-                'pair_id' => $pairCartel->pair_id ?? null,
-                'is_correct' => $isPairCorrect,
-                'is_answered' => true,
-            ]
-        );
-        StudentAnswer::updateOrCreate(
-            [
-                'student_id' => $studentId,
-                'question_id' => $questionId,
-                'image_id' => $tarjetaId,
-            ],
-            [
-                'pair_id' => $pairTarjeta->pair_id ?? null,
-                'is_correct' => $isPairCorrect,
-                'is_answered' => true,
-            ]
-        );
-
-        $pareadosCarteles[] = $cartelId;
-        $pareadosTarjetas[] = $tarjetaId;
-    }
-
-    // Marcar como incorrectos los carteles sin pareja
-    $allCarteles = QuestionImage::where('question_id', $questionId)
-        ->whereIn('image_id', $cartelIds)
-        ->pluck('image_id')
-        ->toArray();
-
-    foreach ($allCarteles as $cartelId) {
-        if (!in_array($cartelId, $pareadosCarteles)) {
-            StudentAnswer::updateOrCreate(
-                [
-                    'student_id' => $studentId,
-                    'question_id' => $questionId,
-                    'image_id' => $cartelId,
-                ],
-                [
-                    'pair_id' => null,
-                    'is_correct' => false,
-                    'is_answered' => true,
-                ]
-            );
-        }
-    }
-
-    // Marcar como incorrectos las tarjetas sin pareja
-    $allTarjetas = QuestionImage::where('question_id', $questionId)
-        ->whereIn('image_id', $selectedImages)
-        ->pluck('image_id')
-        ->toArray();
-
-    foreach ($allTarjetas as $tarjetaId) {
-        if (!in_array($tarjetaId, $pareadosTarjetas)) {
-            StudentAnswer::updateOrCreate(
-                [
-                    'student_id' => $studentId,
-                    'question_id' => $questionId,
-                    'image_id' => $tarjetaId,
-                ],
-                [
-                    'pair_id' => null,
-                    'is_correct' => false,
-                    'is_answered' => true,
-                ]
-            );
-        }
-    }
-
-    return redirect()->route('manual2')
-        ->with('message', '¡Respuestas guardadas!')
-        ->with('alert-type', 'success');
+    return redirect()->route('student.showQuestionE2', $questionId)
+        ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
+        ->with('alert-type', $isPairCorrect ? 'success' : 'error');
 }
+elseif ($mode === 'seleccionyasociacion') {
+    $request->validate([
+        'seleccion_id' => 'required|exists:question_images,image_id',
+        'seleccion2_id' => 'required|exists:question_images,image_id',
+    ]);
+    $seleccionId = $request->input('seleccion_id');
+    $seleccion2Id = $request->input('seleccion2_id');
+    $pairSeleccion = QuestionImage::where('question_id', $questionId)->where('image_id', $seleccionId)->first();
+    $pairSeleccion2 = QuestionImage::where('question_id', $questionId)->where('image_id', $seleccion2Id)->first();
+    $isPairCorrect = $pairSeleccion && $pairSeleccion2 && $pairSeleccion->pair_id === $pairSeleccion2->pair_id;
+    // Guardar la respuesta del estudiante para seleccion
+    StudentAnswer::updateOrCreate(
+        [
+            'student_id' => $studentId,
+            'question_id' => $questionId,
+            'image_id' => $seleccionId,
+        ],
+        [
+            'pair_id' => $pairSeleccion->pair_id ?? null,
+            'is_correct' => $isPairCorrect,
+            'is_answered' => true,
+        ]
+    );
+    // Guardar la respuesta del estudiante para seleccion2
+    StudentAnswer::updateOrCreate(
+        [
+            'student_id' => $studentId,
+            'question_id' => $questionId,
+            'image_id' => $seleccion2Id,
+        ],
+        [
+            'pair_id' => $pairSeleccion2->pair_id ?? null,
+            'is_correct' => $isPairCorrect,
+            'is_answered' => true,
+        ]
+    );
+    // Verificar si quedan imágenes de seleccion o seleccion2 sin responder
+    $remainingSeleccion = QuestionImage::where('question_id', $questionId)
+        ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+            ->where('question_id', $questionId)
+            ->pluck('image_id')
+            ->toArray())
+        ->whereHas('image', function ($query) {
+            $query->where('path', 'LIKE', 'images/seleccionyasociacion/%');
+        })
+        ->count();
+    $remainingSeleccion2 = QuestionImage::where('question_id', $questionId)
+        ->whereNotIn('image_id', StudentAnswer::where('student_id', $studentId)
+            ->where('question_id', $questionId)
+            ->pluck('image_id')
+            ->toArray())
+        ->whereHas('image', function ($query) {
+            $query->where('path', 'LIKE', 'images/cartelesSeleccion/%');
+        })
+        ->count();
+    if ($remainingSeleccion === 0 || $remainingSeleccion2 === 0) {
+        // Pasar a la siguiente pregunta
+        $nextQuestion = Question::where('type', $question->type)
+            ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+            ->first();
+        if ($nextQuestion) {
+            return redirect()->route('student.showQuestionE2', $nextQuestion->id)
+                ->with('message', '¡Par guardado correctamente!')
+                ->with('alert-type', 'success');
+        } else {
+            return redirect()->route('manual2')
+                ->with('message', '¡Has completado todas las preguntas!')
+                ->with('alert-type', 'success');
+        }
+    }
+    return redirect()->route('student.showQuestionE2', $questionId)
+        ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
+        ->with('alert-type', $isPairCorrect ? 'success' : 'error');
+    }
 
         // --- OTROS MODOS ---
         return back()->with('message', 'Modo de actividad no reconocido.')->with('alert-type', 'error');

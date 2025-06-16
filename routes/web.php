@@ -49,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/professor/dashboard', [ProfessorController::class, 'index'])->name('professor.dashboard');
     Route::get('/professor/estudiante/{id}/detalle', [ProfessorController::class, 'detalle'])->name('professor.studentDetail');
     Route::get('/professor/questions', [ProfessorController::class, 'listQuestions'])->name('professor.questions.list');
+    Route::get('/professor/search-abecedario', [ProfessorController::class, 'searchAbecedario'])->name('professor.searchAbecedario');
+    Route::post('/professor/student/{id}/abecedario/save', [ProfessorController::class, 'saveLearnedWords'])->name('professor.saveLearnedWords');
+    Route::get('/professor/student/{id}/abecedario', [ProfessorController::class, 'abecedario'])->name('professor.abecedario');
+    Route::delete('/professor/learned-word/{id}/delete', [ProfessorController::class, 'deleteLearnedWord'])->name('professor.deleteLearnedWord');
 
 
     //ETAPA 1 PROFESOR

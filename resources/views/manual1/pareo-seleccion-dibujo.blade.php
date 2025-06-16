@@ -12,6 +12,9 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <h1 class="text-primary fw-bold">PAREO SELECCIÓN Y DIBUJO</h1>
     <!-- Contenido para Profesores -->
@@ -24,7 +27,7 @@
         <li>Reconocer sílabas</li>
         <li>Trabajar los diferentes niveles del lenguaje de forma lúdica</li>
     </ul>
-
+    @if($isProfessor)
     <h3>Sugerencias de actividades para el pareo y selección</h3>
     <ul>
         <li>Mostrar la imagen que se nombra.</li>
@@ -46,7 +49,6 @@
         </li>
     </p>
 </ul>
-    @if($isProfessor)
 
         @if(session('message'))
             <div class="alert alert-success">

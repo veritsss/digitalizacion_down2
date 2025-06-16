@@ -12,6 +12,9 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <h1 class="text-primary fw-bold">PAREO DE IMÁGENES IGUALES</h1>
     <!-- Contenido para Profesores -->
@@ -24,6 +27,7 @@
         <li>Potenciar la memoria visual.</li>
         <li>Servir como base para la identificación de gráficas en etapas iniciales.</li>
     </ul>
+    @if($isProfessor)
     <h3>Sugerencias de actividades para el Pareo por igualdad</h3>
     <ul>
         <li>Parear los dibujos iguales.</li>
@@ -42,7 +46,7 @@
             </li>
         </p>
     </ul>
-    @if($isProfessor)
+
 
     @if(session('message'))
         <div class="alert alert-success">

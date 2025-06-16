@@ -16,8 +16,15 @@ class ProfessorE2Controller extends Controller
 {
     // Obtener imágenes de tarjetas-foto y carteles
     $images = Image::where('path', 'like', 'images/tarjetas-foto/%')->get();
-    $cartels = Image::where('path', 'like', 'images/carteles/%')->get();
-   return view('professor.etapa2.select-question-images', compact('images', 'cartels', 'folder', 'mode'));
+    $cartels = Image::where('path', 'like', 'images/unir/%')->get();
+    $asociar = Image::where('path', 'like', 'images/asociar/%')->get();
+    $asociar2 = Image::where('path', 'like', 'images/cartelesAsociar/%')->get();
+    $unir = Image::where('path', 'like', 'images/unir/%')->get();
+    $unir2 = Image::where('path', 'like', 'images/cartelesUnir/%')->get();
+    $seleccion = Image::where('path', 'like', 'images/seleccionyasociacion/%')->get();
+    $seleccion2 = Image::where('path', 'like', 'images/Cartelesseleccion/%')->get();
+
+   return view('professor.etapa2.select-question-images', compact('images', 'cartels','asociar','asociar2','seleccion','seleccion2','unir','unir2', 'folder', 'mode'));
 }
 
     // Guardar las imágenes seleccionadas para la pregunta
@@ -83,19 +90,32 @@ class ProfessorE2Controller extends Controller
 
         // Filtrar carteles seleccionados
         $cartels = Image::whereIn('id', $questionImages)
-            ->where('path', 'like', 'images/carteles/%')
+            ->where('path', 'like', 'images/unir/%')
+            ->get();
+        $asociar = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/asociar/%')
+            ->get();
+        $asociar2 = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/cartelesAsociar/%')
+            ->get();
+        $unir = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/unir/%')
+            ->get();
+        $unir2 = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/cartelesUnir/%')
+            ->get();
+        $seleccion = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/seleccionyasociacion/%')
+            ->get();
+        $seleccion2 = Image::whereIn('id', $questionImages)
+            ->where('path', 'like', 'images/Cartelesseleccion/%')
             ->get();
 
-        if ($folder === 'unir' || $mode === 'unir') {
-            return view('professor.etapa2.select-correct-images', compact('images', 'cartels', 'folder', 'mode', 'question'));
-        }
-        elseif ($folder === 'carteles' || $mode === 'pairs') {
-            // Si es tarjetas-foto, envía las imágenes y los carteles
-            return view('professor.etapa2.select-correct-images', compact( 'cartels', 'folder', 'mode', 'question'));
-        }
+
+
 
         // Para los demás casos, solo envía lo necesario
-        return view('professor.etapa2.select-correct-images', compact('images', 'folder', 'mode', 'question'));
+      return view('professor.etapa2.select-correct-images', compact('images', 'cartels', 'asociar', 'asociar2', 'unir', 'unir2','seleccion','seleccion2', 'folder', 'mode', 'question'));
     }
     // Guardar las imágenes correctas
 public function saveCorrectImagesE2(Request $request, $folder)
@@ -121,18 +141,19 @@ public function saveCorrectImagesE2(Request $request, $folder)
         case 'clasificacionHabitat':
         case 'clasificacionCategoria':
         case 'pareoporigualdad':
-
+            case 'seleccion':
+            case 'asociar':
             case 'unir':
                 $images = QuestionImage::where('question_id', $questionId)->with('image')->get();
                 $this->resetImages($questionId, ['pair_id' => null]);
                 $this->assignPairs($images); // Esto guarda el size en pair_id y marca como correctas
-                return $this->jsonResponse(true, 'Respuestas correctas guardadas por pares (criterio: size).');
-
+                return $this->jsonResponse(true, 'Las respuestas han sido guardadas correctamente.');
         case 'carteles':
             return $this->handleImagesOrPairs($request, $questionId, $mode);
 
         case 'tarjetas-foto':
             return $this->handleTarjetasFoto($request, $questionId);
+
 
     }
 }
@@ -151,6 +172,7 @@ public function saveCorrectImagesE2(Request $request, $folder)
             return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
         }
     }
+
 private function handleTarjetasFoto(Request $request, $questionId)
 {
     // Validar los carteles asociados
@@ -240,9 +262,3 @@ private function handleTarjetasFoto(Request $request, $questionId)
 
 
 }
-
-
-
-
-
-

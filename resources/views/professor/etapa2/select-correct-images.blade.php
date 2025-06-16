@@ -95,6 +95,37 @@
                         </div>
                     @endforeach
                 @endif
+            @elseif($folder === 'asociar')
+            @if ($mode === 'asociar')
+        <div class="row justify-content-center align-items-start mb-4">
+            <div class="col-md-6">
+                <h4 class="text-center text-primary">Imágenes</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($asociar as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center text-success">Carteles(Palabras)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($asociar2 as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
             @elseif ($folder === 'tarjetas-foto')
                @if ($mode === 'tarjetas-foto')
         @foreach ($images as $image)
@@ -115,7 +146,7 @@
             <div class="col-md-6">
                 <h4 class="text-center text-primary">Carteles (Palabras)</h4>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    @foreach($images as $image)
+                    @foreach($unir as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
@@ -128,7 +159,38 @@
             <div class="col-md-6">
                 <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    @foreach($cartels as $image)
+                    @foreach($unir2 as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+    @elseif ($folder === 'seleccion')
+    @if ($mode === 'seleccionyasociacion')
+        <div class="row justify-content-center align-items-start mb-4">
+            <div class="col-md-6">
+                <h4 class="text-center text-primary">Carteles (Palabras)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($seleccion as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($seleccion2 as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">

@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\QuestionImage;
 use App\Models\StudentAnswer;
 use App\Models\User;
+use App\Models\LearnedWord;
 
 class ProfessorController extends Controller
 {
@@ -234,7 +235,59 @@ public function listQuestions(Request $request)
 
     return view('professor.monitoreo.list', compact('questions'));
 }
+public function searchAbecedario(Request $request)
+{
+      $search = $request->input('search');
 
+    // Buscar estudiantes por nombre, RUT o ID
+    $students = User::where('role', 'Estudiante')
+        ->when($search, function ($query, $search) {
+            $query->where('name', 'like', "%$search%")
+                ->orWhere('rut', 'like', "%$search%"); // Buscar por RUT
+        })
+        ->get();
+
+    // Si es una solicitud AJAX, devolver los resultados como JSON
+    if ($request->ajax()) {
+        return response()->json($students);
+    }
+
+
+    // Si no es AJAX, cargar la vista con todos los estudiantes
+    return view('professor.monitoreo.search-abecedario', compact('students'));
+}
+public function abecedario($studentId)
+{
+    $student = User::findOrFail($studentId);
+
+    // Aquí puedes cargar los datos necesarios para la vista del abecedario
+    return view('professor.monitoreo.abecedario', compact('student'));
+}
+public function saveLearnedWords(Request $request, $studentId)
+{
+    $request->validate([
+        'letter' => 'required|string|max:1',
+        'words' => 'required|array',
+        'words.*' => 'string|max:255',
+    ]);
+
+    foreach ($request->input('words') as $word) {
+        LearnedWord::create([
+            'student_id' => $studentId,
+            'letter' => strtoupper($request->input('letter')),
+            'word' => $word,
+        ]);
+    }
+
+    return redirect()->back()->with('message', 'Palabras guardadas correctamente.');
+}
+public function deleteLearnedWord($wordId)
+{
+    $word = LearnedWord::findOrFail($wordId);
+    $word->delete();
+
+    return redirect()->back()->with('message', 'Palabra eliminada correctamente.');
+}
 }
 
 

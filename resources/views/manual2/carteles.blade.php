@@ -23,6 +23,7 @@
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
+    @if($isProfessor)
     <h3>Sugerencias de actividades para la asociación</h3>
     <ul>
         <li>Asociar Tarjeta-Foto y cartel.</li>
@@ -47,8 +48,6 @@
             </li>
         </p>
     </ul>
- @if($isProfessor)
-
         @if(session('message'))
             <div class="alert alert-success">
                 {{ session('message') }}

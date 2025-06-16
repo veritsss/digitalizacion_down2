@@ -23,6 +23,7 @@
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
+    @if($isProfessor)
     <h3>Sugerencias de actividades para la asociación</h3>
     <ul>
         <li>Asociar Tarjeta-Foto y cartel.</li>
@@ -47,15 +48,15 @@
             </li>
         </p>
     </ul>
- @if($isProfessor)
+
 
         @if(session('message'))
             <div class="alert alert-success">
                 {{ session('message') }}
             </div>
         @endif
-        <a href="{{ route('professor.selectConfigurationModeE2','tarjetas-foto') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con las Tarjetas-Fotos
+        <a href="{{ route('professor.selectConfigurationModeE2','seleccion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+            Comenzar con la Selección y Asociación
         </a>
 
         @else
@@ -66,8 +67,8 @@
                     {{ $message }}
                 </div>
             @else
-            <a href="{{ route('student.answer', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
-                Responder Preguntas de Tarjetas-Fotos
+            <a href="{{ route('student.answerE2', ['type' => 'seleccion']) }}" class="btn btn-primary btn-lg">
+                Responder Preguntas de Selección y Asociación
             </a>
             @endif
         </div>

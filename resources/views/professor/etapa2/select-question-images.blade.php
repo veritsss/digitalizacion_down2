@@ -96,7 +96,7 @@
         </div>
     </div>
             <h4>Tarjetas Foto</h4>
-            @foreach($images as $image)
+            @foreach($unir as $image)
                 <div class="col-6 col-md-3 text-center mb-4">
                     <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
                     <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
@@ -105,7 +105,7 @@
                 </div>
             @endforeach
             <h4>Carteles</h4>
-            @foreach($cartels as $image)
+            @foreach($unir2 as $image)
                 <div class="col-6 col-md-3 text-center mb-4">
                     <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
                     <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
@@ -113,7 +113,65 @@
                     </label>
                 </div>
             @endforeach
+            @elseif($folder === 'asociar')
+
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
+        <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
+        </div>
+    </div>
+            <h4>Imagenes</h4>
+            @foreach($asociar as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                    <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+            <h4>Carteles</h4>
+            @foreach($asociar2 as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+              @elseif($folder === 'seleccion')
+
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
+        <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
+        </div>
+    </div>
+            <h4>Imagenes</h4>
+            @foreach($seleccion as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                    <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+            <h4>Carteles</h4>
+            @foreach($seleccion2 as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+
         @endif
+
     </div>
 
     <div class="d-flex justify-content-center gap-3 mt-4">
