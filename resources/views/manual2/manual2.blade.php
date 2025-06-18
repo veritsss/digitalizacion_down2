@@ -57,11 +57,13 @@
                 📚 Libros personales
             </a>
         </li>
+        @if($isProfessor)
         <li class="list-group-item py-3">
             <a href="{{ route('abecedario') }}" class="text-decoration-none text-dark fw-bold">
                 🔤 Abecedario
             </a>
         </li>
+        @endif
     </ul>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -12,25 +12,34 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-primary fw-bold">ASOCIACIÓN</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+    <h1 class="text-primary fw-bold">UNIÓN</h1>
+    <h2>¿Qué es unir?</h2>
+    <p>Unir es una actividad que consiste en relacionar palabras con dibujos, partes del cuerpo u otros elementos que guardan una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para reforzar la asociación entre conceptos y representaciones visuales.</p>
+    <h3>Objetivo de unir en la lectoescritura</h3>
     <ul>
         <li>Estimular la comprensión y el reconocimiento de significados.</li>
         <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
+        <li>Relacionar palabras con objetos o partes del cuerpo.</li>
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
      @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+    <h3>Sugerencias de actividades para la unión</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Indicar el dibujo correspondiente a cada palabra.</li>
+        <li>Unir la palabra con el dibujo que corresponde.</li>
+        <li>Leer las palabras y unir con la parte del cuerpo correspondiente.</li>
+        <li>Observar los dibujos y unir con la palabra correspondiente.</li>
     </ul>
 
     </ul>
@@ -48,13 +57,6 @@
             </li>
         </p>
     </ul>
-
-
-        @if(session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
         <a href="{{ route('professor.selectConfigurationModeE2','unir') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
             Comenzar con la unión
         </a>
@@ -62,22 +64,10 @@
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
             <a href="{{ route('student.answerE2', ['type' => 'unir']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de Unión
             </a>
-            @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

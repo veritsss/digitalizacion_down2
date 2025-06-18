@@ -12,6 +12,16 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
     <h1 class="text-primary fw-bold">CARTELES</h1>
     <h2>¿Qué es asociarse?</h2>
     <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
@@ -48,11 +58,7 @@
             </li>
         </p>
     </ul>
-        @if(session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
+
         <a href="{{ route('professor.selectConfigurationModeE2','carteles') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
             Comenzar con los carteles
         </a>
@@ -60,22 +66,10 @@
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
             <a href="{{ route('student.answerE2', ['type' => 'carteles']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de los carteles
             </a>
-            @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

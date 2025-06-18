@@ -16,6 +16,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+    @endif
     <h1 class="text-primary fw-bold">CLASIFICACIÓN</h1>
     <!-- Contenido para Profesores -->
     <h2>¿Qué es clasificar?</h2>
@@ -51,14 +61,6 @@
             </li>
         </p>
     </ul>
-
-
-    @if(session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
-
     <div class="mt-4">
         <a href="{{ route('professor.selectConfigurationModeE1','clasificacionColor') }}"
            class="btn btn-primary btn-lg d-block text-center mt-3">
@@ -76,11 +78,7 @@
 @else
     <!-- Contenido para Estudiantes -->
     <div class="mt-4">
-        @if(isset($message))
-            <div class="alert alert-info">
-                {{ $message }}
-            </div>
-        @else
+
         <a href="{{ route('student.answer', ['type' => 'clasificacionColor']) }}"
             class="btn btn-primary btn-lg d-block text-center mt-3">
             Responder Preguntas de Clasificación por Color
@@ -93,14 +91,7 @@
             class="btn btn-warning btn-lg d-block text-center mt-3">
             Responder Preguntas de Clasificación por Hábitat
         </a>
-        @endif
     </div>
-
-    @if(session('message'))
-        <div class="alert alert-info">
-            {{ session('message') }}
-        </div>
-    @endif
 @endif
 </div>
 @endsection

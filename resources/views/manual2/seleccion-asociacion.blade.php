@@ -12,25 +12,33 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-primary fw-bold">ASOCIACIÓN</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+    <h1 class="text-primary fw-bold">SELECCIÓN Y ASOCIACIÓN</h1>
+    <h2>¿Qué es selección y asociación?</h2>
+    <p>Selección y asociación es una actividad que consiste en identificar palabras o conceptos que se relacionan con dibujos o acciones específicas. En lectoescritura, esta estrategia se utiliza para reforzar la comprensión y asociación entre palabras y representaciones visuales o acciones.</p>
+    <h3>Objetivo de selección y asociación en la lectoescritura</h3>
     <ul>
         <li>Estimular la comprensión y el reconocimiento de significados.</li>
         <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
+        <li>Relacionar palabras con dibujos o acciones específicas.</li>
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
-        <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
+        <li>Desarrollar habilidades de selección y asociación de conceptos.</li>
     </ul>
-    @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+     @if($isProfessor)
+    <h3>Sugerencias de actividades para selección y asociación</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Encerrar o mostrar la palabra que se asocia al dibujo.</li>
+        <li>Leer las acciones.</li>
+        <li>Encerrar o mostrar la palabra que se asocia a la acción.</li>
     </ul>
 
     </ul>
@@ -48,36 +56,17 @@
             </li>
         </p>
     </ul>
-
-
-        @if(session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
         <a href="{{ route('professor.selectConfigurationModeE2','seleccion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con la Selección y Asociación
+            Comenzar con selección y asociación
         </a>
 
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
             <a href="{{ route('student.answerE2', ['type' => 'seleccion']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de Selección y Asociación
             </a>
-            @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

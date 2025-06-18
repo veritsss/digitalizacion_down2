@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 
 class Manual2Controller extends Controller
 {
-    public function index()
+   public function index()
     {
-        return view('manual2.manual2');
+         if (Auth::user()->role === 'Profesor') {
+        return view('manual2.manual2', [
+            'isProfessor' => true,
+        ]);
+    } elseif (Auth::user()->role === 'Estudiante') {
+        return view('manual2.manual2', [
+            'isProfessor' => false,
+        ]);
+    }
+    abort(403, 'No tienes permisos para acceder a esta página.');
     }
 
     public function abecedario()

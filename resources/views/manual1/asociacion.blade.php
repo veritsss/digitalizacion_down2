@@ -61,22 +61,25 @@
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
+
             <a href="{{ route('student.answer', ['type' => 'asociacion']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de Asociación
             </a>
-            @endif
+
         </div>
 
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 @endsection

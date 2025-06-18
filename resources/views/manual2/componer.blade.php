@@ -12,24 +12,34 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
     <h1 class="text-primary fw-bold">COMPONER</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+    <h2>¿Qué es componer?</h2>
+    <p>Componer es una actividad que consiste en observar una imagen y utilizar tarjetas o carteles para formar oraciones que representen la acción o el significado del dibujo. En lectoescritura, esta estrategia se utiliza para desarrollar habilidades de construcción de oraciones y comprensión de conceptos.</p>
+    <h3>Objetivo de componer en la lectoescritura</h3>
     <ul>
-        <li>Estimular la comprensión y el reconocimiento de significados.</li>
-        <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
+        <li>Estimular la construcción de oraciones significativas.</li>
+        <li>Favorecer la comprensión de acciones y conceptos representados en imágenes.</li>
+        <li>Relacionar palabras con acciones o significados específicos.</li>
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
-        <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
+        <li>Desarrollar habilidades de escritura y composición.</li>
     </ul>
-    <h3>Sugerencias de actividades para la asociación</h3>
+     @if($isProfessor)
+    <h3>Sugerencias de actividades para componer</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Observar la imagen.</li>
+        <li>Leer las tarjetas.</li>
+        <li>Componer la oración.</li>
+        <li>Completar con los carteles según corresponda a la acción que representa el dibujo.</li>
     </ul>
 
     </ul>
@@ -47,36 +57,17 @@
             </li>
         </p>
     </ul>
- @if($isProfessor)
-
-        @if(session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
-        <a href="{{ route('professor.selectConfigurationModeE2','tarjetas-foto') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con la Composición
+        <a href="{{ route('professor.selectConfigurationModeE2','componer') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+            Comenzar a Componer
         </a>
 
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
-            <a href="{{ route('student.answerE2', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
-                Responder Preguntas de Composición
+            <a href="{{ route('student.answerE2', ['type' => 'componer']) }}" class="btn btn-primary btn-lg">
+                Responder Preguntas de Componer
             </a>
-            @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

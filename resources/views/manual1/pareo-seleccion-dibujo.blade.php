@@ -15,7 +15,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
     <h1 class="text-primary fw-bold">PAREO SELECCIÓN Y DIBUJO</h1>
     <!-- Contenido para Profesores -->
     <h2>¿Qué es el Pareo?</h2>
@@ -49,12 +58,6 @@
         </li>
     </p>
 </ul>
-
-        @if(session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
         <a href="{{ route('professor.selectConfigurationModeE1','pareoyseleccion') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
             Comenzar con el Pareo, selección y dibujo
         </a>
@@ -62,22 +65,10 @@
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            @if(isset($message))
-                <div class="alert alert-info">
-                    {{ $message }}
-                </div>
-            @else
             <a href="{{ route('student.answer', ['type' => 'pareoyseleccion']) }}" class="btn btn-primary btn-lg">
                 Responder Preguntas de Pareo
             </a>
-            @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

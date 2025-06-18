@@ -2,6 +2,16 @@
 @section('title', 'PareoPorIgualdad')
 
 @section('contenido')
+@if(session('message'))
+    <script>
+        Swal.fire({
+            title: '{{ session('alert-type') === 'success' ? '¡Éxito!' : '¡Alerta!' }}',
+            text: '{{ session('message') }}',
+            icon: '{{ session('alert-type') }}', // Tipo de alerta (success, error, info, etc.)
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 <div class="container">
     <!-- Botón de retroceso -->
     <a href="{{ route('manual1') }}"
@@ -48,11 +58,6 @@
     </ul>
 
 
-    @if(session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
     <a href="{{ route('professor.selectConfigurationModeE1','pareoporigualdad') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
         Comenzar con el Pareo por igualdad
     </a>
@@ -60,22 +65,11 @@
     @else
     <!-- Contenido para Estudiantes -->
     <div class="mt-4">
-        @if(isset($message))
-            <div class="alert alert-info">
-                {{ $message }}
-            </div>
-        @else
+
         <a href="{{ route('student.answer', ['type' => 'pareoporigualdad']) }}" class="btn btn-primary btn-lg">
             Responder Preguntas de Pareo por igualdad
         </a>
-        @endif
     </div>
-
-    @if(session('message'))
-        <div class="alert alert-info">
-            {{ session('message') }}
-        </div>
-    @endif
 @endif
 </div>
 @endsection

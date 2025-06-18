@@ -2,6 +2,7 @@
 @section('title', 'Manual Etapa 1')
 
 @section('contenido')
+@if($isProfessor)
 <div class="container">
     <!-- Botón de regreso con mejor accesibilidad y estilo -->
     <a href="{{ route('manual2') }}"
@@ -12,27 +13,27 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-primary fw-bold">ABECEDARIO</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+      <h1 class="text-primary fw-bold">ABECEDARIO</h1>
+    <h2>¿Qué es el abecedario?</h2>
+    <p>El abecedario es una herramienta fundamental en el proceso de lectoescritura. Se completa de manera progresiva durante todo el proceso de aprendizaje, a medida que aumenta el repertorio de palabras que el alumno/a reconoce de forma global.</p>
+    <h3>Objetivo del abecedario</h3>
     <ul>
-        <li>Estimular la comprensión y el reconocimiento de significados.</li>
-        <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
-        <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
-        <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
+        <li>Desarrollar el reconocimiento global de palabras.</li>
+        <li>Ampliar el repertorio lingüístico del estudiante.</li>
+        <li>Fortalecer la memoria visual mediante la asociación de palabras con imágenes.</li>
+        <li>Fomentar la construcción de un abecedario personalizado y significativo.</li>
     </ul>
-    @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+    <h3>Metodología</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Introducción progresiva de palabras simples y familiares.</li>
+        <li>Asociación de palabras con imágenes y sonidos para reforzar el aprendizaje.</li>
+        <li>Organización de las palabras reconocidas según la letra inicial, formando un abecedario personalizado.</li>
     </ul>
-
+    <h3>Beneficios del abecedario</h3>
+    <ul>
+        <li>Adaptación al ritmo del estudiante, ajustándose a su nivel de reconocimiento global.</li>
+        <li>Fomento de la autonomía en la construcción de su propio abecedario.</li>
+        <li>Desarrollo integral del lenguaje mediante la combinación de habilidades visuales, auditivas y lingüísticas.</li>
     </ul>
     <p><strong>Cualquier duda sobre la creación de las actividades puede consultar los manuales:</strong></p>
     <ul>
@@ -65,17 +66,20 @@
                     {{ $message }}
                 </div>
             @else
-            <a href="{{ route('student.answerE2', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
-                Responder Preguntas de Abecedario
-            </a>
+              <!-- SweetAlert para usuarios no autorizados -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    title: 'Acceso denegado',
+                    text: 'Esta página es solo para profesores.',
+                    icon: 'error',
+                    confirmButtonText: 'Volver al inicio'
+                }).then(() => {
+                    window.location.href = "{{ route('dashboard') }}";
+                });
+            </script>
             @endif
         </div>
-
-        @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-        @endif
     @endif
 </div>
 @endsection

@@ -34,12 +34,12 @@
                                 <h5 class="imprenta-minus">{{ strtolower($letter) }}</h5>
                             </div>
                             <div class="text-center" style="flex: 1;">
-                                <h4 class="manuscrita-mayus">{{ $letter }}</h4>
-                                <h5 class="manuscrita-minus">{{ strtolower($letter) }}</h5>
+                                <h4 class="cursiva-mayus">{{ $letter }}</h4>
+                                <h5 class="cursiva-minus">{{ strtolower($letter) }}</h5>
                             </div>
                         </div>
                         <hr>
-                        <h6 class="text-center text-secondary">Palabras:</h6>
+                        <h6 class="text-center text-secondary">Palabras que inicien con: {{ $letter }} </h6>
                         <ul class="list-group mb-2">
                             @foreach($student->learnedWords->where('letter', $letter) as $word)
                                 <li class="list-group-item d-flex justify-content-between align-items-center p-1">
@@ -56,7 +56,7 @@
                             @csrf
                             <input type="hidden" name="letter" value="{{ $letter }}">
                             <div class="mb-2">
-                                <input type="text" name="words[]" class="form-control form-control-sm" placeholder="Nueva palabra" required>
+                                <input type="text" name="words[]" class="form-control form-control-sm" placeholder="ingrese palabras:" required>
                             </div>
                             <button type="submit" class="btn btn-primary btn-sm w-100">Guardar</button>
                         </form>
@@ -70,13 +70,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
 
 <style>
-    .imprenta-mayus, .manuscrita-mayus {
+    .imprenta-mayus{
         font-family: 'Arial', sans-serif;
+        font-size: 1.5rem;
+        font-weight: normal;
+    }
+    .cursiva-mayus {
+        font-family: 'Dancing Script', cursive;
         font-size: 1.5rem;
         font-weight: bold;
     }
 
-    .imprenta-minus, .manuscrita-minus {
+
+    .imprenta-minus {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.2rem;
+        font-weight: normal;
+    }
+    .cursiva-minus {
         font-family: 'Dancing Script', cursive;
         font-size: 1.2rem;
         font-weight: normal;
