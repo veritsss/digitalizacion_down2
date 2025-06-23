@@ -120,10 +120,7 @@
         seriesTemporales: [
             "Ordena la secuencia: ",
         ],
-        'tarjetas-foto': [ // Clave con guion
-            "Seleccione el texto asociado a cada imagen: ",
-            "Asocie las imágenes con sus textos correspondientes: ",
-        ],
+
     };
 
     // Llenar las opciones del select según el folder

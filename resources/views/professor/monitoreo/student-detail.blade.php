@@ -66,8 +66,8 @@
                     <td>{{ $detalle['omitidas'] }}</td>
                     <td>
                         <span class="badge bg-success">
-                            {{ $detalle['total_imagenes'] > 0
-                                ? round(($detalle['imagenes_correctas'] / $detalle['total_imagenes']) * 100, 2)
+                            {{ ($detalle['imagenes_correctas'] + $detalle['imagenes_incorrectas'] + $detalle['omitidas']) > 0
+                                ? round(($detalle['imagenes_correctas'] / ($detalle['imagenes_correctas'] + $detalle['imagenes_incorrectas'] + $detalle['omitidas'])) * 100, 2)
                                 : 0 }}%
                         </span>
                     </td>

@@ -23,24 +23,22 @@
     </script>
 @endif
     <h1 class="text-primary fw-bold">CARTELES</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+    <h2>¿Qué son los Carteles?</h2>
+    <p>Los Carteles son herramientas visuales que permiten asociar palabras o frases con imágenes, conceptos o acciones específicas. Son ideales para reforzar la comprensión lectora y la asociación de significados en la lectoescritura.</p>
+
+    <h3>Objetivo de los Carteles en la lectoescritura</h3>
     <ul>
         <li>Estimular la comprensión y el reconocimiento de significados.</li>
         <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
+        <li>Relacionar símbolos con objetos reales o acciones específicas.</li>
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
+
     @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+    <h3>Sugerencias de actividades con los Carteles</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Relacionar carteles entre sí según su significado.</li>
     </ul>
 
     </ul>

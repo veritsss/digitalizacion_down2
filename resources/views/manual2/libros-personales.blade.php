@@ -23,24 +23,27 @@
     </script>
 @endif
     <h1 class="text-primary fw-bold">LIBROS PERSONALES</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+      <h2>¿Qué son los Libros Personales?</h2>
+    <p>Los Libros Personales son herramientas pedagógicas diseñadas para mantener alta la motivación del estudiante, recopilando palabras que reconoce en forma global y permitiendo trabajar conceptos de tiempo, espacio y experiencias personales.</p>
+
+    <h3>Objetivo de los Libros Personales en la lectoescritura</h3>
     <ul>
+        <li>Generalizar y contextualizar el vocabulario aprendido.</li>
+        <li>Ampliar y categorizar el vocabulario que se reconoce en forma global.</li>
         <li>Estimular la comprensión y el reconocimiento de significados.</li>
         <li>Favorecer la memoria visual y auditiva.</li>
-        <li>Relacionar símbolos con objetos reales.</li>
+        <li>Relacionar símbolos con objetos reales y experiencias personales.</li>
         <li>Fomentar el desarrollo del pensamiento lógico-lingüístico.</li>
-        <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
+
     @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+   <h3>Sugerencias de actividades con los Libros Personales</h3>
     <ul>
-        <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
-        <li>Seleccionar el cartel que se nombra.</li>
-        <li>Denominar las palabras que lee.</li>
+        <li>Escribir palabras que el estudiante reconoce en forma global.</li>
+        <li>Incorporar pequeñas historias vivenciadas, como paseos familiares o eventos importantes.</li>
+        <li>Relacionar palabras con imágenes o dibujos realizados por el estudiante.</li>
+        <li>Clasificar palabras en categorías como objetos, acciones, lugares, etc.</li>
+        <li>Trabajar conceptos de tiempo y espacio a través de las historias personales.</li>
     </ul>
 
     </ul>
@@ -58,15 +61,15 @@
             </li>
         </p>
     </ul>
-        <a href="{{ route('professor.selectConfigurationModeE2','tarjetas-foto') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
+       <a href="{{ route('professor.searchFrases') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
             Comenzar con los Libros Personales
         </a>
 
         @else
         <!-- Contenido para Estudiantes -->
         <div class="mt-4">
-            <a href="{{ route('student.answerE2', ['type' => 'tarjetas-foto']) }}" class="btn btn-primary btn-lg">
-                Responder Preguntas de los Libros Personales
+         <a href="{{ route('student.listPhrases', ['studentId' => $studentId]) }}" class="btn btn-primary btn-lg">
+                Ver mis libros personales
             </a>
         </div>
     @endif

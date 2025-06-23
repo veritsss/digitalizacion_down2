@@ -157,12 +157,22 @@ class StudentControllerE2 extends Controller
                     $isCorrect = false;
                 }
             }
+              // Redirigir a la siguiente pregunta o finalizar
+        $nextQuestion = Question::where('type', $question->type)
+            ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
+            ->first();
 
-            return redirect()->route('manual2')
-                ->with('message', $isCorrect ? '¡Respuesta correcta!' : 'Algunas respuestas son incorrectas.')
-                ->with('alert-type', $isCorrect ? 'success' : 'error');
+        if ($nextQuestion) {
+            session()->flash('message', $isCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+            session()->flash('alert-type', $isCorrect ? 'success' : 'error');
+            return redirect()->route('student.showQuestionE2', $nextQuestion->id);
+        } else {
+            $finalMessage = ($isCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
+            session()->flash('message', $finalMessage);
+            session()->flash('alert-type', $isCorrect ? 'success' : 'error');
+            return redirect()->route('manual2');
         }
-
+    }
         // --- PAREO MIXTO (carteles y tarjetas-foto) ---
         elseif ($mode === 'pairs') {
             $request->validate([
@@ -318,20 +328,22 @@ if ($remainingUnir === 0 || $remainingUnir2 === 0) {
         ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
         ->first();
 
-    if ($nextQuestion) {
-        return redirect()->route('student.showQuestionE2', $nextQuestion->id)
-            ->with('message', '¡Par guardado correctamente!')
-            ->with('alert-type', 'success');
-    } else {
-        return redirect()->route('manual2')
-            ->with('message', '¡Has completado todas las preguntas!')
-            ->with('alert-type', 'success');
-    }
-}
+      if ($nextQuestion) {
+                    session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('student.showQuestionE2', $nextQuestion->id);
+                } else {
+                    $finalMessage = ($isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
+                    session()->flash('message', $finalMessage);
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('manual2');
+                }
+            }
 
-return redirect()->route('student.showQuestionE2', $questionId)
-    ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
-    ->with('alert-type', $isPairCorrect ? 'success' : 'error');
+            // Si quedan pares, recargar la misma pregunta
+            session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+            session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+            return redirect()->route('student.showQuestionE2', $questionId);
 }
 elseif ($mode === 'asociar') {
     $request->validate([
@@ -402,20 +414,22 @@ elseif ($mode === 'asociar') {
             ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
             ->first();
 
-        if ($nextQuestion) {
-            return redirect()->route('student.showQuestionE2', $nextQuestion->id)
-                ->with('message', '¡Par guardado correctamente!')
-                ->with('alert-type', 'success');
-        } else {
-            return redirect()->route('manual2')
-                ->with('message', '¡Has completado todas las preguntas!')
-                ->with('alert-type', 'success');
-        }
-    }
+       if ($nextQuestion) {
+                    session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('student.showQuestionE2', $nextQuestion->id);
+                } else {
+                    $finalMessage = ($isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
+                    session()->flash('message', $finalMessage);
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('manual2');
+                }
+            }
 
-    return redirect()->route('student.showQuestionE2', $questionId)
-        ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
-        ->with('alert-type', $isPairCorrect ? 'success' : 'error');
+            // Si quedan pares, recargar la misma pregunta
+            session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+            session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+            return redirect()->route('student.showQuestionE2', $questionId);
 }
 elseif ($mode === 'seleccionyasociacion') {
     $request->validate([
@@ -477,20 +491,23 @@ elseif ($mode === 'seleccionyasociacion') {
         $nextQuestion = Question::where('type', $question->type)
             ->whereNotIn('id', StudentAnswer::where('student_id', $studentId)->pluck('question_id')->toArray())
             ->first();
-        if ($nextQuestion) {
-            return redirect()->route('student.showQuestionE2', $nextQuestion->id)
-                ->with('message', '¡Par guardado correctamente!')
-                ->with('alert-type', 'success');
-        } else {
-            return redirect()->route('manual2')
-                ->with('message', '¡Has completado todas las preguntas!')
-                ->with('alert-type', 'success');
-        }
-    }
-    return redirect()->route('student.showQuestionE2', $questionId)
-        ->with('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.')
-        ->with('alert-type', $isPairCorrect ? 'success' : 'error');
-    }
+       if ($nextQuestion) {
+                    session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('student.showQuestionE2', $nextQuestion->id);
+                } else {
+                    $finalMessage = ($isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
+                    session()->flash('message', $finalMessage);
+                    session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+                    return redirect()->route('manual2');
+                }
+            }
+
+            // Si quedan pares, recargar la misma pregunta
+            session()->flash('message', $isPairCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+            session()->flash('alert-type', $isPairCorrect ? 'success' : 'error');
+            return redirect()->route('student.showQuestionE2', $questionId);
+}
 
         // --- OTROS MODOS ---
         return back()->with('message', 'Modo de actividad no reconocido.')->with('alert-type', 'error');

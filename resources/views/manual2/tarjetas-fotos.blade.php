@@ -22,10 +22,10 @@
         });
     </script>
 @endif
-    <h1 class="text-primary fw-bold">ASOCIACIÓN</h1>
-    <h2>¿Qué es asociarse?</h2>
-    <p>Asociar es una actividad que consiste en relacionar un estímulo con otro que guarda una conexión lógica o funcional. En lectoescritura, esta estrategia se utiliza para unir palabras con imágenes, sonidos con letras, objetos con su función, entre otros.</p>
-    <h3>Objetivo de asociar en la lectoescritura</h3>
+    <h1 class="text-primary fw-bold">Tarjetas-Fotos</h1>
+    <h2>¿Qué son las Tarjetas-Fotos?</h2>
+    <p>Las Tarjetas-Fotos son herramientas visuales que permiten asociar imágenes con conceptos, palabras o acciones. Estas actividades son ideales para reforzar la comprensión y el aprendizaje en lectoescritura.</p>
+    <h3>Objetivo de las tarjetas-foto en la lectoescritura</h3>
     <ul>
         <li>Estimular la comprensión y el reconocimiento de significados.</li>
         <li>Favorecer la memoria visual y auditiva.</li>
@@ -34,11 +34,9 @@
         <li>Establecer relaciones entre conceptos y palabras de forma significativa.</li>
     </ul>
      @if($isProfessor)
-    <h3>Sugerencias de actividades para la asociación</h3>
+    <h3>Sugerencias de actividades para las tarjetas-foto</h3>
     <ul>
         <li>Asociar Tarjeta-Foto y cartel.</li>
-        <li>Asociar cartel con cartel.</li>
-        <li>Clasificar las Tarjetas-Foto.</li>
         <li>Seleccionar el cartel que se nombra.</li>
         <li>Denominar las palabras que lee.</li>
     </ul>

@@ -89,11 +89,6 @@
 
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
-        <div class="mt-2">
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
-        </div>
     </div>
             <h4>Tarjetas Foto</h4>
             @foreach($unir as $image)
@@ -117,11 +112,6 @@
 
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
-        <div class="mt-2">
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
-        </div>
     </div>
             <h4>Imagenes</h4>
             @foreach($asociar as $image)
@@ -141,15 +131,34 @@
                     </label>
                 </div>
             @endforeach
+            @elseif($folder === 'componer')
+
+         <div class="mb-3">
+        <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
+    </div>
+            <h4>Imagenes</h4>
+            @foreach($componer as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                    <label for="image_{{ $image->id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
+            <h4>Carteles</h4>
+            @foreach($componer2 as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                    </label>
+                </div>
+            @endforeach
               @elseif($folder === 'seleccion')
 
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
-        <div class="mt-2">
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('search-input').value='carteles'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Carteles</button>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="document.getElementById('search-input').value='tarjetas-foto'; document.getElementById('search-input').dispatchEvent(new Event('input'));">Solo Tarjetas-Foto</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));">Ver Todos</button>
-        </div>
+
     </div>
             <h4>Imagenes</h4>
             @foreach($seleccion as $image)
@@ -191,41 +200,27 @@
 
     // Opciones predefinidas según el folder (type)
     const optionsByFolder = {
-        pareoyseleccion: [
-            "Seleccione la imagen que corresponda a: ",
-            "Pareee las partes del cuerpo que son iguales: ",
-        ],
-        asociacion: [
-            "Muestre los objetos que se usen para: ",
-            "Paree los objetos que están relacionados: ",
-        ],
-        clasificacionHabitat: [
-            "Agrupar y pegar todos los animales que viven en el campo:",
-            "Agrupar y pegar todos los animales que viven en la selva: ",
-        ],
-        clasificacionColor: [
-            "Agrupar las fichas según el color: ",
-        ],
-        clasificacionCategoria: [
-            "Parear las imágenes iguales: ",
-            "Parear las imágenes que correspondan a la categoría: ",
-        ],
-        pareoporigualdad: [
-            "Paree los dibujos iguales: ",
-        ],
-        seriesTamaño: [
-            "Ordenar imágenes por tamaño: ",
-            "Completar según el modelo: ",
-        ],
-        seriesTemporales: [
-            "Ordena la secuencia: ",
-        ],
         'tarjetas-foto': [ // Clave con guion
-            "Seleccione el texto asociado a cada imagen: ",
             "Asocie las imágenes con sus textos correspondientes: ",
         ],
         carteles: [
-            "Paree los carteles iguales: ",
+            "Asocie cartel con cartel: ",
+        ],
+        unir: [
+            "Observe los dibujos y paree cada dibujo con su palabra correspondiente: ",
+            "Lea las palabras y únalas con la parte del cuerpo correspondiente: ",
+        ],
+        asociar: [
+            "Leer y asociar el cartel al dibujo correspondiente: ",
+            "Leer y parear las palabras iguales: ",
+        ],
+        componer: [
+            "Componga la oración: ",
+            "Complete con los carteles según la acción que representa el dibujo: ",
+        ],
+        seleccion: [
+            "Relacione el dibujo con la palabra correspondiente: ",
+            "Relacione el cartel con la acción que se señala: ",
         ],
     };
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Image;
 
 class Manual2Controller extends Controller
 {
@@ -83,6 +85,7 @@ class Manual2Controller extends Controller
 
     public function librosPersonales()
     {
+        $user = Auth::user();
         if (Auth::user()->role === 'Profesor') {
             return view('manual2.libros-personales', [
                 'isProfessor' => true,
@@ -90,6 +93,7 @@ class Manual2Controller extends Controller
         } elseif (Auth::user()->role === 'Estudiante') {
             return view('manual2.libros-personales', [
                 'isProfessor' => false,
+                'studentId' => $user->id,
             ]);
         }
         abort(403, 'No tienes permisos para acceder a esta página.');

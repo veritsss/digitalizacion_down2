@@ -53,8 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/professor/student/{id}/abecedario/save', [ProfessorController::class, 'saveLearnedWords'])->name('professor.saveLearnedWords');
     Route::get('/professor/student/{id}/abecedario', [ProfessorController::class, 'abecedario'])->name('professor.abecedario');
     Route::delete('/professor/learned-word/{id}/delete', [ProfessorController::class, 'deleteLearnedWord'])->name('professor.deleteLearnedWord');
-
-
+    Route::get('/professor/search-images', [ProfessorController::class, 'searchImages'])->name('professor.searchImages');
+    Route::post('/professor/create-phrase', [ProfessorController::class, 'createPhrase'])->name('professor.createPhrase');
+    Route::get('/professor/frases-personales', function () {return view('professor.frases-personales');})->name('professor.frasesPersonales');
     //ETAPA 1 PROFESOR
     Route::get('/professor/e1/select-configuration-mode/{folder}', [ProfessorE1Controller::class, 'selectConfigurationModeE1'])->name('professor.selectConfigurationModeE1');
     Route::get('/professor/e1/select-question-images/{folder}/{mode}', [ProfessorE1Controller::class, 'selectQuestionImagesPageE1'])->name('professor.selectQuestionImagesPageE1');
@@ -135,3 +136,13 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/associate-carteles-tarjetas', [CartelController::class, 'showAssociateForm'])->name('cartel.showAssociateForm');
 Route::post('/associate-carteles-tarjetas', [CartelController::class, 'associateTarjetaFoto'])->name('cartel.associateTarjetaFoto');
+
+// Ruta para mostrar la vista de búsqueda de estudiantes para frases
+Route::get('/professor/search-frases', [ProfessorController::class, 'searchFrases'])->name('professor.searchFrases');
+
+// Ruta para mostrar las frases personales de un estudiante específico
+Route::get('/professor/student/{studentId}/frases', [ProfessorController::class, 'showPhrases'])->name('professor.showPhrases');
+Route::delete('/professor/student/{studentId}/frases/{phraseId}', [ProfessorController::class, 'deletePhrase'])->name('professor.deletePhrase');
+Route::get('/professor/student/{studentId}/list-frases', [ProfessorController::class, 'listFrases'])->name('professor.listPhrases');
+Route::get('/professor/student/{studentId}/search-phrases', [ProfessorController::class, 'searchPhrases'])->name('professor.searchPhrases');
+Route::get('/student/{studentId}/phrases', [ProfessorController::class, 'viewStudentPhrases'])->name('student.listPhrases');

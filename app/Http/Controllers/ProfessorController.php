@@ -9,6 +9,7 @@ use App\Models\QuestionImage;
 use App\Models\StudentAnswer;
 use App\Models\User;
 use App\Models\LearnedWord;
+use App\Models\Phrase;
 
 class ProfessorController extends Controller
 {
@@ -137,11 +138,6 @@ public function detalle($id)
         $total_preguntas = $question_ids->count();
 
         // Preguntas respondidas por el estudiante de este tipo
-        $preguntas_respondidas = StudentAnswer::where('student_id', $student->id)
-            ->whereIn('question_id', $question_ids)
-            ->pluck('question_id')
-            ->unique()
-            ->count();
         $preguntas_respondidas_ids = StudentAnswer::where('student_id', $student->id)
             ->whereIn('question_id', $question_ids)
             ->pluck('question_id')
@@ -149,49 +145,35 @@ public function detalle($id)
 
         $preguntas_respondidas = $preguntas_respondidas_ids->count();
 
-        // Solo imágenes correctas de preguntas respondidas
-        $imagenes_correctas_ids = QuestionImage::whereIn('question_id', $preguntas_respondidas_ids)
+        // Total de imágenes correctas posibles en las preguntas respondidas
+        $total_correct_images = QuestionImage::whereIn('question_id', $preguntas_respondidas_ids)
             ->where('is_correct', 1)
-            ->pluck('id');
-
-        // Total de imágenes correctas posibles en esas preguntas
-        $total_imagenes = QuestionImage::whereIn('question_id', $question_ids)
-            ->where('is_correct', 1)
-            ->count();
-
-        // Imágenes respondidas por el estudiante (de esas preguntas)
-        $imagenes_respondidas = StudentAnswer::where('student_id', $student->id)
-            ->whereIn('question_id', $question_ids)
             ->count();
 
         // Imágenes correctas respondidas
         $imagenes_correctas = StudentAnswer::where('student_id', $student->id)
-            ->whereIn('question_id', $question_ids)
+            ->whereIn('question_id', $preguntas_respondidas_ids)
             ->where('is_correct', 1)
             ->count();
 
         // Imágenes incorrectas respondidas
         $imagenes_incorrectas = StudentAnswer::where('student_id', $student->id)
-            ->whereIn('question_id', $question_ids)
+            ->whereIn('question_id', $preguntas_respondidas_ids)
             ->where('is_correct', 0)
-
             ->count();
 
+        // Cálculo de imágenes omitidas
+        $omitidas = max(0, $total_correct_images - ($imagenes_correctas + $imagenes_incorrectas));
 
-          $imagenes_correctas_respondidas_ids = StudentAnswer::where('student_id', $student->id)
-            ->whereIn('question_id', $preguntas_respondidas_ids)
-            ->whereIn('image_id', $imagenes_correctas_ids)
-            ->pluck('image_id')
-            ->unique();
-
-        $omitidas = ($imagenes_correctas_ids->diff($imagenes_correctas_respondidas_ids)->count()) -  $imagenes_respondidas;
+        // Imágenes respondidas por el estudiante
+        $imagenes_respondidas = $imagenes_correctas + $imagenes_incorrectas;
 
         if ($total_preguntas > 0) {
             $detalles[] = [
                 'type' => $type,
                 'total_preguntas' => $total_preguntas,
                 'preguntas_respondidas' => $preguntas_respondidas,
-                'total_imagenes' => $total_imagenes,
+                'total_imagenes' => $total_correct_images,
                 'imagenes_respondidas' => $imagenes_respondidas,
                 'imagenes_correctas' => $imagenes_correctas,
                 'imagenes_incorrectas' => $imagenes_incorrectas,
@@ -287,6 +269,166 @@ public function deleteLearnedWord($wordId)
     $word->delete();
 
     return redirect()->back()->with('message', 'Palabra eliminada correctamente.');
+}
+public function searchImages(Request $request)
+{
+    $search = $request->input('search');
+
+    // Filtrar imágenes por los valores específicos en el campo path
+    $images = Image::where(function ($query) use ($search) {
+        $query->where('path', 'like', "%images/unir%")
+              ->orWhere('path', 'like', "%images/seleccionyasociacion%")
+              ->orWhere('path', 'like', "%images/tarjetas-foto%");
+    })
+    ->where('path', 'like', "%$search%") // Filtrar por el término de búsqueda
+    ->get();
+
+    return response()->json($images);
+}
+public function createPhrase(Request $request)
+{
+    try {
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'image_id' => 'required|exists:images,id',
+            'word' => 'required|string|max:255',
+            'phrase' => 'required|string|max:255',
+        ]);
+
+        // Guardar la frase en la base de datos
+        Phrase::create([
+            'student_id' => $request->input('student_id'),
+            'image_id' => $request->input('image_id'),
+            'word' => $request->input('word'),
+            'phrase' => $request->input('phrase'),
+        ]);
+
+        return redirect()->back()->with([
+            'message' => 'Frase creada correctamente.',
+            'alert-type' => 'success',
+        ]);
+    } catch (\Exception $e) {
+        return redirect()->back()->with([
+            'message' => 'Hubo un error al crear la frase. Por favor, inténtalo nuevamente.',
+            'alert-type' => 'error',
+        ]);
+    }
+}
+public function searchFrases(Request $request)
+{
+      $search = $request->input('search');
+
+    // Buscar estudiantes por nombre, RUT o ID
+    $students = User::where('role', 'Estudiante')
+        ->when($search, function ($query, $search) {
+            $query->where('name', 'like', "%$search%")
+                ->orWhere('rut', 'like', "%$search%"); // Buscar por RUT
+        })
+        ->get();
+
+    // Si es una solicitud AJAX, devolver los resultados como JSON
+    if ($request->ajax()) {
+        return response()->json($students);
+    }
+
+
+    // Si no es AJAX, cargar la vista con todos los estudiantes
+    return view('professor.monitoreo.search-frases', compact('students'));
+}
+public function showPhrases($studentId)
+{
+    $student = User::findOrFail($studentId);
+
+    // Obtener las frases asociadas al estudiante
+    $phrases = Phrase::where('student_id', $studentId)->get();
+
+    // Pasar las variables a la vista
+    return view('professor.frases-personales', compact('student', 'phrases'));
+}
+public function listFrases($studentId)
+{
+    $student = User::findOrFail($studentId);
+    $phrases = Phrase::where('student_id', $studentId)->with('image')->get();
+
+    return view('professor.list-frases', compact('student', 'phrases'));
+}
+public function searchPhrases(Request $request, $studentId)
+{
+    $search = $request->input('search');
+    $filter = $request->input('filter', 'recent'); // Filtro por defecto: Más recientes
+
+    $query = Phrase::where('student_id', $studentId)
+        ->where(function ($query) use ($search) {
+            $query->where('word', 'like', "%$search%")
+                  ->orWhere('phrase', 'like', "%$search%")
+                  ->orWhereHas('image', function ($q) use ($search) {
+                      $q->where('path', 'like', "%$search%");
+                  });
+        });
+
+    // Aplicar el filtro
+    switch ($filter) {
+        case 'recent':
+            $query->orderBy('created_at', 'desc');
+            break;
+        case 'oldest':
+            $query->orderBy('created_at', 'asc');
+            break;
+        case 'alphabetical':
+            $query->orderBy('word', 'asc');
+            break;
+        case 'reverse-alphabetical':
+            $query->orderBy('word', 'desc');
+            break;
+    }
+
+    $phrases = $query->with('image')->get();
+
+    return response()->json($phrases);
+}
+public function viewStudentPhrases($studentId)
+{
+    // Verificar que el estudiante exista
+    $student = User::findOrFail($studentId);
+
+    // Obtener las frases del estudiante
+    $phrases = Phrase::where('student_id', $studentId)->with('image')->get();
+
+    return view('professor.monitoreo.list-frases2', compact('student', 'phrases'));
+}
+public function searchStudentPhrases(Request $request, $studentId)
+{
+    $search = $request->input('search');
+    $filter = $request->input('filter', 'recent'); // Filtro por defecto: Más recientes
+
+    $query = Phrase::where('student_id', $studentId)
+        ->where(function ($query) use ($search) {
+            $query->where('word', 'like', "%$search%")
+                  ->orWhere('phrase', 'like', "%$search%")
+                  ->orWhereHas('image', function ($q) use ($search) {
+                      $q->where('path', 'like', "%$search%");
+                  });
+        });
+
+    // Aplicar el filtro
+    switch ($filter) {
+        case 'recent':
+            $query->orderBy('created_at', 'desc');
+            break;
+        case 'oldest':
+            $query->orderBy('created_at', 'asc');
+            break;
+        case 'alphabetical':
+            $query->orderBy('word', 'asc');
+            break;
+        case 'reverse-alphabetical':
+            $query->orderBy('word', 'desc');
+            break;
+    }
+
+    $phrases = $query->with('image')->get();
+
+    return response()->json($phrases);
 }
 }
 

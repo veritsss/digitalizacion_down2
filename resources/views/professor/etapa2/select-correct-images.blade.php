@@ -171,6 +171,37 @@
             </div>
         </div>
     @endif
+    @elseif ($folder === 'componer')
+    @if ($mode === 'componer')
+        <div class="row justify-content-center align-items-start mb-4">
+            <div class="col-md-6">
+                <h4 class="text-center text-primary">Carteles (Palabras)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($componer as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center text-success">Tarjetas (Imágenes)</h4>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($componer2 as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <div class="image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </div>
+
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
     @elseif ($folder === 'seleccion')
     @if ($mode === 'seleccionyasociacion')
         <div class="row justify-content-center align-items-start mb-4">
@@ -201,6 +232,23 @@
                 </div>
             </div>
         </div>
+     @elseif($mode === 'images')
+                    @foreach($seleccion as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
+                    @foreach($seleccion2 as $image)
+                        <div class="col-6 col-md-3 text-center mb-4">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                            </label>
+                        </div>
+                    @endforeach
     @endif
             @endif
 
@@ -223,63 +271,140 @@
 
 <!-- Modal de Previsualización -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="previewModalLabel">Previsualización de la Pregunta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h3 class="text-primary fw-bold text-center">{{ $question->title }}</h3>
-                <div class="row">
-                    @if($mode === 'images')
-                        @foreach($images as $image)
-                            <div class="col-6 col-md-3 text-center mb-4">
-                                <label class="btn btn-outline-primary btn-lg w-100 image-container">
-                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                                </label>
-                            </div>
-                        @endforeach
-                    @elseif($mode === 'pairs')
-                        @foreach($cartels as $image)
-                            <div class="col-6 col-md-3 text-center mb-4">
-                                <label class="btn btn-outline-primary btn-lg w-100 image-container">
-                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                                </label>
-                            </div>
-                        @endforeach
-                    @elseif($mode === 'tarjetas-foto')
-                        @foreach($images as $image)
-                            <div class="col-6 col-md-3 text-center mb-4">
-                                <div class="image-container">
-                                    <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                <h1 class="text-primary fw-bold text-center">{{ $question->title }}</h1>
+
+                <form>
+                    <div class="row">
+                        @if($question->mode === 'pairs')
+                            @foreach($question->images as $image)
+                                <div class="col-6 col-md-3 text-center mb-4">
+                                    <input type="checkbox" name="selected_images[]" value="{{ $image->image_id }}" id="image_{{ $image->image_id }}" class="btn-check">
+                                    <label for="image_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                                        <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
+                                    </label>
                                 </div>
-                                <p class="mt-2 fw-bold text-primary">{{ $image->associated_text ?? 'Sin texto asociado' }}</p>
-                            </div>
-                        @endforeach
-                    @elseif($mode === 'seriesTemporales')
-                        @php
-                            $series = $images->groupBy('sequence_group');
-                        @endphp
-                        @foreach($series as $group => $imagenes)
-                            <div class="row">
-                                @foreach($imagenes->sortBy('sequence_order') as $image)
-                                    <div class="col-6 col-md-3 text-center mb-4">
-                                        <label class="image-container">
-                                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                                        </label>
-                                        <select class="form-select mt-2">
-                                            <option value="" disabled selected>Seleccionar orden</option>
-                                            @for($i = 1; $i <= count($imagenes); $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
+                            @endforeach
+                        @elseif($question->mode === 'tarjetas-foto')
+                            @foreach($question->images as $image)
+                                <div class="col-6 col-md-4 text-center mb-4">
+                                    <div class="card shadow-sm">
+                                        <div class="image-container">
+                                            <img src="{{ asset($image->image->path) }}" alt="Imagen {{ $image->image_id }}" class="image-content">
+                                        </div>
+                                        <div class="card-body">
+                                            <select name="answers[{{ $image->image_id }}]" class="form-select" required>
+                                                <option value="" disabled selected>Selecciona el cartel</option>
+                                                @foreach($question->images as $option)
+                                                    <option value="{{ $option->cartel->id }}">{{ $option->cartel->text ?? 'Sin cartel asociado' }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                @endforeach
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
+                                </div>
+                            @endforeach
+                        @elseif($question->mode === 'unir')
+                        <div id="pareo-app">
+    <div class="row justify-content-center align-items-start mb-4">
+        <!-- Unir -->
+        <div class="col-md-6">
+            <h4 class="text-center text-primary">Unir (Palabras)</h4>
+            <div id="unir-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($unir as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir_id" value="{{ $image->image_id }}" id="unir_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Unir2 -->
+        <div class="col-md-6">
+            <h4 class="text-center text-success">Unir2 (Imágenes)</h4>
+            <div id="unir2-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($unir2 as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir2-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir2_id" value="{{ $image->image_id }}" id="unir2_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir2_{{ $image->image_id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
+                        @elseif($question->mode === 'asociar')
+                         <div id="pareo-app">
+    <div class="row justify-content-center align-items-start mb-4">
+        <div class="col-md-6">
+            <h4 class="text-center text-primary">Asociar (Palabras)</h4>
+            <div id="unir-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($asociar as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir_id" value="{{ $image->image_id }}" id="unir_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4 class="text-center text-success">Asociar (Imágenes)</h4>
+            <div id="unir2-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($asociar2 as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir2-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir2_id" value="{{ $image->image_id }}" id="unir2_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir2_{{ $image->image_id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+                        @elseif($question->mode === 'seleccionyasociacion')
+                        <div id="pareo-app">
+    <div class="row justify-content-center align-items-start mb-4">
+        <div class="col-md-6">
+            <h4 class="text-center text-primary">Seleccionar (Palabras)</h4>
+            <div id="unir-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($seleccion as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir_id" value="{{ $image->image_id }}" id="unir_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4 class="text-center text-success">Asociar (Imágenes)</h4>
+            <div id="unir2-container" class="d-flex flex-wrap justify-content-center gap-3">
+                @foreach($seleccion2 as $image)
+                    <div class="col-6 col-md-3 text-center mb-4 unir2-item" data-id="{{ $image->image_id }}">
+                        <input type="radio" name="unir2_id" value="{{ $image->image_id }}" id="unir2_{{ $image->image_id }}" class="btn-check">
+                        <label for="unir2_{{ $image->image_id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                            <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
+                        </label>
+                    </div>
+                @endforeach
+                        @endif
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
