@@ -48,10 +48,10 @@
                     <p class="fs-4 text-dark">{{ $phrase->phrase }}</p>
 
                     <!-- Botón para eliminar la frase -->
-                    <form action="{{ route('professor.deletePhrase', [$student->id, $phrase->id]) }}" method="POST">
+                    <form action="{{ route('professor.deletePhrase', [$student->id, $phrase->id]) }}" method="POST" class="delete-phrase-form">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger rounded-pill shadow-sm">Eliminar</button>
+                        <button type="button" class="btn btn-sm btn-danger rounded-pill shadow-sm delete-phrase-btn">Eliminar</button>
                     </form>
                 </div>
             </div>
@@ -111,6 +111,32 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error:', error));
     }
+
+    // Seleccionar todos los botones de eliminar
+    const deleteButtons = document.querySelectorAll('.delete-phrase-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario por defecto
+
+            const form = this.closest('form'); // Obtener el formulario asociado al botón
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Enviar el formulario si el usuario confirma
+                }
+            });
+        });
+    });
 });
 </script>
 @endsection

@@ -430,6 +430,15 @@ public function searchStudentPhrases(Request $request, $studentId)
 
     return response()->json($phrases);
 }
+public function deletePhrase($studentId, $phraseId)
+{
+    $phrase = Phrase::where('id', $phraseId)->where('student_id', $studentId)->firstOrFail();
+
+    // Eliminar la frase
+    $phrase->delete();
+
+    return redirect()->back()->with('message', 'Frase eliminada correctamente.');
+}
 }
 
 

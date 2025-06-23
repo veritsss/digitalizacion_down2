@@ -62,7 +62,7 @@
         </p>
     </ul>
        <a href="{{ route('professor.searchFrases') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con los Libros Personales
+            Ver Libros Personales de los alumnos
         </a>
 
         @else

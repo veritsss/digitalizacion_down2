@@ -13,11 +13,7 @@
     </a>
     <h1 class="text-center mb-4">Abecedario del Estudiante: {{ $student->name }}</h1>
 
-    @if(session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
+
 
     <div class="row">
         @php
@@ -42,15 +38,15 @@
                         <h6 class="text-center text-secondary">Palabras que inicien con: {{ $letter }} </h6>
                         <ul class="list-group mb-2">
                             @foreach($student->learnedWords->where('letter', $letter) as $word)
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-1">
-                                    <span class="small">{{ $word->word }}</span>
-                                    <form action="{{ route('professor.deleteLearnedWord', $word->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">X</button>
-                                    </form>
-                                </li>
-                            @endforeach
+    <li class="list-group-item d-flex justify-content-between align-items-center p-1">
+        <span class="small">{{ $word->word }}</span>
+        <form action="{{ route('professor.deleteLearnedWord', $word->id) }}" method="POST" class="delete-word-form" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" class="btn btn-danger btn-sm delete-word-btn">X</button>
+        </form>
+    </li>
+@endforeach
                         </ul>
                         <form action="{{ route('professor.saveLearnedWords', $student->id) }}" method="POST">
                             @csrf
@@ -112,4 +108,34 @@
         font-size: 0.8rem;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Seleccionar todos los botones de eliminar
+    const deleteButtons = document.querySelectorAll('.delete-word-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario por defecto
+
+            const form = this.closest('form'); // Obtener el formulario asociado al botón
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Enviar el formulario si el usuario confirma
+                }
+            });
+        });
+    });
+});
+</script>
 @endsection

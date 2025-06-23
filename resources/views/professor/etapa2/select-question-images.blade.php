@@ -64,7 +64,7 @@
         <input type="text" id="search-input" class="form-control" placeholder="Buscar cartel">
     </div>
             <h4>Carteles</h4>
-            @foreach($cartels as $image)
+            @foreach($images as $image)
                 <div class="col-6 col-md-3 text-center mb-4">
                     <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
                     <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
@@ -109,7 +109,7 @@
                 </div>
             @endforeach
             @elseif($folder === 'asociar')
-
+              @if($mode === 'asociar')
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
     </div>
@@ -131,6 +131,18 @@
                     </label>
                 </div>
             @endforeach
+                @elseif($mode === 'pairs')
+                  <h4>Carteles</h4>
+            @foreach($images as $image)
+                <div class="col-6 col-md-3 text-center mb-4">
+                    <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="cartel_{{ $image->id }}" class="btn-check">
+                    <label for="cartel_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
+                        <img src="{{ asset($image->path) }}" alt="Cartel {{ $image->id }}" class="image-content" data-path="{{ asset($image->path) }}">
+                </label>
+                </div>
+            @endforeach
+            @endif
+
             @elseif($folder === 'componer')
 
          <div class="mb-3">
@@ -158,7 +170,6 @@
 
          <div class="mb-3">
         <input type="text" id="search-input" class="form-control" placeholder="Buscar imagen o cartel">
-
     </div>
             <h4>Imagenes</h4>
             @foreach($seleccion as $image)

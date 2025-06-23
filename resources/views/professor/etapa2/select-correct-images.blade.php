@@ -11,7 +11,7 @@
      </svg>
      <span class="fw-bold">salir</span>
   </a>
-    <h1 class="text-primary fw-bold">Pregunta: {{ $question->title }} </h1>
+    <h1 class="text-primary fw-bold"> {{ $question->title }} </h1>
     <p class="text-muted fs-4">Seleccionar Imágenes Correctas para la pregunta</p>
 
 
@@ -76,22 +76,12 @@
                     @endforeach
                 @endif
              @elseif($folder === 'carteles')
-                @if($mode === 'images')
-                    @foreach($images as $image)
-                        <div class="col-6 col-md-3 text-center mb-4">
-                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
-                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
-                                <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </label>
-                        </div>
-                    @endforeach
-                @elseif($mode === 'pairs')
-                  @foreach($cartels as $image)
+                @if($mode === 'pairs')
+                  @foreach($images as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
                             <div class="image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
                             </div>
-
                         </div>
                     @endforeach
                 @endif

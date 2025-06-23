@@ -11,9 +11,14 @@ class ProfessorE2Controller extends Controller
     // Mostrar la página para seleccionar imágenes para la pregunta
  public function selectQuestionImagesPageE2($folder = 'tarjetas-foto', $mode = 'images')
 {
-    // Obtener imágenes de tarjetas-foto y carteles
-    $images = Image::where('path', 'like', 'images/tarjetas-foto/%')->get();
-    $cartels = Image::where('path', 'like', 'images/carteles/%')->get();
+     // Construir el patrón de búsqueda para la carpeta
+    $pathPattern = 'images/' . $folder . '/%';
+
+    // Filtrar las imágenes según el usage_type
+    $images = Image::where('path', 'like', $pathPattern)
+                   ->whereRaw("FIND_IN_SET('$mode', usage_type)") // Filtrar por usage_type
+                   ->get();
+
     $asociar = Image::where('path', 'like', 'images/asociar/%')->get();
     $asociar2 = Image::where('path', 'like', 'images/cartelesAsociar/%')->get();
     $unir = Image::where('path', 'like', 'images/unir/%')->get();
@@ -23,7 +28,7 @@ class ProfessorE2Controller extends Controller
     $componer = Image::where('path', 'like', 'images/componer/%')->get();
     $componer2 = Image::where('path', 'like', 'images/cartelesComponer/%')->get();
 
-   return view('professor.etapa2.select-question-images', compact('images', 'cartels','asociar','asociar2','seleccion','seleccion2','unir','unir2','componer','componer2', 'folder', 'mode'));
+   return view('professor.etapa2.select-question-images', compact('images','asociar','asociar2','seleccion','seleccion2','unir','unir2','componer','componer2', 'folder', 'mode'));
 }
     // Guardar las imágenes seleccionadas para la pregunta
     public function selectQuestionImagesE2(Request $request)
@@ -81,15 +86,14 @@ class ProfessorE2Controller extends Controller
         }
         $question = Question::findOrFail($questionId);
 
-        // Filtrar imágenes seleccionadas
-        $images = Image::whereIn('id', $questionImages)
-            ->where('path', 'like', 'images/tarjetas-foto/%')
-            ->get();
+        $pathPattern = 'images/' . $folder . '/%';
 
-        // Filtrar carteles seleccionados
-        $cartels = Image::whereIn('id', $questionImages)
-            ->where('path', 'like', 'images/carteles/%')
-            ->get();
+     // Filtrar solo las imágenes asociadas a la pregunta actual
+    $images = QuestionImage::where('question_id', $questionId)
+        ->with('image')
+        ->get()
+        ->pluck('image');
+
         $asociar = Image::whereIn('id', $questionImages)
             ->where('path', 'like', 'images/asociar/%')
             ->get();
@@ -115,7 +119,7 @@ class ProfessorE2Controller extends Controller
             ->where('path', 'like', 'images/cartelesComponer/%')
             ->get();
         // Para los demás casos, solo envía lo necesario
-      return view('professor.etapa2.select-correct-images', compact('images', 'cartels', 'asociar', 'asociar2', 'unir', 'unir2','seleccion','seleccion2','componer','componer2', 'folder', 'mode', 'question'));
+      return view('professor.etapa2.select-correct-images', compact('images', 'asociar', 'asociar2', 'unir', 'unir2','seleccion','seleccion2','componer','componer2', 'folder', 'mode', 'question'));
     }
     // Guardar las imágenes correctas
 public function saveCorrectImagesE2(Request $request, $folder)
@@ -141,7 +145,6 @@ public function saveCorrectImagesE2(Request $request, $folder)
         case 'clasificacionHabitat':
         case 'clasificacionCategoria':
         case 'pareoporigualdad':
-
             case 'asociar':
             case 'unir':
             case 'componer':
@@ -152,6 +155,7 @@ public function saveCorrectImagesE2(Request $request, $folder)
                 return $this->jsonResponse(true, 'Las respuestas han sido guardadas correctamente.');
         case 'carteles':
         case 'seleccion':
+        case 'cartelesAsociar':
             return $this->handleImagesOrPairs($request, $questionId, $mode);
 
         case 'tarjetas-foto':

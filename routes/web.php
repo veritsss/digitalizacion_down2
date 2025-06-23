@@ -142,7 +142,7 @@ Route::get('/professor/search-frases', [ProfessorController::class, 'searchFrase
 
 // Ruta para mostrar las frases personales de un estudiante específico
 Route::get('/professor/student/{studentId}/frases', [ProfessorController::class, 'showPhrases'])->name('professor.showPhrases');
-Route::delete('/professor/student/{studentId}/frases/{phraseId}', [ProfessorController::class, 'deletePhrase'])->name('professor.deletePhrase');
+Route::delete('/professor/student/{student}/phrases/{phrase}', [ProfessorController::class, 'deletePhrase'])->name('professor.deletePhrase');
 Route::get('/professor/student/{studentId}/list-frases', [ProfessorController::class, 'listFrases'])->name('professor.listPhrases');
 Route::get('/professor/student/{studentId}/search-phrases', [ProfessorController::class, 'searchPhrases'])->name('professor.searchPhrases');
 Route::get('/student/{studentId}/phrases', [ProfessorController::class, 'viewStudentPhrases'])->name('student.listPhrases');

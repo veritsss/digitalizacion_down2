@@ -243,17 +243,16 @@ function updatePares() {
         <div class="col-md-6">
             <h4 class="text-center text-primary">Asociar (Palabras)</h4>
             <div id="asociar-container" class="d-flex flex-wrap justify-content-center gap-3">
-                @foreach($asociar as $image)
+                 @foreach($asociar as $image)
                     <div class="col-6 col-md-3 text-center mb-4 asociar-img" data-id="{{ $image->image_id }}">
                         <input type="radio" name="asociar_id" value="{{ $image->image_id }}" id="asociar_{{ $image->image_id }}" class="btn-check">
-                        <label for="asociar_{{ $image->image_id }}" class="btn btn-outline-primary btn-lg w-100 image-container">
+                        <label for="asociar_{{ $image->image_id }}" class="btn btn-outline-success btn-lg w-100 image-container">
                             <img src="{{ asset($image->image->path) }}" alt="Asociar {{ $image->image_id }}" class="image-content">
                         </label>
                     </div>
                 @endforeach
             </div>
         </div>
-
         <!-- Asociar2 -->
         <div class="col-md-6">
             <h4 class="text-center text-success">Asociar2 (Imágenes)</h4>
@@ -273,7 +272,7 @@ function updatePares() {
 
 
 <script>
-    let selectedAsociar = null;
+let selectedAsociar = null;
 let selectedAsociar2 = null;
 let pares = [];
 

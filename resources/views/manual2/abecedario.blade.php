@@ -55,7 +55,7 @@
             </div>
         @endif
         <a href="{{ route('professor.searchAbecedario') }}" class="btn btn-primary btn-lg d-block text-center mt-3">
-            Comenzar con el Abecedario
+            Ver Abecedario de alumnos
         </a>
 
         @else

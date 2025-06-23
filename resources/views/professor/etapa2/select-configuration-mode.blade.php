@@ -164,22 +164,6 @@
                     </div>
                 </div>
             </div>
-           <div class="col-md-5 mb-4 d-flex">
-                <div class="card shadow-sm border-primary equal-height-card w-100">
-                    <div class="card-body text-center d-flex flex-column">
-                        <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
-                        <p class="card-text text-muted flex-grow-1">Crea la pregunta y luego configura las imagenes correctas según la acción que se represente en el cartel.</p>
-                         <ul class="text-start mb-3">
-                            <li>Asociar carteles con las acciones que representen lo escrito en el cartel.</li>
-                        </ul>
-                        <div class="mt-auto">
-                            <a href="{{ route('professor.selectQuestionImagesPageE2', ['folder' => $folder, 'mode' => 'images']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
-                                Seleccionar Imágenes
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     @endif
