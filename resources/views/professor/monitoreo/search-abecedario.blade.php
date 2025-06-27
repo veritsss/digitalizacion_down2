@@ -29,7 +29,7 @@
                 @foreach($students as $student)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{{ $student->name }}</strong> <br>
+                            <strong>{{ $student->name }} {{ $student->apellido }}</strong> <br>
                             <small class="text-muted">RUT: {{ $student->rut }}</small>
                         </div>
                         <a href="{{ route('professor.abecedario', $student->id) }}" class="btn btn-sm btn-primary">

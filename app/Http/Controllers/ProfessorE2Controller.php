@@ -41,6 +41,7 @@ class ProfessorE2Controller extends Controller
 
     $folder = $request->input('folder'); // Obtener el valor de la carpeta
     $mode = $request->input('mode');
+
     // Crear la pregunta con el tipo de actividad
     $question = Question::create([
         'title' => $request->input('title'),
@@ -48,33 +49,32 @@ class ProfessorE2Controller extends Controller
         'mode' => $mode,
     ]);
 
-    // Asociar las imágenes seleccionadas a la pregunta
-    foreach ($request->selected_images as $imageId) {
-       QuestionImage::create([
+    // Randomizar las imágenes seleccionadas
+    $selectedImages = $request->selected_images;
+    shuffle($selectedImages); // Randomiza el orden de las imágenes
+
+    // Asociar las imágenes randomizadas a la pregunta
+    foreach ($selectedImages as $imageId) {
+        QuestionImage::create([
             'question_id' => $question->id,
             'image_id' => $imageId,
             'is_correct' => false, // Por defecto, no son correctas
         ]);
     }
-        $request->validate([
 
-            'selected_images' => 'required|array',
-            'selected_images.*' => 'exists:images,id',
-        ]);
+    // Guardar las imágenes seleccionadas en la sesión
+    session(['question_images' => $selectedImages]);
 
-        // Guardar las imágenes seleccionadas en la sesión
-        session(['question_images' => $request->selected_images]);
+    // Guardar el ID de la pregunta en la sesión
+    session(['question_id' => $question->id]);
 
-        // Guardar el ID de la pregunta en la sesión
-        session(['question_id' => $question->id]);
-
-        return redirect()->route('professor.selectCorrectImagesPageE2', [
-            'folder' => $folder,
-            'mode' => $mode,
-            'questionId' => $question->id,
-        ])->with('message', 'Imágenes seleccionadas correctamente.')
-  ->with('alert-type', 'success'); // Tipo de alerta (success, error, warning, info)
-    }
+    return redirect()->route('professor.selectCorrectImagesPageE2', [
+        'folder' => $folder,
+        'mode' => $mode,
+        'questionId' => $question->id,
+    ])->with('message', 'Imágenes seleccionadas correctamente.')
+      ->with('alert-type', 'success'); // Tipo de alerta (success, error, warning, info)
+}
 
     public function selectCorrectImagesE2($folder = 'pareoyseleccion', $mode = 'images', $questionId)
     {
@@ -177,10 +177,9 @@ public function saveCorrectImagesE2(Request $request, $folder)
             return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
         }
         if ($mode === 'seleccionyasociacion') {
-            $images = QuestionImage::where('question_id', $questionId)->with('image')->get();
-                $this->resetImages($questionId, ['pair_id' => null]);
-                $this->assignPairs($images); // Esto guarda el size en pair_id y marca como correctas
-                return $this->jsonResponse(true, 'Las respuestas han sido guardadas correctamente.');
+           $this->validateImages($request);
+            $this->updateImages($questionId, $request->selected_images);
+            return $this->jsonResponse(true, 'Respuestas correctas guardadas.');
 
         }
     }

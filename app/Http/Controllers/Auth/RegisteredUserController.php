@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisteredUserController extends Controller
 {
@@ -32,7 +33,8 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'rut' => ['required', 'string', 'regex:/^\d{1,2}\.\d{3}\.\d{3}-[0-9kK]{1}$/', function ($attribute, $value, $fail) {
+            'apellido' => ['required', 'string', 'max:255'],
+            'rut' => ['required', 'string', Rule::unique('users', 'rut'), 'regex:/^\d{1,2}\.\d{3}\.\d{3}-[0-9kK]{1}$/', function ($attribute, $value, $fail) {
                 if (!$this->isValidRut($value)) {
                     $fail('El RUT ingresado no es válido.');
                 }
@@ -44,6 +46,7 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'apellido' => $request->apellido,
             'rut' => $request->rut,
             'email' => $request->email,
             'password' => Hash::make($request->password),

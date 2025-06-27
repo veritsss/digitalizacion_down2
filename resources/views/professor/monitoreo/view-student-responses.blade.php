@@ -48,7 +48,7 @@
         <span class="fw-bold">Volver</span>
     </a>
 
-    <h1 class="text-primary fw-bold mb-4">Respuestas del Estudiante: {{ $student->name }}</h1>
+    <h1 class="text-primary fw-bold mb-4">Respuestas del Estudiante: {{ $student->name }} {{ $student->apellido }}</h1>
 
     <!-- Formulario de filtros -->
     <form method="GET" action="{{ route('professor.viewStudentResponses', ['studentId' => $student->id]) }}" class="mb-4">

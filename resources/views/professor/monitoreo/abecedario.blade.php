@@ -11,7 +11,7 @@
         </svg>
         <span class="fw-bold">Volver</span>
     </a>
-    <h1 class="text-center mb-4">Abecedario del Estudiante: {{ $student->name }}</h1>
+    <h1 class="text-center mb-4">Abecedario del Estudiante: {{ $student->name }} {{ $student->apellido }}</h1>
 
 
 

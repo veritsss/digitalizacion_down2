@@ -200,10 +200,10 @@
                 <div class="d-flex flex-wrap justify-content-center gap-3">
                     @foreach($seleccion as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
+                            </label>
                         </div>
                     @endforeach
                 </div>
@@ -213,10 +213,10 @@
                 <div class="d-flex flex-wrap justify-content-center gap-3">
                     @foreach($seleccion2 as $image)
                         <div class="col-6 col-md-3 text-center mb-4">
-                            <div class="image-container">
+                            <input type="checkbox" name="selected_images[]" value="{{ $image->id }}" id="image_{{ $image->id }}" class="btn-check">
+                            <label for="image_{{ $image->id }}" class="btn btn-outline-success btn-lg w-100 image-container">
                                 <img src="{{ asset($image->path) }}" alt="Imagen {{ $image->id }}" class="image-content">
-                            </div>
-
+                            </label>
                         </div>
                     @endforeach
                 </div>

@@ -13,7 +13,7 @@
     </a>
 <div class="container my-5">
     <h1 class="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
-        Detalle de respuestas: {{ $student->name }}
+        Detalle de respuestas: {{ $student->name }} {{ $student->apellido }}
     </h1>
     <div class="table-responsive bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
         <table class="table table-hover align-middle">

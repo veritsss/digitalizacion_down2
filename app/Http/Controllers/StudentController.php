@@ -127,7 +127,7 @@ if ($nextQuestion) {
         } elseif ($mode === 'pairs') {
             // Validar las imágenes seleccionadas
             $request->validate([
-                'selected_images' => 'required|array|size:2', // Deben seleccionarse exactamente 2 imágenes para un par
+                'selected_images' => 'required|array', // Deben seleccionarse exactamente 2 imágenes para un par
                 'selected_images.*' => 'exists:question_images,image_id',
             ]);
 
@@ -180,11 +180,11 @@ if ($nextQuestion) {
                     ->first();
 
                 if ($nextQuestion) {
-                    session()->flash('message', $isCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+                    session()->flash('message', $isCorrect ? '¡Selecciones correctas!' : 'Selecciones incorrectas.');
                     session()->flash('alert-type', $isCorrect ? 'success' : 'error');
                     return redirect()->route('student.showQuestion', $nextQuestion->id);
                 } else {
-                    $finalMessage = ($isCorrect ? '¡Par correcto!' : 'Par incorrecto.') . ' ¡Has completado todas las preguntas!';
+                    $finalMessage = ($isCorrect ? '¡Selecciones correctas!' : 'Selecciones incorrectas.') . ' ¡Has completado todas las preguntas!';
                     session()->flash('message', $finalMessage);
                     session()->flash('alert-type', $isCorrect ? 'success' : 'error');
                     return redirect()->route('manual1');
@@ -192,7 +192,7 @@ if ($nextQuestion) {
             }
 
             // Si quedan pares, recargar la misma pregunta
-            session()->flash('message', $isCorrect ? '¡Par correcto!' : 'Par incorrecto.');
+            session()->flash('message', $isCorrect ? '¡Selecciones correctas!' : 'Selecciones incorrectas.');
             session()->flash('alert-type', $isCorrect ? 'success' : 'error');
             return redirect()->route('student.showQuestion', $questionId);
         } elseif ($question->type === 'seriesTemporales') {

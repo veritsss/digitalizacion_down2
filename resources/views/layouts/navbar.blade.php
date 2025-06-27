@@ -1,22 +1,26 @@
-<nav class="navbar navbar-expand-lg" role="navigation" aria-label="Main navigation">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg d-flex justify-content-between align-items-center" role="navigation" aria-label="Main navigation">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}" aria-label="Ir al Dashboard">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="height: 40px;">
         </a>
+        <!-- Ícono Beta centrado -->
+        <div class="beta-watermark">
+            <span>Beta</span>
+        </div>
+        <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                </ul>
+            <ul class="navbar-nav me-auto"></ul>
 
             @auth
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de usuario">
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->name }} {{ Auth::user()->apellido }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
@@ -43,11 +47,7 @@
         </div>
     </div>
 </nav>
-
 <style>
-    body {
-        font-family: 'Arial', sans-serif;
-    }
 
     .navbar {
         z-index: 1000; /* Asegura que la barra de navegación esté siempre arriba */
@@ -101,6 +101,39 @@
     .navbar-nav .nav-link:focus {
         outline: 3px solid #f39c12; /* Resaltado de enlace cuando se enfoca (clave para accesibilidad) */
     }
+
+    .beta-watermark {
+    position: absolute; /* Posiciona el elemento dentro de la navbar */
+    left: 50%; /* Mueve el elemento al centro horizontal */
+    transform: translateX(-50%); /* Ajusta el desplazamiento para centrarlo */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 999; /* Asegura que esté por encima de otros elementos */
+}
+
+    .beta-watermark span {
+         background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 992px) {
+    .beta-watermark {
+        position: relative; /* Cambia a relative para evitar problemas en el diseño colapsado */
+        left: auto;
+        transform: none;
+        margin: 0 auto; /* Centra el ícono dentro del contenedor */
+    }
+}
 </style>
 
 

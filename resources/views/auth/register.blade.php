@@ -8,6 +8,12 @@
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
+         <!-- Apellido -->
+        <div>
+            <x-input-label for="apellido" :value="__('Apellido')" />
+            <x-text-input id="apellido" class="block mt-1 w-full" type="text" name="apellido" :value="old('apellido')" required autofocus autocomplete="apellido" />
+            <x-input-error :messages="$errors->get('apellido')" class="mt-2" />
+        </div>
         <!-- RUT -->
         <div>
             <x-input-label for="rut" :value="__('Rut')" />
@@ -46,7 +52,7 @@
         </div>
 
     <div class="mt-4">
-    <label for="role" class="block text-sm font-medium text-white mb-2">Rol:</label>
+    <label for="role" class="block text-sm font-medium text-black mb-2">Rol:</label>
     <select id="role" name="role" required
         class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
         <option value="estudiante">Estudiante</option>

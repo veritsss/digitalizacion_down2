@@ -14,7 +14,7 @@ class HomeController extends Controller
     {
         $user = Auth::user(); // Usar la clase Auth para obtener el usuario autenticado
 
-        return view('welcome');
+        return view('dashboard');
     }
     public function dashboard()
 {

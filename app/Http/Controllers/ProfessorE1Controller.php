@@ -36,6 +36,7 @@ class ProfessorE1Controller extends Controller
 
     $folder = $request->input('folder'); // Obtener el valor de la carpeta
     $mode = $request->input('mode');
+
     // Crear la pregunta con el tipo de actividad
     $question = Question::create([
         'title' => $request->input('title'),
@@ -43,33 +44,32 @@ class ProfessorE1Controller extends Controller
         'mode' => $mode,
     ]);
 
-    // Asociar las imágenes seleccionadas a la pregunta
-    foreach ($request->selected_images as $imageId) {
-       QuestionImage::create([
+    // Randomizar las imágenes seleccionadas
+    $selectedImages = $request->selected_images;
+    shuffle($selectedImages); // Randomiza el orden de las imágenes
+
+    // Asociar las imágenes randomizadas a la pregunta
+    foreach ($selectedImages as $imageId) {
+        QuestionImage::create([
             'question_id' => $question->id,
             'image_id' => $imageId,
             'is_correct' => false, // Por defecto, no son correctas
         ]);
     }
-        $request->validate([
 
-            'selected_images' => 'required|array',
-            'selected_images.*' => 'exists:images,id',
-        ]);
+    // Guardar las imágenes seleccionadas en la sesión
+    session(['question_images' => $selectedImages]);
 
-        // Guardar las imágenes seleccionadas en la sesión
-        session(['question_images' => $request->selected_images]);
+    // Guardar el ID de la pregunta en la sesión
+    session(['question_id' => $question->id]);
 
-        // Guardar el ID de la pregunta en la sesión
-        session(['question_id' => $question->id]);
-
-        return redirect()->route('professor.selectCorrectImagesPageE1', [
-            'folder' => $folder,
-            'mode' => $mode,
-            'questionId' => $question->id,
-        ])->with('message', 'Imágenes seleccionadas correctamente.')
-  ->with('alert-type', 'success'); // Tipo de alerta (success, error, warning, info)
-    }
+    return redirect()->route('professor.selectCorrectImagesPageE1', [
+        'folder' => $folder,
+        'mode' => $mode,
+        'questionId' => $question->id,
+    ])->with('message', 'Imágenes seleccionadas correctamente.')
+      ->with('alert-type', 'success'); // Tipo de alerta (success, error, warning, info)
+}
 
     public function selectCorrectImagesE1($folder = 'pareoyseleccion', $mode = 'images', $questionId)
     {
@@ -170,7 +170,7 @@ private function handleTarjetasFoto(Request $request, $questionId)
     // Validar los carteles asociados
     $request->validate([
         'cartel_ids' => 'required|array',
-        'cartel_ids.*' => 'exists:cartels,id',
+        'cartel_ids.*' => 'exists:carteles,id',
     ]);
 
     // Reiniciar las imágenes de la pregunta (marcar todas como no correctas)

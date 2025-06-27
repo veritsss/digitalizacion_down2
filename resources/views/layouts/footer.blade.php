@@ -12,7 +12,7 @@
             <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                 <h5>Otros enlaces</h5>
                 <ul class="list-unstyled">
-                    <li><a href="/" class="text-white">Ver manuales</a></li>
+                    <li><a href="/verManuales" class="text-white">Ver manuales</a></li>
                     <li><a href="#" class="text-white">¿Quiénes somos?</a></li>
                     <li><a href="#" class="text-white">Historia</a></li>
                     <li><a href="#" class="text-white">Contacto</a></li>

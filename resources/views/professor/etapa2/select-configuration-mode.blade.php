@@ -145,20 +145,15 @@
         </a>
         <h1 class="text-primary fw-bold display-4">Configuración para Carteles</h1>
         <p class="text-muted fs-5">Configura las respuestas correctas para la actividad de carteles.</p>
-        <div class="row justify-content-center">
+           <div class="row justify-content-center">
             <div class="col-md-5 mb-4 d-flex">
-                <div class="card shadow-sm border-success equal-height-card w-100">
+                <div class="card shadow-sm border-primary equal-height-card w-100">
                     <div class="card-body text-center d-flex flex-column">
-                        <h5 class="card-title text-success fw-bold">Selección de Pares</h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            Crea la pregunta y luego configura los pares para que el estudiante asocie imágenes y carteles.
-                        </p>
-                        <ul class="text-start mb-3">
-                            <li>Asociar imágenes con carteles según palabras que se relacionen a la imagen.</li>
-                        </ul>
+                        <h5 class="card-title text-primary fw-bold">Selección de Imágenes Correctas</h5>
+                        <p class="card-text text-muted flex-grow-1">Selecciona las imágenes correctas para configurar las respuestas.</p>
                         <div class="mt-auto">
-                            <a href="{{ route('professor.selectQuestionImagesPageE2', ['folder' => $folder, 'mode' => 'seleccionyasociacion']) }}" class="btn btn-success btn-lg w-100 mt-auto">
-                                Seleccionar pares
+                            <a href="{{ route('professor.selectQuestionImagesPageE2', ['folder' => $folder, 'mode' => 'seleccionyasociacion']) }}" class="btn btn-primary btn-lg w-100 mt-auto">
+                                Seleccionar Imágenes
                             </a>
                         </div>
                     </div>

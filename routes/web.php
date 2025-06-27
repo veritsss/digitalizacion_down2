@@ -16,11 +16,8 @@ use App\Http\Controllers\ProfessorE2Controller;
 use App\Http\Controllers\StudentControllerE2;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
+Route::get('/', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+// Rutas de autenticación
 
 // Rutas accesibles solo para profesores
 Route::middleware(['auth', 'role:Profesor'])->group(function () {
@@ -35,12 +32,10 @@ Route::middleware(['auth', 'role:Estudiante'])->group(function () {
    // Rutas accesibles para todos los usuarios autenticados
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::get('/inicio', function () {
-        return view('inicio');
-    })->name('inicio');
 
+    Route::get('/inicio', function () {return view('inicio');})->name('inicio');
+    Route::get('/verManuales', function () {return view('manuales'); })->name('verManuales');
 
     //PROFESOR GENERAL
     Route::get('/professor/student/{studentId}/responses', [ProfessorController::class, 'viewStudentResponses'])->name('professor.viewStudentResponses');
